@@ -243,6 +243,31 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid 
  .brew-show-steps{min-height:32px;margin-top:6px}.brew-footnote{font-size:8px}
 }
 @media(min-width:620px){.sheet{min-height:680px;max-height:90vh;height:90vh;border-radius:22px}}
+
+/* 2026 November release: succinct beans / pour quantities / bloom flavor note */
+.beans-line{background:#efe8d5;border-radius:15px;padding:7px 15px 7px 13px;margin-top:11px;color:#26523d;font-size:13px;font-weight:780;min-height:40px}
+.beans-value{display:inline-flex;align-items:baseline;gap:2px;font-family:var(--num);color:#123f2b;font-size:24px;line-height:1;font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap}
+.beans-value small{font-size:13px;font-weight:720;font-family:var(--sans)}
+#hybridSettings .option{min-height:68px;gap:5px}
+#hybridSettings .option .option-main{font-size:21px;letter-spacing:-.02em}
+#hybridSettings .option .option-sub{font-size:11px;font-weight:750;opacity:.88}
+#hybridSettings .summary-note{font-size:10px;line-height:1.5}
+.brew-quantity{min-width:0}
+.brew-quantity-label{font-family:var(--sans);font-size:11px;letter-spacing:.05em;color:#657b69;margin-bottom:3px}
+.quantity-stack{display:flex;flex-direction:column;gap:6px}
+.quantity-row{display:flex;align-items:center;gap:9px;min-width:0;justify-content:space-between}
+.quantity-row + .quantity-row{border-top:1px solid #d8d0c0;padding-top:6px}
+.quantity-tag{min-width:52px;text-align:center;flex:0 0 52px;padding:6px 5px;border-radius:99px;line-height:1;font-size:12px;font-family:var(--sans);font-weight:850;white-space:nowrap}
+.quantity-tag-added{background:#efd1a0;color:#6c4b23}
+.quantity-tag-total{background:#174d37;color:#fff8e9}
+.quantity-value{margin-left:auto;font-family:var(--num);font-size:clamp(30px,8.5vw,39px);font-weight:500;letter-spacing:-.04em;color:#114b33;line-height:1.05;white-space:nowrap;font-variant-numeric:tabular-nums}
+.quantity-value small{font-family:var(--sans);font-size:.42em;font-weight:700;letter-spacing:0;margin-left:2px}
+.quantity-value .no-pour{color:#9aa59a}
+.brew-main{grid-template-columns:95px minmax(0,1fr);align-items:center;gap:11px;margin-top:9px;margin-bottom:10px;min-height:116px}
+.brew-illustration{width:95px;min-height:100px}
+.brew-illustration .icon-svg{width:76px;height:77px}
+@media(max-width:375px){.beans-line{padding:7px 10px}.quantity-row{gap:5px}.quantity-tag{min-width:45px;flex-basis:45px;font-size:11px}.quantity-value{font-size:30px}.brew-main{grid-template-columns:78px minmax(0,1fr);gap:6px}.brew-illustration{width:78px;min-height:80px}.brew-illustration .icon-svg{height:60px;width:65px}}
+@media(max-height:780px){#hybridSettings .option{min-height:58px}.brew-main{grid-template-columns:76px minmax(0,1fr);min-height:83px;gap:8px}.brew-illustration{width:76px;min-height:78px}.brew-illustration .icon-svg{height:60px;width:65px}.quantity-stack{gap:4px}.quantity-row + .quantity-row{padding-top:4px}.quantity-tag{padding:5px 4px}.quantity-value{font-size:32px}.beans-line{min-height:34px;padding-top:4px;padding-bottom:4px}}
 </style>
 </head>
 <body>
@@ -298,13 +323,13 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid 
          <button type="button" class="volume-step" id="waterPlus" aria-label="お湯を10ml増やす">＋</button>
        </div>
        <div class="volume-hint">100〜1,000ml / ±10mlずつ調整　•　数字を直接入力もできます</div>
-       <div class="beans-line"><span>必要なコーヒー豆</span><b id="beansInfo">20g　/　豆：湯 = 1：15</b></div>
+       <div class="beans-line"><span>必要なコーヒー豆</span><strong id="beansInfo" class="beans-value">20<small>g</small></strong></div>
      </section>
      <section class="config-section" id="hybridSettings"><h2 class="field-title">初回の注湯量</h2><div class="option-grid" role="group" aria-label="ハイブリッド初回注湯量">
-       <button type="button" class="option two-line" data-bloom="40"><span class="option-main" data-bloom-value="40">40g</span></button>
-       <button type="button" class="option two-line" data-bloom="45"><span class="option-main" data-bloom-value="45">45g</span></button>
-       <button type="button" class="option two-line" data-bloom="50"><span class="option-main" data-bloom-value="50">50g</span></button>
-     </div><div class="summary-note">スイッチの開閉と湯温変更も案内します。</div></section>
+       <button type="button" class="option two-line" data-bloom="40"><span class="option-main" data-bloom-value="40">40g</span><span class="option-sub">軽め</span></button>
+       <button type="button" class="option two-line" data-bloom="45"><span class="option-main" data-bloom-value="45">45g</span><span class="option-sub">バランス</span></button>
+       <button type="button" class="option two-line" data-bloom="50"><span class="option-main" data-bloom-value="50">50g</span><span class="option-sub">しっかり</span></button>
+     </div><div class="summary-note">味わいの傾向は目安です。スイッチの開閉と湯温も案内します。</div></section>
      <section class="config-section" id="fourSixSettings" hidden><h2 class="field-title">前半の配分 <span class="field-note">味の設計</span></h2><div class="option-grid" role="group" aria-label="前半の配分">
        <button type="button" class="option" data-taste="sweet"><span class="option-main">甘さ重視</span><span class="option-sub" id="sweetSplit">50+70g</span></button>
        <button type="button" class="option" data-taste="balanced"><span class="option-main">バランス</span><span class="option-sub" id="balancedSplit">60+60g</span></button>
@@ -320,7 +345,7 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid 
  <main class="screen brew" id="brewView" aria-label="抽出タイマー" hidden>
    <header class="brew-header"><button type="button" class="icon-button" id="backBtn" aria-label="レシピの設定に戻る"><svg class="icon-svg"><use href="#icon-arrow"/></svg></button><div class="brew-head-center"><div class="brew-head-line"><svg class="icon-svg" id="methodSvg"><use href="#icon-switch" id="methodUse"/></svg><span class="brew-method" id="methodHeading">ハイブリッド</span></div><div class="brew-device" id="deviceHeading">HARIO Switch</div></div><button type="button" class="icon-button" id="brewSettings" aria-label="設定を開く"><svg class="icon-svg"><use href="#icon-gear"/></svg></button></header>
    <div class="timer-ring" role="timer" aria-label="抽出の経過時間"><svg class="ring-svg" viewBox="0 0 260 260" aria-hidden="true"><circle class="ring-track" cx="130" cy="130" r="117"/><circle class="ring-progress" id="ringProgress" cx="130" cy="130" r="117" stroke-dasharray="735.133" stroke-dashoffset="735.133"/></svg><div class="ring-center"><span class="phase-chip" id="phaseChip">浸漬</span><span class="timer-clock" id="clock">0:00</span><span class="timer-duration">/ 3:30</span></div></div>
-   <section class="brew-card" aria-label="現在の工程"><div class="brew-card-header"><span class="step-chip" id="stepCount">STEP 1 / 5</span><span class="stage-title" id="stageAction">スイッチを閉じる</span></div><div class="brew-main"><div class="brew-illustration" id="brewIllustration"><svg class="icon-svg" role="img" aria-label="スイッチのレバー位置"><use href="#icon-switch-closed" id="stageIcon"/></svg><span class="valve-marker" id="valveMarker"><strong id="valveMarkText">CLOSE</strong><small id="valveMarkHint">↗ 上げる</small></span></div><div class="brew-quantity"><div class="brew-quantity-label" id="stageLabel">1投目 / 累計目標</div><div class="brew-total-line"><strong class="brew-total" id="stageAmount">45<small>g</small></strong><span class="brew-added" id="stageAdded">+45g</span></div></div></div><div class="brew-note" id="stageNote">レバーを右上に上げて閉じ、約90℃のお湯で豆全体を浸します。</div><div class="temp-tip" id="tempTip" hidden><svg class="icon-svg"><use href="#icon-thermo"/></svg><span>次の注湯に使う70〜80℃のお湯を準備</span></div></section>
+   <section class="brew-card" aria-label="現在の工程"><div class="brew-card-header"><span class="step-chip" id="stepCount">STEP 1 / 5</span><span class="stage-title" id="stageAction">スイッチを閉じる</span></div><div class="brew-main"><div class="brew-illustration" id="brewIllustration"><svg class="icon-svg" role="img" aria-label="スイッチのレバー位置"><use href="#icon-switch-closed" id="stageIcon"/></svg><span class="valve-marker" id="valveMarker"><strong id="valveMarkText">CLOSE</strong><small id="valveMarkHint">↗ 上げる</small></span></div><div class="brew-quantity" aria-label="現在の注湯量"><div class="brew-quantity-label" id="stageLabel">1投目</div><div class="quantity-stack"><div class="quantity-row quantity-row-added"><span class="quantity-tag quantity-tag-added">今回</span><strong class="quantity-value" id="stageAdded">45<small>g</small></strong></div><div class="quantity-row quantity-row-total"><span class="quantity-tag quantity-tag-total">累計</span><strong class="quantity-value" id="stageAmount">45<small>g</small></strong></div></div></div></div><div class="brew-note" id="stageNote">レバーを右上に上げて閉じ、約90℃のお湯で豆全体を浸します。</div><div class="temp-tip" id="tempTip" hidden><svg class="icon-svg"><use href="#icon-thermo"/></svg><span>次の注湯に使う70〜80℃のお湯を準備</span></div></section>
    <section class="next-box" id="nextBox" aria-label="次の工程"><div class="next-top"><strong>次の工程</strong><span id="nextTime">0:40</span></div><div class="next-text" id="nextInstruction">スイッチを開けて、累計120gまで注ぎます。</div><div class="next-valve" id="nextValve" hidden><svg class="icon-svg"><use href="#icon-switch-open" id="nextValveIcon"/></svg><span id="nextValveText">OPEN｜レバーを水平に</span></div><div class="next-countdown" id="nextCountdown">あと 0:40</div></section>
    <div class="brew-actions"><button type="button" class="brew-round reset" id="resetBrew"><svg class="icon-svg"><use href="#icon-reset"/></svg>リセット</button><button type="button" class="brew-round pause" id="pauseBrew"><svg class="icon-svg"><use id="pauseIconUse" href="#icon-pause"/></svg><span id="pauseLabel">一時停止</span></button></div>
    <button type="button" class="brew-show-steps" data-open-steps><svg class="icon-svg"><use href="#icon-book"/></svg>全行程をみる</button><p class="brew-footnote">画面ロック中は合図音が鳴らない場合があります</p>
@@ -398,7 +423,7 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid 
   $('waterMinus').disabled=prefs.water<=100;
   $('waterPlus').disabled=prefs.water>=1000;
   $('resetVolume').disabled=prefs.water===300;
-  $('beansInfo').textContent=`${computedBeans()}g　/　1：${prefs.ratio}`;
+  $('beansInfo').innerHTML=`${computedBeans()}<small>g</small>`;
   document.querySelectorAll('[data-bloom]').forEach(b=>{const value=+b.dataset.bloom;b.classList.toggle('selected',value===prefs.bloom);b.setAttribute('aria-pressed',String(value===prefs.bloom));b.querySelector('[data-bloom-value]').textContent=`${Math.round(prefs.water*value/300)}g`;});
   for(const [taste,base] of Object.entries(TASTE)){
    const first=Math.round(prefs.water*base/300),second=Math.round(prefs.water*.4)-first;
@@ -425,9 +450,9 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid 
   $('ringProgress').style.strokeDasharray=CIRCUMFERENCE.toFixed(3);$('ringProgress').style.strokeDashoffset=(CIRCUMFERENCE*(1-sec/DURATION)).toFixed(3);
   $('stepCount').textContent=step.at===DURATION?'FINISH':`STEP ${active+1} / ${recipe.length-1}`;
   $('stageAction').textContent=step.action;
-  $('stageLabel').textContent=step.pour?`${step.name} / 累計目標`:step.at===DURATION?'抽出完了':'注湯完了';
+  $('stageLabel').textContent=step.pour?step.name:step.at===DURATION?'抽出完了':'注湯完了';
   $('stageAmount').innerHTML=`${step.total}<small>g</small>`;
-  $('stageAdded').textContent=step.pour?`+${step.add}g`:'注湯なし';
+  $('stageAdded').innerHTML=step.pour?`${step.add}<small>g</small>`:'<span class="no-pour">—</span>';
   $('stageNote').textContent=step.instruction;
   $('tempTip').hidden=!(prefs.method==='hybrid'&&active===2);
   if(next){
