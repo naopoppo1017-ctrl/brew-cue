@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="Brew Cue">
-<meta name="description" content="ハイブリッドと4:6メソッドに対応。湯量を自動計算して一投ずつ案内するコーヒー抽出タイマー。">
+<meta name="description" content="ハイブリッドと4:6メソッドに対応。10ml刻みの湯量調整、レバー操作の図解、全行程の確認ができるコーヒー抽出タイマー。">
 <link rel="manifest" href="./manifest.webmanifest">
 <link rel="icon" href="./icon-192.png" type="image/png">
 <link rel="apple-touch-icon" href="./icon-180.png">
@@ -188,12 +188,90 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid 
  .screen{min-height:850px}
 }
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;animation:none!important}}
+
+/* vNext: precise amount control, definitive non-draggable recipe view, physical switch lever */
+.volume-stepper{display:grid;grid-template-columns:50px minmax(0,1fr) 50px;align-items:center;gap:8px;background:#f0e8da;border:1px solid #d8ceba;padding:9px 11px;border-radius:100px;min-height:73px}
+.volume-step{height:45px;width:45px;border-radius:50%;background:#faf5ec;border:1px solid #bdb49e;color:#204934;display:grid;place-items:center;font-size:27px;line-height:1;font-weight:350;box-shadow:0 2px 5px #3b2b1a0d}
+.volume-step:active{background:#e3e8dc}
+.volume-entry{min-width:0;display:flex;align-items:baseline;justify-content:center;gap:5px}
+.volume-entry input{font-family:var(--num);min-width:0;width:min(4ch,100%);padding:0;background:transparent;border:0;border-bottom:2px solid transparent;border-radius:0;text-align:right;color:#12402d;font-size:clamp(35px,10vw,48px);letter-spacing:-.055em;font-variant-numeric:tabular-nums;appearance:textfield;-moz-appearance:textfield}
+.volume-entry input:focus{outline:none;border-bottom-color:#b5884c}
+.volume-entry input::-webkit-inner-spin-button,.volume-entry input::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
+.volume-entry span{font-family:var(--num);font-size:21px;color:#284c39}
+.volume-hint{font-size:10px;line-height:1.5;color:#829084;margin-top:8px;text-align:center}
+.volume-label{align-items:center}.volume-label .field-title{margin-bottom:8px}.volume-label #resetVolume{margin-bottom:8px;font-size:11px;text-decoration:none;color:#34664c;border:1px solid #a5bdac;border-radius:99px;padding:6px 10px;white-space:nowrap}.volume-label #resetVolume:disabled{opacity:.4}
+.brew-main{grid-template-columns:106px minmax(0,1fr);gap:12px;align-items:center;min-height:105px}
+.brew-illustration{padding-right:10px;border-right:1px solid #c9cabd;width:106px;height:auto;min-height:90px;display:flex;flex-direction:column;gap:1px;justify-content:center;align-items:center}
+.brew-illustration .icon-svg{width:78px;height:80px;stroke-width:1.75;overflow:visible}
+.brew-illustration:not(.hybrid) .icon-svg{width:64px;height:72px}
+.valve-marker{display:flex;flex-direction:column;gap:1px;align-items:center;line-height:1.2;font-family:var(--sans);white-space:nowrap}
+.valve-marker strong{font-weight:850;letter-spacing:.10em;color:#164e37;font-size:12px}
+.valve-marker small{color:#7a663e;font-size:10px;font-weight:780}
+.brew-total{font-size:clamp(39px,11vw,60px)}
+.next-valve{display:flex;align-items:center;gap:5px;color:#376348;font-size:10px;font-weight:850;margin-top:4px}
+.next-valve .icon-svg{height:26px;width:27px;stroke-width:2}
+.sheet-layer{background:rgba(9,32,22,.56);align-items:center}
+.sheet{height:100dvh;max-height:none;border-radius:0;padding:calc(14px + env(safe-area-inset-top,0px)) 19px calc(10px + env(safe-area-inset-bottom,0px));box-shadow:0 0 45px #071b1740}
+.sheet-header{padding:8px 0 18px;border-bottom:1px solid #e1dacd;margin-bottom:14px}
+.sheet-header .icon-button{width:45px;height:45px;border:1px solid #c7cabd;background:#fffaf0;flex:0 0 auto}
+.sheet-header .icon-button .icon-svg{width:23px;height:23px}
+.sheet-body{flex:1;min-height:0;padding-bottom:24px}
+.step-box.has-valve{position:relative;padding-right:78px;min-height:80px}
+.step-valve-indicator{position:absolute;right:2px;top:4px;display:flex;align-items:center;flex-direction:column;gap:0;color:#24513a;font-size:9px;font-weight:850;letter-spacing:.055em}
+.step-valve-indicator svg.icon-svg{width:52px;height:50px;stroke-width:2}
+@media(max-width:370px){.volume-stepper{min-height:64px;grid-template-columns:43px minmax(0,1fr) 43px;padding:6px}.volume-step{width:39px;height:39px}.volume-entry input{font-size:37px}.volume-entry span{font-size:17px}.volume-hint{font-size:9px}.brew-main{grid-template-columns:82px minmax(0,1fr);gap:7px}.brew-illustration{width:82px;padding-right:6px}.brew-illustration .icon-svg{height:61px;width:68px}.brew-total{font-size:40px}.valve-marker strong{font-size:10px}.valve-marker small{font-size:9px}.brew-card{padding:12px 12px}.step-box.has-valve{padding-right:63px}.step-valve-indicator svg.icon-svg{width:43px;height:43px}}
+@media(max-height:780px){.volume-stepper{min-height:58px;padding:6px 9px}.volume-step{height:38px;width:38px}.volume-entry input{font-size:36px}.volume-entry span{font-size:18px}.volume-hint{margin-top:4px;font-size:9px}.brew-main{min-height:68px;grid-template-columns:84px minmax(0,1fr);margin:3px 0}.brew-illustration{width:84px;min-height:65px}.brew-illustration .icon-svg{width:66px;height:58px}.valve-marker strong{font-size:10px}.valve-marker small{font-size:9px}.brew-quantity-label{font-size:11px}.brew-total{font-size:41px}.next-valve .icon-svg{height:19px;width:20px}}
+@media(max-height:900px){
+ .brew-header{min-height:52px}
+ .timer-ring{width:min(49vw,196px);height:min(49vw,196px);margin:4px auto 9px}
+ .timer-clock{font-size:clamp(48px,14vw,67px)}.timer-duration{font-size:19px}
+ .brew-card{padding:13px 17px 12px}.brew-main{grid-template-columns:94px minmax(0,1fr);gap:10px;min-height:75px;margin:5px 0}
+ .brew-illustration{width:94px;min-height:75px}.brew-illustration .icon-svg{width:71px;height:67px}
+ .brew-total{font-size:clamp(40px,11vw,56px)}.brew-note{font-size:12px;padding-top:8px;line-height:1.5}
+ .next-box{padding:10px 13px;margin-top:8px}.next-text{margin-top:5px}.next-countdown{margin-top:2px}
+ .brew-actions{padding-top:9px}.brew-round{width:58px;height:58px}.brew-round.pause{width:65px;height:65px}
+ .brew-show-steps{margin-top:8px;min-height:34px}.brew-footnote{margin-top:3px}
+}
+@media(max-height:700px){
+ .brew-header{min-height:44px}.timer-ring{width:min(38vw,148px);height:min(38vw,148px);margin:2px auto 5px}.timer-clock{font-size:46px}.timer-duration{font-size:15px}
+ .phase-chip{font-size:10px;padding:3px 9px}
+ .brew-card{padding:10px 12px}.brew-main{grid-template-columns:78px minmax(0,1fr);min-height:63px;margin:2px 0}
+ .brew-illustration{width:78px;min-height:60px}.brew-illustration .icon-svg{width:66px;height:57px}
+ .brew-card-header .stage-title{font-size:14px}.brew-total{font-size:40px}.brew-note{font-size:11px;padding-top:5px}
+ .next-box{padding:7px 11px;margin-top:6px}.next-top{padding-bottom:3px}.next-top span{font-size:20px}.next-text{font-size:11px}.next-valve{display:none}
+ .brew-round{width:52px;height:52px}.brew-round.pause{width:57px;height:57px}
+ .brew-show-steps{min-height:32px;margin-top:6px}.brew-footnote{font-size:8px}
+}
+@media(min-width:620px){.sheet{min-height:680px;max-height:90vh;height:90vh;border-radius:22px}}
 </style>
 </head>
 <body>
 <svg class="symbols" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
- <symbol id="icon-switch" viewBox="0 0 80 85"><path d="M14 10 H66 L55 47 H25Z"/><path d="M19 19H61M24 28H56M29 37H51" stroke-opacity=".45"/><path d="M35 47V53H45V47"/><path d="M40 53V60"/><path d="M21 60H59"/><path d="M26 60L19 69H61L54 60"/><path d="M30 70H50"/><path d="M60 57h8v7h-8z" fill="currentColor" fill-opacity=".16"/><path d="M64 57V49"/></symbol>
- <symbol id="icon-v60" viewBox="0 0 80 85"><path d="M13 9H66L55 57H26Z"/><path d="M19 18L31 56M30 16L37 56M41 15L42 56M53 16L48 56M63 18L54 56" stroke-opacity=".75"/><path d="M66 17C85 16 78 37 60 39"/><path d="M23 57H58L62 65H19Z"/><path d="M27 65H54"/><path d="M40 69C37 74 37 76 40 78C44 75 43 73 40 69Z" fill="currentColor" stroke="none"/></symbol>
+ <symbol id="icon-switch" viewBox="0 0 80 85">
+  <path d="M12 10H58L49 49H22Z"/>
+  <path d="M18 18L27 48M29 16L34 48M40 15L40 48M51 18L47 48" stroke-opacity=".72"/>
+  <path d="M22 49H51L55 57H18Z"/>
+  <path d="M25 62H49"/>
+  <circle cx="56" cy="55" r="3" fill="currentColor" stroke="none"/>
+  <path d="M56 55L75 32" stroke-width="3.5"/>
+</symbol>
+ <symbol id="icon-switch-closed" viewBox="0 0 80 85">
+  <path d="M12 10H58L49 49H22Z"/>
+  <path d="M18 18L27 48M29 16L34 48M40 15L40 48M51 18L47 48" stroke-opacity=".72"/>
+  <path d="M22 49H51L55 57H18Z"/>
+  <path d="M25 62H49"/>
+  <circle cx="56" cy="55" r="3" fill="currentColor" stroke="none"/>
+  <path d="M56 55L75 32" stroke-width="3.5"/>
+</symbol>
+  <symbol id="icon-switch-open" viewBox="0 0 80 85">
+  <path d="M12 10H58L49 49H22Z"/>
+  <path d="M18 18L27 48M29 16L34 48M40 15L40 48M51 18L47 48" stroke-opacity=".72"/>
+  <path d="M22 49H51L55 57H18Z"/>
+  <path d="M25 62H49"/>
+  <circle cx="56" cy="55" r="3" fill="currentColor" stroke="none"/>
+  <path d="M56 55H78" stroke-width="3.5"/>
+</symbol>
+  <symbol id="icon-v60" viewBox="0 0 80 85"><path d="M13 9H66L55 57H26Z"/><path d="M19 18L31 56M30 16L37 56M41 15L42 56M53 16L48 56M63 18L54 56" stroke-opacity=".75"/><path d="M66 17C85 16 78 37 60 39"/><path d="M23 57H58L62 65H19Z"/><path d="M27 65H54"/><path d="M40 69C37 74 37 76 40 78C44 75 43 73 40 69Z" fill="currentColor" stroke="none"/></symbol>
  <symbol id="icon-book" viewBox="0 0 24 24"><path d="M12 21V5.5C9.4 3.2 5.2 2.8 2.5 4v15c2.5-1 6.6-.7 9.5 2Zm0 0V5.5c2.6-2.3 6.8-2.7 9.5-1.5v15c-2.5-1-6.6-.7-9.5 2Z"/></symbol>
  <symbol id="icon-gear" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.2"/><path d="m9.7 2.5-.6 2.2-1.7.8-2.1-1.1-2 2 1.1 2.1-.8 1.8-2.1.6v2.8l2.1.6.8 1.8-1.1 2.1 2 2 2.1-1.1 1.8.8.6 2.1h2.8l.6-2.1 1.8-.8 2.1 1.1 2-2-1.1-2.1.8-1.8 2.1-.6v-2.8l-2.1-.6-.8-1.8 1.1-2.1-2-2-2.1 1.1-1.8-.8-.6-2.2Z"/></symbol>
  <symbol id="icon-arrow" viewBox="0 0 24 24"><path d="M14.5 5 8 12l6.5 7"/></symbol>
@@ -209,12 +287,17 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid 
    <header class="setup-top"><div><div class="brand">BREW CUE</div><div class="brand-underline"></div></div><button class="icon-button settings-button" id="openSettings" type="button" aria-label="設定を開く"><svg class="icon-svg"><use href="#icon-gear"/></svg></button></header>
    <div class="setup-main">
      <section><h1 class="field-title">抽出メソッド</h1><div class="method-grid" role="group" aria-label="抽出メソッド">
-       <button class="method-card" type="button" data-method="hybrid" aria-pressed="true"><span class="check">✓</span><svg class="icon-svg"><use href="#icon-switch"/></svg><span class="method-name">ハイブリッド</span><span class="method-sub">HARIO Switch</span></button>
+       <button class="method-card" type="button" data-method="hybrid" aria-pressed="true"><span class="check">✓</span><svg class="icon-svg"><use href="#icon-switch-closed"/></svg><span class="method-name">ハイブリッド</span><span class="method-sub">HARIO Switch</span></button>
        <button class="method-card" type="button" data-method="fourSix" aria-pressed="false"><span class="check">✓</span><svg class="icon-svg"><use href="#icon-v60"/></svg><span class="method-name">4:6メソッド</span><span class="method-sub">V60</span></button>
      </div></section>
-     <section class="config-section"><div class="volume-label"><h2 class="field-title">抽出量</h2><button type="button" id="customVolumeBtn">量を指定</button></div>
-       <div class="segment" role="group" aria-label="お湯の量"><button type="button" data-water="300">300 <small>ml</small></button><button type="button" data-water="600">600 <small>ml</small></button></div>
-       <form class="custom-volume" id="customVolume" hidden><input type="number" id="waterInput" inputmode="numeric" min="100" max="1000" step="10" aria-label="お湯の量（100〜1000ml）"><span>ml</span><button type="submit">適用</button></form>
+     <section class="config-section" aria-labelledby="waterTitle">
+       <div class="volume-label"><h2 class="field-title" id="waterTitle">抽出量 <span class="field-note">注湯するお湯の量</span></h2><button type="button" id="resetVolume">300mlに戻す</button></div>
+       <div class="volume-stepper" role="group" aria-label="お湯の量を10ml刻みで調整">
+         <button type="button" class="volume-step" id="waterMinus" aria-label="お湯を10ml減らす">−</button>
+         <label class="volume-entry"><input type="number" id="waterInput" inputmode="numeric" min="100" max="1000" step="10" value="300" aria-label="お湯の量（100〜1000ml、10ml刻み）"><span>ml</span></label>
+         <button type="button" class="volume-step" id="waterPlus" aria-label="お湯を10ml増やす">＋</button>
+       </div>
+       <div class="volume-hint">100〜1,000ml / ±10mlずつ調整　•　数字を直接入力もできます</div>
        <div class="beans-line"><span>必要なコーヒー豆</span><b id="beansInfo">20g　/　豆：湯 = 1：15</b></div>
      </section>
      <section class="config-section" id="hybridSettings"><h2 class="field-title">初回の注湯量</h2><div class="option-grid" role="group" aria-label="ハイブリッド初回注湯量">
@@ -237,16 +320,16 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid 
  <main class="screen brew" id="brewView" aria-label="抽出タイマー" hidden>
    <header class="brew-header"><button type="button" class="icon-button" id="backBtn" aria-label="レシピの設定に戻る"><svg class="icon-svg"><use href="#icon-arrow"/></svg></button><div class="brew-head-center"><div class="brew-head-line"><svg class="icon-svg" id="methodSvg"><use href="#icon-switch" id="methodUse"/></svg><span class="brew-method" id="methodHeading">ハイブリッド</span></div><div class="brew-device" id="deviceHeading">HARIO Switch</div></div><button type="button" class="icon-button" id="brewSettings" aria-label="設定を開く"><svg class="icon-svg"><use href="#icon-gear"/></svg></button></header>
    <div class="timer-ring" role="timer" aria-label="抽出の経過時間"><svg class="ring-svg" viewBox="0 0 260 260" aria-hidden="true"><circle class="ring-track" cx="130" cy="130" r="117"/><circle class="ring-progress" id="ringProgress" cx="130" cy="130" r="117" stroke-dasharray="735.133" stroke-dashoffset="735.133"/></svg><div class="ring-center"><span class="phase-chip" id="phaseChip">浸漬</span><span class="timer-clock" id="clock">0:00</span><span class="timer-duration">/ 3:30</span></div></div>
-   <section class="brew-card" aria-label="現在の工程"><div class="brew-card-header"><span class="step-chip" id="stepCount">STEP 1 / 5</span><span class="stage-title" id="stageAction">スイッチを閉じる</span></div><div class="brew-main"><div class="brew-illustration"><svg class="icon-svg"><use href="#icon-switch" id="stageIcon"/></svg></div><div class="brew-quantity"><div class="brew-quantity-label" id="stageLabel">1投目 / 累計目標</div><div class="brew-total-line"><strong class="brew-total" id="stageAmount">45<small>g</small></strong><span class="brew-added" id="stageAdded">+45g</span></div></div></div><div class="brew-note" id="stageNote">スイッチを閉じ、約90℃のお湯で豆全体を浸します。</div><div class="temp-tip" id="tempTip" hidden><svg class="icon-svg"><use href="#icon-thermo"/></svg><span>次の注湯に使う70〜80℃のお湯を準備</span></div></section>
-   <section class="next-box" id="nextBox" aria-label="次の工程"><div class="next-top"><strong>次の工程</strong><span id="nextTime">0:40</span></div><div class="next-text" id="nextInstruction">スイッチを開けて、累計120gまで注ぎます。</div><div class="next-countdown" id="nextCountdown">あと 0:40</div></section>
+   <section class="brew-card" aria-label="現在の工程"><div class="brew-card-header"><span class="step-chip" id="stepCount">STEP 1 / 5</span><span class="stage-title" id="stageAction">スイッチを閉じる</span></div><div class="brew-main"><div class="brew-illustration" id="brewIllustration"><svg class="icon-svg" role="img" aria-label="スイッチのレバー位置"><use href="#icon-switch-closed" id="stageIcon"/></svg><span class="valve-marker" id="valveMarker"><strong id="valveMarkText">CLOSE</strong><small id="valveMarkHint">↗ 上げる</small></span></div><div class="brew-quantity"><div class="brew-quantity-label" id="stageLabel">1投目 / 累計目標</div><div class="brew-total-line"><strong class="brew-total" id="stageAmount">45<small>g</small></strong><span class="brew-added" id="stageAdded">+45g</span></div></div></div><div class="brew-note" id="stageNote">レバーを右上に上げて閉じ、約90℃のお湯で豆全体を浸します。</div><div class="temp-tip" id="tempTip" hidden><svg class="icon-svg"><use href="#icon-thermo"/></svg><span>次の注湯に使う70〜80℃のお湯を準備</span></div></section>
+   <section class="next-box" id="nextBox" aria-label="次の工程"><div class="next-top"><strong>次の工程</strong><span id="nextTime">0:40</span></div><div class="next-text" id="nextInstruction">スイッチを開けて、累計120gまで注ぎます。</div><div class="next-valve" id="nextValve" hidden><svg class="icon-svg"><use href="#icon-switch-open" id="nextValveIcon"/></svg><span id="nextValveText">OPEN｜レバーを水平に</span></div><div class="next-countdown" id="nextCountdown">あと 0:40</div></section>
    <div class="brew-actions"><button type="button" class="brew-round reset" id="resetBrew"><svg class="icon-svg"><use href="#icon-reset"/></svg>リセット</button><button type="button" class="brew-round pause" id="pauseBrew"><svg class="icon-svg"><use id="pauseIconUse" href="#icon-pause"/></svg><span id="pauseLabel">一時停止</span></button></div>
    <button type="button" class="brew-show-steps" data-open-steps><svg class="icon-svg"><use href="#icon-book"/></svg>全行程をみる</button><p class="brew-footnote">画面ロック中は合図音が鳴らない場合があります</p>
  </main>
 </div>
-<div class="sheet-layer" id="sheetLayer" hidden><section class="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle"><div class="sheet-grab"></div><header class="sheet-header"><h2 id="sheetTitle">全行程</h2><button type="button" class="icon-button" id="closeSheet" aria-label="閉じる"><svg class="icon-svg"><use href="#icon-close"/></svg></button></header>
+<div class="sheet-layer" id="sheetLayer" hidden><section class="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle"><header class="sheet-header"><h2 id="sheetTitle">全行程</h2><button type="button" class="icon-button" id="closeSheet" aria-label="閉じる"><svg class="icon-svg"><use href="#icon-close"/></svg></button></header>
  <div id="stepsContent" class="sheet-body"><div class="meta-chips"><div class="meta-chip"><span>お湯</span><strong id="sheetWater">300ml</strong></div><div class="meta-chip"><span id="sheetSecondLabel">初回の注湯</span><strong id="sheetSecond">45g</strong></div><div class="meta-chip"><span id="sheetThirdLabel">工程</span><strong id="sheetThird">5工程</strong></div></div><ol class="steps-list" id="stepsList"></ol></div>
  <div id="settingsContent" class="sheet-body" hidden><div class="setting-row"><label for="ratioSelect">豆とお湯の比率</label><select id="ratioSelect"><option value="14">1：14（濃いめ）</option><option value="15">1：15（標準）</option><option value="16">1：16（軽め）</option><option value="17">1：17（すっきり）</option></select></div><div class="setting-row"><label for="soundToggle">工程の合図音</label><input type="checkbox" id="soundToggle" checked></div><div class="setting-row"><span>合図音の確認</span><button type="button" class="test-button" id="soundTest">音を試す ♪</button></div><p class="setting-help">次の工程の10秒前から画面で予告し、3・2・1秒前に合図音が鳴ります。抽出中に比率や抽出方法は変更できません。<br><br>抽出中は画面を開いたまま使用してください。工程時刻は基本レシピ（300ml）を基準とした目安です。</p></div>
- <div class="sheet-bottom"><button type="button" class="sheet-dismiss" id="sheetDismiss">閉じる</button></div></section></div>
+ </section></div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 <script>
 (()=>{
@@ -289,11 +372,11 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid 
   if(prefs.method==='hybrid'){
    const targets=[Math.round(water*prefs.bloom/300),Math.round(water*120/300),Math.round(water*200/300),water];
    return [
-    {at:0,name:'1投目',action:'スイッチを閉じる',phase:'浸漬',pour:true,total:targets[0],add:targets[0],instruction:'スイッチを閉じ、約90℃のお湯で豆全体を浸します。',description:'閉じた状態で最初のお湯を注ぎます。',valve:'closed'},
-    {at:40,name:'2投目',action:'スイッチを開く',phase:'透過',pour:true,total:targets[1],add:targets[1]-targets[0],instruction:`スイッチを開け、すぐに累計${targets[1]}gまで注ぎます。`,description:'スイッチを開いたまま透過させます。',valve:'open'},
-    {at:90,name:'3投目',action:'開けたまま注ぐ',phase:'透過',pour:true,total:targets[2],add:targets[2]-targets[1],instruction:`スイッチを開けたまま、累計${targets[2]}gまで注ぎます。`,description:'次の注湯は70〜80℃のお湯を使います。',valve:'open'},
-    {at:130,name:'4投目',action:'スイッチを閉じる',phase:'浸漬',pour:true,total:targets[3],add:targets[3]-targets[2],instruction:`スイッチを閉じ、70〜80℃のお湯を累計${water}gまで注ぎます。`,description:'低めの湯温で浸漬します。',valve:'closed'},
-    {at:165,name:'抽出',action:'スイッチを開く',phase:'透過',pour:false,total:water,add:0,instruction:'スイッチを開き、コーヒーが落ちるのを待ちます。',description:'注湯は完了しています。',valve:'open'},
+    {at:0,name:'1投目',action:'スイッチを閉じる',phase:'浸漬',pour:true,total:targets[0],add:targets[0],instruction:'スイッチを閉じ、約90℃のお湯で豆全体を浸します。',description:'レバーが右上ならCLOSE（浸漬）です。',valve:'closed'},
+    {at:40,name:'2投目',action:'スイッチを開く',phase:'透過',pour:true,total:targets[1],add:targets[1]-targets[0],instruction:`レバーを水平にして開き、すぐに累計${targets[1]}gまで注ぎます。`,description:'レバーが水平ならOPEN（透過）です。',valve:'open'},
+    {at:90,name:'3投目',action:'開けたまま注ぐ',phase:'透過',pour:true,total:targets[2],add:targets[2]-targets[1],instruction:`レバーを水平に保ち、累計${targets[2]}gまで注ぎます。`,description:'次の注湯は70〜80℃のお湯を使います。',valve:'open'},
+    {at:130,name:'4投目',action:'スイッチを閉じる',phase:'浸漬',pour:true,total:targets[3],add:targets[3]-targets[2],instruction:`レバーを右上に上げて閉じ、70〜80℃のお湯を累計${water}gまで注ぎます。`,description:'低めの湯温で浸漬します。',valve:'closed'},
+    {at:165,name:'抽出',action:'スイッチを開く',phase:'透過',pour:false,total:water,add:0,instruction:'レバーを水平にして開き、コーヒーが落ちるのを待ちます。',description:'注湯は完了しています。',valve:'open'},
     {at:210,name:'完成',action:'できあがり',phase:'完成',pour:false,total:water,add:0,instruction:'抽出完了。おいしい一杯を楽しんでください。',description:'スイッチを開けた状態で抽出完了。',valve:'open'}
    ];
   }
@@ -311,8 +394,10 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid 
  function renderSetup(){
   $('hybridSettings').hidden=prefs.method!=='hybrid';$('fourSixSettings').hidden=prefs.method!=='fourSix';
   document.querySelectorAll('[data-method]').forEach(b=>{const ok=b.dataset.method===prefs.method;b.classList.toggle('selected',ok);b.setAttribute('aria-pressed',ok);});
-  document.querySelectorAll('[data-water]').forEach(b=>{const ok=+b.dataset.water===prefs.water;b.classList.toggle('selected',ok);b.setAttribute('aria-pressed',ok);});
-  $('waterInput').value=prefs.water;
+  if(document.activeElement!==$('waterInput'))$('waterInput').value=prefs.water;
+  $('waterMinus').disabled=prefs.water<=100;
+  $('waterPlus').disabled=prefs.water>=1000;
+  $('resetVolume').disabled=prefs.water===300;
   $('beansInfo').textContent=`${computedBeans()}g　/　1：${prefs.ratio}`;
   document.querySelectorAll('[data-bloom]').forEach(b=>{const value=+b.dataset.bloom;b.classList.toggle('selected',value===prefs.bloom);b.setAttribute('aria-pressed',String(value===prefs.bloom));b.querySelector('[data-bloom-value]').textContent=`${Math.round(prefs.water*value/300)}g`;});
   for(const [taste,base] of Object.entries(TASTE)){
@@ -329,7 +414,13 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid 
   const sec=timeNow(), active=recipeStage(sec),step=recipe[active],next=recipe[active+1];
   const show4=prefs.method==='fourSix';
   $('methodHeading').textContent=show4?'4:6メソッド':'ハイブリッド';$('deviceHeading').textContent=show4?'V60':'HARIO Switch';
-  $('methodUse').setAttribute('href',show4?'#icon-v60':'#icon-switch');$('stageIcon').setAttribute('href',show4?'#icon-v60':'#icon-switch');
+  $('methodUse').setAttribute('href',show4?'#icon-v60':'#icon-switch-closed');
+  $('stageIcon').setAttribute('href',show4?'#icon-v60':step.valve==='closed'?'#icon-switch-closed':'#icon-switch-open');
+  $('brewIllustration').classList.toggle('hybrid',!show4);
+  $('valveMarker').hidden=show4;
+  $('valveMarkText').textContent=step.valve==='closed'?'CLOSE':'OPEN';
+  $('valveMarkHint').textContent=step.valve==='closed'?'↗ 上げる':'→ 水平に';
+  $('brewIllustration').querySelector('svg').setAttribute('aria-label',show4?'V60ドリッパー':step.valve==='closed'?'レバーが右上に上がったCLOSE状態':'レバーが床と平行のOPEN状態');
   $('phaseChip').textContent=step.phase;$('clock').textContent=clockTime(sec);
   $('ringProgress').style.strokeDasharray=CIRCUMFERENCE.toFixed(3);$('ringProgress').style.strokeDashoffset=(CIRCUMFERENCE*(1-sec/DURATION)).toFixed(3);
   $('stepCount').textContent=step.at===DURATION?'FINISH':`STEP ${active+1} / ${recipe.length-1}`;
@@ -339,8 +430,13 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid 
   $('stageAdded').textContent=step.pour?`+${step.add}g`:'注湯なし';
   $('stageNote').textContent=step.instruction;
   $('tempTip').hidden=!(prefs.method==='hybrid'&&active===2);
-  if(next){$('nextTime').textContent=clockTime(next.at);$('nextInstruction').textContent=nextInstruction(next);const rem=Math.max(0,Math.ceil(next.at-sec));$('nextCountdown').textContent=`あと ${clockTime(rem)}`;$('nextBox').classList.toggle('imminent',rem<=10&&timer.mode==='running');}
-  else{$('nextTime').textContent='✓';$('nextInstruction').textContent='抽出が完了しました。';$('nextCountdown').textContent='おつかれさまでした';$('nextBox').classList.remove('imminent');}
+  if(next){
+   $('nextTime').textContent=clockTime(next.at);$('nextInstruction').textContent=nextInstruction(next);
+   const rem=Math.max(0,Math.ceil(next.at-sec));$('nextCountdown').textContent=`あと ${clockTime(rem)}`;
+   $('nextBox').classList.toggle('imminent',rem<=10&&timer.mode==='running');
+   $('nextValve').hidden=show4||next.at===DURATION;
+   if(!show4){$('nextValveIcon').setAttribute('href',next.valve==='closed'?'#icon-switch-closed':'#icon-switch-open');$('nextValveText').textContent=next.valve==='closed'?'CLOSE｜レバーを右上へ':'OPEN｜レバーを水平に';}
+  }else{$('nextTime').textContent='✓';$('nextInstruction').textContent='抽出が完了しました。';$('nextCountdown').textContent='おつかれさまでした';$('nextBox').classList.remove('imminent');$('nextValve').hidden=true;}
   if(timer.mode==='running'){$('pauseIconUse').setAttribute('href','#icon-pause');$('pauseLabel').textContent='一時停止';}
   else if(timer.mode==='paused'){$('pauseIconUse').setAttribute('href','#icon-play');$('pauseLabel').textContent='再開';}
   else{$('pauseIconUse').setAttribute('href','#icon-reset');$('pauseLabel').textContent='もう一杯';}
@@ -371,7 +467,15 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid 
    line.append(at,qty,phase);
    const description=document.createElement('div');description.className='step-description';description.textContent=step.at===DURATION?step.action:`${step.name}：${step.action}`;
    const sub=document.createElement('div');sub.className='step-sub';sub.textContent=step.pour?`累計${step.total}g ／ ${step.instruction}`:step.instruction;
-   box.append(line,description,sub);li.append(dot,box);ol.append(li);
+   box.append(line,description,sub);
+   if(prefs.method==='hybrid'&&step.at!==DURATION){
+    const indicator=document.createElement('span');indicator.className='step-valve-indicator';
+    indicator.setAttribute('aria-label',step.valve==='closed'?'CLOSE、レバーは右上':'OPEN、レバーは水平');
+    const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');svg.setAttribute('class','icon-svg');svg.setAttribute('aria-hidden','true');
+    const use=document.createElementNS('http://www.w3.org/2000/svg','use');use.setAttribute('href',step.valve==='closed'?'#icon-switch-closed':'#icon-switch-open');svg.appendChild(use);
+    const status=document.createElement('span');status.textContent=step.valve==='closed'?'CLOSE':'OPEN';indicator.append(svg,status);box.classList.add('has-valve');box.append(indicator);
+   }
+   li.append(dot,box);ol.append(li);
   });
  }
  function openSheet(mode){
@@ -400,9 +504,16 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid 
  }
  function tick(){if(timer.mode!=='running')return;const sec=timeNow();if(previousTick!==null)alerts(previousTick,sec);previousTick=sec;if(sec>=DURATION){timer={mode:'done',elapsed:DURATION,startedAt:null};unwake();saveTimer();}renderTimer();}
  document.querySelectorAll('[data-method]').forEach(b=>b.addEventListener('click',()=>{prefs.method=b.dataset.method;updateRecipe();}));
- document.querySelectorAll('[data-water]').forEach(b=>b.addEventListener('click',()=>{prefs.water=+b.dataset.water;$('customVolume').hidden=true;updateRecipe();}));
- $('customVolumeBtn').addEventListener('click',()=>{$('customVolume').hidden=!$('customVolume').hidden;if(!$('customVolume').hidden){$('waterInput').focus();$('waterInput').select();}});
- $('customVolume').addEventListener('submit',e=>{e.preventDefault();const n=+$('waterInput').value;if(!Number.isFinite(n)||n<100||n>1000){toast('100〜1000mlの範囲で指定してください');return;}prefs.water=Math.round(n/10)*10;updateRecipe();$('customVolume').hidden=true;});
+ const setWater=n=>{prefs.water=Math.min(1000,Math.max(100,Math.round(n/10)*10));updateRecipe();$('waterInput').value=prefs.water;};
+ $('waterMinus').addEventListener('click',()=>setWater(prefs.water-10));
+ $('waterPlus').addEventListener('click',()=>setWater(prefs.water+10));
+ $('resetVolume').addEventListener('click',()=>setWater(300));
+ $('waterInput').addEventListener('change',e=>{
+  const raw=e.target.value.trim(),v=Number(raw);
+  if(!raw||!Number.isFinite(v)||v<100||v>1000){toast('抽出量は100〜1000mlで指定してください');e.target.value=prefs.water;return;}
+  setWater(v);
+ });
+ $('waterInput').addEventListener('keydown',e=>{if(e.key==='Enter'){e.target.blur();}});
  document.querySelectorAll('[data-bloom]').forEach(b=>b.addEventListener('click',()=>{prefs.bloom=+b.dataset.bloom;updateRecipe();}));
  document.querySelectorAll('[data-taste]').forEach(b=>b.addEventListener('click',()=>{prefs.taste=b.dataset.taste;updateRecipe();}));
  document.querySelectorAll('[data-body]').forEach(b=>b.addEventListener('click',()=>{prefs.body=+b.dataset.body;updateRecipe();}));
@@ -411,9 +522,8 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid 
  $('backBtn').addEventListener('click',back);
  document.querySelectorAll('[data-open-steps]').forEach(b=>b.addEventListener('click',()=>openSheet('steps')));
  $('openSettings').addEventListener('click',()=>openSheet('settings'));$('brewSettings').addEventListener('click',()=>openSheet('settings'));
- $('closeSheet').addEventListener('click',closeSheet);$('sheetDismiss').addEventListener('click',closeSheet);
- $('sheetLayer').addEventListener('click',e=>{if(e.target===$('sheetLayer'))closeSheet();});
- document.addEventListener('keydown',e=>{if(e.key==='Escape')closeSheet();if(e.key==='Tab'&&sheetMode){const nodes=[...$('sheetLayer').querySelectorAll('button:not([disabled]):not([hidden]), select:not([disabled]),input:not([disabled])')].filter(n=>n.offsetParent!==null);if(nodes.length){const first=nodes[0],last=nodes[nodes.length-1];if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus();}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus();}}}});
+ $('closeSheet').addEventListener('click',closeSheet);
+ document.addEventListener('keydown',e=>{if(e.key==='Tab'&&sheetMode){const nodes=[...$('sheetLayer').querySelectorAll('button:not([disabled]):not([hidden]), select:not([disabled]),input:not([disabled])')].filter(n=>n.offsetParent!==null);if(nodes.length){const first=nodes[0],last=nodes[nodes.length-1];if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus();}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus();}}}});
  $('ratioSelect').addEventListener('change',e=>{if(timer.mode!=='idle')return;prefs.ratio=+e.target.value;updateRecipe();});
  $('soundToggle').addEventListener('change',e=>{prefs.sound=e.target.checked;savePrefs();});
  $('soundTest').addEventListener('click',()=>{if(!prefs.sound){toast('合図音がオフになっています');return;}initAudio();chime(true);toast('合図音を再生しました');});
