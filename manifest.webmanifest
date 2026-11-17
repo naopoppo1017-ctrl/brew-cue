@@ -1,25 +1,25 @@
 {
-  "name": "Brew Cue — Coffee Ritual Timer",
+  "name": "Brew Cue — コーヒー抽出タイマー",
   "short_name": "Brew Cue",
-  "description": "いまやることが一目でわかるコーヒー抽出タイマー。",
-  "id": "./",
-  "start_url": "./index.html",
+  "description": "粕谷さんのSwitchハイブリッド抽出レシピを、現在の操作と湯量でガイドするタイマー",
+  "lang": "ja",
+  "start_url": "./",
   "scope": "./",
   "display": "standalone",
   "background_color": "#eeece3",
-  "theme_color": "#eeece3",
+  "theme_color": "#17281f",
   "icons": [
     {
       "src": "./icon-192.png",
       "sizes": "192x192",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
     },
     {
       "src": "./icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
     }
   ]
 }

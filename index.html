@@ -11,7 +11,7 @@
 <link rel="manifest" href="./manifest.webmanifest">
 <link rel="apple-touch-icon" href="./icon-180.png">
 <link rel="icon" href="./icon-192.png" type="image/png">
-<title>Brew Cue — A better brewing ritual.</title>
+<title>Brew Cue — 集中して淹れるコーヒータイマー</title>
 <style>
 :root{--paper:#eeece3;--cream:#f8f6ef;--white:#fffdf6;--ink:#17231d;--forest:#21342b;--secondary:#607167;--line:#dcded5;--gold:#f1bc73;--amber:#dfa354;--jade:#395445;--sans:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Noto Sans JP","Yu Gothic",sans-serif;--serif:Georgia,"Times New Roman",serif}
 *{box-sizing:border-box}
@@ -126,6 +126,127 @@ button,input,select{font:inherit}button{cursor:pointer}button:disabled,input:dis
 @media(min-width:760px){.shell{padding:43px 28px 65px}.topbar{padding-bottom:26px}.layout{grid-template-columns:minmax(0,1.18fr) minmax(280px,.82fr);gap:22px}.left-rail{order:1}.right-rail{order:2}.recipe{order:0}.brew{order:1}.next{order:2}.brew-content{padding:32px}.now-title{font-size:47px}.pour-amount{font-size:46px}.pour-amount.range{font-size:42px}.guide{padding:25px}.guide-title{font-size:22px}.top-right{font-size:10px}}
 @media(max-width:375px){.shell{padding:15px 11px 36px}.brand-name{font-size:25px}.brew-content{padding:20px 18px}.now-title{font-size:31px}.pour-amount{font-size:34px}.pour-amount.range{font-size:32px}.top-right{font-size:8px}.volume-field input{font-size:33px}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+/* Phase 1 — deliberate hierarchy and hands-free clarity */
+:root{--paper:#eeece3;--cream:#f8f6ef;--ink:#17231d;--gold:#f1bc73}
+.top-right{display:none}
+.top-actions{display:flex;align-items:center;gap:8px}
+.focus-toggle{display:inline-flex;gap:7px;align-items:center;padding:10px 12px;border:1px solid #d2d7ce;border-radius:100px;color:#3c5443;background:#f8f7f0;font-size:11px;font-weight:850;white-space:nowrap}
+.focus-toggle svg{width:14px;height:14px}
+.focus-toggle[aria-pressed="true"]{background:#233b2e;color:#f5eddc;border-color:#233b2e}
+.bloom-panel{border-top:1px solid #e3e3d7;margin-top:14px;padding-top:12px}
+.bloom-head{display:flex;align-items:baseline;justify-content:space-between;gap:10px;color:#526a58;font-size:11px;font-weight:800;margin-bottom:9px}
+.bloom-head small{color:#839182;font-size:10px;font-weight:600}
+.bloom-choices{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}
+.bloom-choice{padding:10px 6px 9px;background:#eeefe7;border:1px solid #dae0d6;border-radius:10px;display:flex;align-items:baseline;justify-content:center;gap:4px;font-weight:850;color:#596e5b;letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+.bloom-choice small{font-size:10px;color:inherit;font-weight:650}
+.bloom-choice.selected{background:#264232;border-color:#264232;color:#f7eacf}
+.bloom-note{margin:8px 0 0;color:#829082;font-size:10px;line-height:1.5}
+.brew-section{margin-top:17px}
+.now-title{margin-top:12px;margin-bottom:5px}
+.now-desc{margin-bottom:13px}
+.switch-visual{display:flex;align-items:center;gap:11px;border:1px solid #5c7460;background:rgba(236,242,218,.075);padding:8px 11px;border-radius:13px;margin-bottom:12px;min-height:66px}
+.switch-graphic{width:56px;height:50px;display:flex;align-items:center;justify-content:center;flex:0 0 56px}
+.switch-graphic svg{width:54px;height:48px;stroke:#dbdfb8;stroke-width:2;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.switch-visual .valve-open,.switch-visual .valve-closed{display:none}
+.switch-visual[data-position="open"] .valve-open{display:block}
+.switch-visual[data-position="closed"] .valve-closed{display:block}
+.switch-graphic .valve-open{stroke:#bcddc1}
+.switch-graphic .valve-closed{stroke:#f2c486}
+.switch-copy{display:flex;flex-direction:column;gap:4px;min-width:0}
+.switch-top{font-size:10px;color:#9eb4a3;letter-spacing:.13em;font-weight:800}
+.switch-status{font-size:23px;font-weight:900;letter-spacing:.04em;line-height:1;color:#f4d095}
+.switch-status.open{color:#c1e4bf}
+.switch-status small{font-size:12px;letter-spacing:0;color:#c1d0c0;margin-left:6px;font-weight:750}
+.switch-hint{font-size:10px;color:#b9c9b9;font-weight:650}
+.pour-box{background:#f6e9ce;padding:13px 17px 14px;min-height:111px}
+.pour-kicker{font-weight:900;letter-spacing:.04em}
+.pour-main{display:flex;align-items:end;justify-content:space-between;flex-wrap:nowrap;gap:10px;margin-top:3px}
+.pour-amount,.pour-amount.range{font-size:clamp(53px,14vw,69px);font-weight:900;letter-spacing:-.07em;white-space:nowrap;line-height:1.12}
+.pour-amount small{font-size:21px;letter-spacing:-.02em;margin-left:3px}
+.pour-cumulative{font-size:13px;color:#46604d;text-align:right;font-weight:800;line-height:1.4;white-space:normal;max-width:43%}
+.pour-cumulative strong{display:block;font-size:17px;color:#295039;white-space:nowrap}
+.pour-cumulative small{display:block;font-size:10px;color:#77816d}
+.temp-advice{border:1px solid #bd9461;border-radius:11px;background:#453726;color:#ffefd6;padding:11px 13px;margin-top:11px;display:flex;gap:9px;align-items:center;line-height:1.45}
+.temp-advice svg{width:23px;height:23px;flex:0 0 23px;stroke:#f5c78b;stroke-width:1.7;fill:none}
+.temp-advice strong{font-size:12px;font-weight:850;display:block}
+.temp-advice span{font-size:10px;color:#dbc5a7;display:block;margin-top:3px}
+.timer-section{margin-top:15px}
+.timer-top{align-items:end}
+.clock{font-size:45px}
+.timer-left .time-caption{font-size:10px}
+.inline-next{font-size:10px;margin-top:6px}
+.timeline-bar{margin:10px 0 14px}
+.countdown-warning{display:flex;justify-content:space-between;gap:12px;align-items:center;background:#efd2a4;color:#372b18;padding:9px 12px;margin:-1px 0 12px;border-radius:10px;font-weight:850;font-size:11px}
+.countdown-warning strong{font-variant-numeric:tabular-nums;font-size:20px;font-weight:900;color:#553a19}
+.next.imminent{border-color:#d2a05b;background:#fff6e7;box-shadow:0 0 0 2px rgba(211,161,84,.15)}
+.next.imminent .next-count{background:#edcf9f;color:#412b0b;border-color:#edcf9f}
+.next-volume strong{font-size:15px}
+.next-label{font-size:10px}
+.next-title{margin-top:7px}
+.next-detail{font-size:11px}
+.next-bottom{margin-top:5px}
+.focus-mode .recipe,.focus-mode .right-rail,.focus-mode .foot{display:none}
+.focus-mode .layout{display:block}
+.focus-mode .left-rail{gap:10px}
+.focus-mode .shell{padding-top:12px;padding-bottom:calc(12px + env(safe-area-inset-bottom))}
+.focus-mode .topbar{padding-bottom:11px}
+.focus-mode .brew-content{padding:18px 18px 14px}
+.focus-mode .now-title{font-size:clamp(36px,9.5vw,51px)}
+.focus-mode .next{padding:12px 14px}
+.focus-mode .timer-hint{margin-top:8px}
+.focus-mode .brew-section{margin-top:13px}
+.focus-mode .brew{box-shadow:0 15px 28px rgba(23,40,31,.14)}
+.focus-mode .now-desc{margin-bottom:12px}
+.focus-mode .now-label{font-size:13px}
+.focus-mode .pour-main{min-height:68px}
+@media(min-width:760px){.focus-mode .shell{max-width:570px}.focus-mode .now-title{font-size:48px}.focus-mode .pour-amount{font-size:69px}.brew-content{padding:26px}}
+@media(max-width:375px){.topbar{padding-bottom:13px}.focus-toggle{font-size:10px;padding:8px}.brew-content{padding:18px 15px}.focus-mode .brew-content{padding:16px 14px}.switch-visual{padding:6px 9px;min-height:59px}.switch-graphic{width:46px;flex-basis:46px}.switch-graphic svg{width:44px}.switch-status{font-size:19px}.pour-amount,.pour-amount.range{font-size:49px}.pour-cumulative{font-size:11px}.pour-cumulative strong{font-size:14px}.focus-mode .now-title{font-size:34px}.timer-hint{font-size:9px}.bloom-choice{padding:8px 3px}}
+@media(max-height:720px){.focus-mode .shell{padding-top:7px}.focus-mode .topbar{padding-bottom:7px}.focus-mode .brew-content{padding-top:14px;padding-bottom:12px}.focus-mode .brew-section{margin-top:9px}.focus-mode .now-title{margin-top:8px;font-size:32px}.focus-mode .now-desc{margin-bottom:8px}.focus-mode .switch-visual{min-height:53px;margin-bottom:8px;padding:4px 10px}.focus-mode .switch-graphic{height:42px}.focus-mode .switch-graphic svg{height:41px}.focus-mode .pour-box{padding:10px 14px;min-height:94px}.focus-mode .pour-amount{font-size:48px}.focus-mode .timer-section{margin-top:10px}.focus-mode .clock{font-size:40px}.focus-mode .timeline-bar{margin:8px 0 10px}.focus-mode .next-detail{display:none}.focus-mode .next{padding:9px 12px}}
+/* Height-aware compact focus view: no scrolling on current full-screen iPhones */
+@media(max-height:900px){
+ .focus-mode .brand-mark{width:33px;height:33px;border-radius:10px}
+ .focus-mode .brand-mark svg{width:19px;height:19px}
+ .focus-mode .brand-name{font-size:24px}
+ .focus-mode .shell{padding-top:9px}
+ .focus-mode .topbar{padding-bottom:9px}
+ .focus-mode .brew-content{padding:15px 17px 13px}
+ .focus-mode .brew-section{margin-top:11px}
+ .focus-mode .now-title{font-size:clamp(34px,8.6vw,43px);line-height:1.25;min-height:0;margin:9px 0 6px}
+ .focus-mode .now-desc{margin-bottom:9px;font-size:12px}
+ .focus-mode .switch-visual{min-height:58px;margin-bottom:9px;padding:5px 10px}
+ .focus-mode .switch-graphic{height:43px}
+ .focus-mode .switch-graphic svg{height:43px}
+ .focus-mode .switch-status{font-size:21px}
+ .focus-mode .pour-box{min-height:98px;padding:11px 15px 12px}
+ .focus-mode .pour-amount{font-size:54px}
+ .focus-mode .timer-section{margin-top:12px}
+ .focus-mode .timeline-bar{margin:9px 0 12px}
+ .focus-mode .timer-hint{margin-top:7px}
+ .focus-mode .temp-advice{padding:8px 10px;margin-top:8px}
+ .focus-mode .countdown-warning{display:none!important}
+ .focus-mode .next{padding:10px 13px}
+ .focus-mode .next-detail{display:none}
+ .focus-mode .next-title{margin:7px 0 4px;font-size:16px}
+ .focus-mode .next-bottom{margin-top:5px}
+}
+@media(max-height:740px){
+ .focus-mode .brew-content{padding:12px 14px}
+ .focus-mode .now-title{font-size:32px}
+ .focus-mode .now-desc{line-height:1.4}
+ .focus-mode .switch-visual{min-height:52px}
+ .focus-mode .switch-top,.focus-mode .switch-hint{font-size:9px}
+ .focus-mode .pour-box{min-height:90px}
+ .focus-mode .pour-amount{font-size:47px}
+ .focus-mode .temp-advice{padding:6px 9px;margin-top:6px}
+ .focus-mode .temp-advice strong{font-size:10px}
+ .focus-mode .timer-section{margin-top:7px}
+ .focus-mode .clock{font-size:38px}
+ .focus-mode .actions .start-btn,.focus-mode .actions .reset-btn{height:46px}
+ .focus-mode .next{padding:8px 10px}
+ .focus-mode .next-line{gap:5px}
+ .focus-mode .next-title{font-size:14px;margin-top:5px}
+ .focus-mode .next-bottom{font-size:10px}
+}
 </style>
 </head>
 <body>
@@ -135,7 +256,7 @@ button,input,select{font:inherit}button{cursor:pointer}button:disabled,input:dis
     <div class="brand-mark" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#304938" stroke-linecap="round" stroke-width="1.5"><path d="M5 4h14l-2 7-5 7-5-7-2-7Z"/><path d="M3 21h18M8 7h8M12 18v3"/></svg></div>
     <div class="brand-name">brew<span>cue.</span></div>
   </div>
-  <div class="top-right">YOUR DAILY<br>COFFEE RITUAL <span style="color:#b68348">✦</span></div>
+  <div class="top-actions"><button id="focusBtn" class="focus-toggle" type="button" aria-pressed="false" aria-label="集中モードを切り替える"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 4H4v4M16 4h4v4M4 16v4h4M20 16v4h-4"/></svg><span id="focusLabel">集中モード</span></button></div>
 </header>
 <main class="layout">
   <div class="left-rail">
@@ -148,7 +269,7 @@ button,input,select{font:inherit}button{cursor:pointer}button:disabled,input:dis
         <div class="bean-count"><strong><span id="beans">20</span><span style="font-size:12px"> g</span></strong><small>コーヒー豆</small></div>
       </div>
       <div class="presets" aria-label="総注湯量のクイック選択"><button class="chip" data-water="200">200 ml</button><button class="chip selected" data-water="300">300 ml</button><button class="chip" data-water="450">450 ml</button><button class="chip" data-water="600">600 ml</button></div>
-      <details class="recipe-more"><summary>豆とお湯の比率を調整</summary><label class="ratio-row" for="ratio"><span>抽出比率</span><select id="ratio"><option value="14">1 : 14（濃いめ）</option><option value="15" selected>1 : 15（標準）</option><option value="16">1 : 16（軽め）</option><option value="17">1 : 17（すっきり）</option></select></label><p class="recipe-note">指定するのは注ぐお湯の総量です。できあがり量は豆の吸水分だけ少なくなります。</p></details>
+      <div class="bloom-panel"><div class="bloom-head"><span>初回注湯量</span><small>300ml基準・3段階</small></div><div class="bloom-choices" aria-label="初回注湯量を選ぶ"><button type="button" class="bloom-choice" data-bloom="40"><span class="bloom-value">40g</span><small>少なめ</small></button><button type="button" class="bloom-choice selected" data-bloom="45"><span class="bloom-value">45g</span><small>標準</small></button><button type="button" class="bloom-choice" data-bloom="50"><span class="bloom-value">50g</span><small>多め</small></button></div><p class="bloom-note" id="bloomNote">300ml時の基準は45g。総湯量に比例して計算します。</p></div><details class="recipe-more"><summary>豆とお湯の比率を調整</summary><label class="ratio-row" for="ratio"><span>抽出比率</span><select id="ratio"><option value="14">1 : 14（濃いめ）</option><option value="15" selected>1 : 15（標準）</option><option value="16">1 : 16（軽め）</option><option value="17">1 : 17（すっきり）</option></select></label><p class="recipe-note">指定するのは注ぐお湯の総量です。できあがり量は豆の吸水分だけ少なくなります。</p></details>
     </section>
 
     <section class="brew" aria-label="抽出タイマーと今の工程">
@@ -157,15 +278,20 @@ button,input,select{font:inherit}button{cursor:pointer}button:disabled,input:dis
         <div class="brew-overline"><span class="kicker">02 — THE BREW</span><span id="statePill" class="status">準備OK</span></div>
         <div class="brew-section"><span id="nowIndex" class="section-num">01</span><span id="nowTag" class="now-label">いまやること</span></div>
         <h2 id="nowTitle" class="now-title" aria-live="polite">フタを閉じて注ぐ</h2>
-        <p id="nowDesc" class="now-desc">約90℃のお湯で豆全体を浸す</p>
-        <div id="pourLine" class="pour-box"><div class="pour-kicker" id="pourLabel">いま注ぐお湯</div><div class="pour-main"><span id="pourAdd" class="pour-amount range">40〜50g</span><span id="pourTotal" class="pour-cumulative">累計 40〜50g</span></div></div>
+        <p id="nowDesc" class="now-desc">約90℃のお湯で、豆全体が浸るまで注ぐ</p>
+        <div id="valveDiagram" class="switch-visual" data-position="closed" aria-label="現在のスイッチ状態">
+          <div class="switch-graphic" aria-hidden="true"><svg viewBox="0 0 64 56"><path d="M7 5H56L45 33H18Z"/><path d="M15 12H49" stroke-opacity=".5"/><path d="M32 33V43"/><path d="M20 50H44" stroke-opacity=".4"/><g class="valve-closed"><path d="M24 41H40" stroke-width="4"/><path d="M43 42L49 37"/></g><g class="valve-open"><path d="M28 38L25 46M35 38L35 46M42 38L45 46" stroke-width="2.5"/><path d="M45 41L50 34"/></g></svg></div>
+          <div class="switch-copy"><span class="switch-top">SWITCH POSITION / 現在の状態</span><strong id="switchText" class="switch-status">CLOSE <small>／ 閉</small></strong><span id="switchHint" class="switch-hint">浸漬：お湯をためる</span></div>
+        </div>
+        <div id="pourLine" class="pour-box"><div class="pour-kicker" id="pourLabel">スケールの目標（累計）</div><div class="pour-main"><span id="pourTotalNumber" class="pour-amount">45<small>g</small></span><span class="pour-cumulative"><small id="pourDetail">今回の追加量</small><strong id="pourAdd">+45g</strong></span></div></div>
+        <div class="temp-advice" id="tempAdvice" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 14V5a2 2 0 0 1 4 0v9a5 5 0 1 1-4 0Z"/><path d="M12 17v-9M17 6h3M17 10h2"/></svg><div><strong>今のうちに70〜80℃のお湯を準備</strong><span>2:10からの最後の注湯に使います</span></div></div>
         <div class="timer-section"><div class="timer-top"><div class="timer-left"><div class="time-caption">BREW TIME <span class="timer-total">/ 3:30</span></div><div class="inline-next"><span id="inlineNextAt" class="inline-next-at">NEXT 0:40</span><span id="inlineNextTitle">フタを開けて注ぐ</span></div></div><div id="clock" class="clock" role="timer" aria-label="抽出経過時間">0:00</div></div><div class="timeline-bar" aria-hidden="true"><div class="timeline-fill" id="progress"></div></div></div>
-        <div class="actions"><button id="startBtn" class="start-btn" type="button" aria-label="タイマーをスタート"><svg id="controlIcon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="m7 4 13 8-13 8V4Z"/></svg><span id="controlText">抽出をスタート</span></button><button id="resetBtn" class="reset-btn" type="button" hidden aria-label="タイマーをリセット" title="リセット">↺</button></div>
+        <div id="preAlert" class="countdown-warning" role="status" hidden><span id="preAlertLabel">まもなく次の工程</span><strong id="preAlertSecs">10秒</strong></div><div class="actions"><button id="startBtn" class="start-btn" type="button" aria-label="タイマーをスタート"><svg id="controlIcon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="m7 4 13 8-13 8V4Z"/></svg><span id="controlText">抽出をスタート</span></button><button id="resetBtn" class="reset-btn" type="button" hidden aria-label="タイマーをリセット" title="リセット">↺</button></div>
         <p id="timerHint" class="timer-hint">スタートすると工程ごとに音でお知らせします</p>
       </div>
     </section>
     <section id="nextCard" class="next" aria-label="次にやること">
-      <span class="next-index" aria-hidden="true"></span><div class="next-main"><div class="next-line"><span class="next-label">UP NEXT / 次にやること</span><span id="nextCountdown" class="next-count">あと 0:40</span></div><div id="nextTitle" class="next-title">フタを開けて注ぐ</div><div class="next-detail" id="nextDesc">開けたらすぐに追加で注ぐ</div><div class="next-bottom"><span id="nextPourLine" class="next-volume">追加 <strong id="nextAdd">70〜80g</strong> <span id="nextTotal">/ 累計120g</span></span><span class="next-at" id="nextAt">0:40</span></div></div>
+      <span class="next-index" aria-hidden="true"></span><div class="next-main"><div class="next-line"><span class="next-label" id="nextLabel">UP NEXT / 次にやること</span><span id="nextCountdown" class="next-count">あと 0:40</span></div><div id="nextTitle" class="next-title">フタを開けて注ぐ</div><div class="next-detail" id="nextDesc">開けたらすぐに追加で注ぐ</div><div class="next-bottom"><span id="nextPourLine" class="next-volume">追加 <strong id="nextAdd">+75g</strong> <span id="nextTotal">/ 累計120g</span></span><span class="next-at" id="nextAt">0:40</span></div></div>
     </section>
   </div>
   <div class="right-rail">
@@ -177,138 +303,142 @@ button,input,select{font:inherit}button{cursor:pointer}button:disabled,input:dis
     </section>
   </div>
 </main>
-<footer class="foot">画面を開いたまま抽出してください。iPhoneの画面ロック中は合図音が鳴らない場合があります。<br>BREW CUE / EVERY DROP, INTENTIONAL.</footer>
+<footer class="foot">画面を開いたまま抽出してください。画面ロックや他アプリの表示中は合図音が鳴らない場合があります。<br>BREW CUE / EVERY DROP, INTENTIONAL.</footer>
 </div>
 <div class="toast" id="toast" role="status" aria-live="assertive"></div>
 <script>
 (()=>{
 'use strict';
-const DURATION=210, RECIPE_KEY='brew-cue-recipe-v1', TIMER_KEY='brew-cue-timer-v1';
+const DURATION=210, RECIPE_KEY='brew-cue-recipe-phase1', TIMER_KEY='brew-cue-timer-phase1';
 const $=id=>document.getElementById(id);
 const steps=[
- {t:0,kind:'浸漬',title:'フタを閉じて注ぐ',text:'約90℃のお湯で豆全体を浸す'},
- {t:40,kind:'透過',title:'フタを開けて注ぐ',text:'開けたらすぐに追加で注ぐ'},
- {t:90,kind:'透過',title:'さらに注ぐ',text:'フタを開けた状態のまま注ぐ'},
- {t:130,kind:'浸漬',title:'フタを閉じて注ぐ',text:'お湯を70〜80℃に下げてから注ぐ'},
- {t:165,kind:'透過',title:'フタを開ける',text:'そのまま抽出完了まで待つ'},
- {t:210,kind:'完成',title:'できあがり！',text:'抽出完了。コーヒーを楽しもう'}
+ {t:0,kind:'浸漬',valve:'closed',title:'スイッチを閉じて注ぐ',text:'約90℃のお湯で、豆全体が浸るまで注ぐ'},
+ {t:40,kind:'透過',valve:'open',title:'スイッチを開いて注ぐ',text:'開けたらすぐ、累計120gまで注ぐ'},
+ {t:90,kind:'透過',valve:'open',title:'さらに注ぐ',text:'スイッチは開いたまま、累計200gまで'},
+ {t:130,kind:'浸漬',valve:'closed',title:'スイッチを閉じて注ぐ',text:'70〜80℃のお湯で、最後の注湯をする'},
+ {t:165,kind:'透過',valve:'open',title:'スイッチを開く',text:'あとはそのまま抽出が終わるのを待つ'},
+ {t:210,kind:'完成',valve:'open',title:'できあがり！',text:'おいしい一杯を楽しもう'}
 ];
-let pref={water:300,ratio:15,sound:true};
-try{const x=JSON.parse(localStorage.getItem(RECIPE_KEY));if(x&&typeof x==='object')pref={...pref,...x};}catch(e){}
+const oldPref=()=>{try{return JSON.parse(localStorage.getItem('brew-cue-recipe-v1'))||{};}catch(e){return {};}};
+const storedPref=()=>{try{return JSON.parse(localStorage.getItem(RECIPE_KEY))||oldPref();}catch(e){return oldPref();}};
+let pref={water:300,ratio:15,sound:true,bloom:45,...storedPref()};
 let water=Number.isFinite(+pref.water)?Math.min(1000,Math.max(100,Math.round(+pref.water/10)*10)):300;
 let ratio=[14,15,16,17].includes(+pref.ratio)?+pref.ratio:15;
+let bloom=[40,45,50].includes(+pref.bloom)?+pref.bloom:45;
 let sound=pref.sound!==false;
 let timer={mode:'idle',elapsed:0,startTime:null};
-try{const x=JSON.parse(localStorage.getItem(TIMER_KEY));if(x&&['running','paused','done'].includes(x.mode)&&Number.isFinite(x.elapsed)&&(x.mode!=='running'||Number.isFinite(x.startTime))){timer={mode:x.mode,elapsed:Math.min(DURATION,Math.max(0,x.elapsed)),startTime:x.startTime};}}catch(e){}
-if(timer.mode==='running'&&(Date.now()-timer.startTime)/1000>=DURATION){timer={mode:'done',elapsed:DURATION,startTime:null};}
-let audioContext=null,wakeLock=null,lastStage=null,lastSecond=-1,lastStoredSecond=-1,toastTimeout=null;
-const fmt=t=>{const s=Math.max(0,Math.floor(t));return `${Math.floor(s/60)}:${String(s%60).padStart(2,'0')}`;};
-const elapsed=()=>timer.mode==='running'?Math.min(DURATION,Math.max(0,(Date.now()-timer.startTime)/1000)):timer.mode==='done'?DURATION:timer.elapsed;
+try{const x=JSON.parse(localStorage.getItem(TIMER_KEY));if(x&&['running','paused','done'].includes(x.mode)&&Number.isFinite(x.elapsed)&&(x.mode!=='running'||Number.isFinite(x.startTime)))timer={mode:x.mode,elapsed:Math.min(DURATION,Math.max(0,x.elapsed)),startTime:x.startTime};}catch(e){}
+const now=()=>timer.mode==='running'?Math.min(DURATION,Math.max(0,(Date.now()-timer.startTime)/1000)):timer.mode==='done'?DURATION:timer.elapsed;
+if(now()>=DURATION&&timer.mode!=='idle')timer={mode:'done',elapsed:DURATION,startTime:null};
+let audioContext=null,wakeLock=null,lastStage=-1,lastSecond=-1,lastTickSec=now(),toastTimeout=null,focus=false;
+const fmt=n=>{const t=Math.max(0,Math.floor(n));return `${Math.floor(t/60)}:${String(t%60).padStart(2,'0')}`;};
 const stageAt=t=>{for(let i=steps.length-1;i>=0;i--)if(t>=steps[i].t)return i;return 0;};
-const mass=(a,b=a)=>a===b?`${a}g`:`${a}〜${b}g`;
-const quantities=i=>{
- const a=Math.round(water*40/300),b=Math.round(water*50/300),c=Math.round(water*120/300),d=Math.round(water*200/300);
- if(i===0)return {added:mass(a,b),total:mass(a,b)};
- if(i===1)return {added:mass(c-b,c-a),total:mass(c)};
- if(i===2)return {added:mass(d-c),total:mass(d)};
- if(i===3)return {added:mass(water-d),total:mass(water)};
- return null;
-};
-const savePrefs=()=>{try{localStorage.setItem(RECIPE_KEY,JSON.stringify({water,ratio,sound}));}catch(e){}};
+const targets=()=>[Math.round(water*bloom/300),Math.round(water*120/300),Math.round(water*200/300),water];
+function qty(i){const ts=targets();return i<4?{total:ts[i],add:ts[i]-(i?ts[i-1]:0)}:null;}
+const descAt=i=>i===1?`開けたらすぐ、累計${qty(1).total}gまで注ぐ`:i===2?`スイッチは開いたまま、累計${qty(2).total}gまで`:i===3?`70〜80℃のお湯で累計${water}gまで注ぐ`:steps[i].text;
+const savePrefs=()=>{try{localStorage.setItem(RECIPE_KEY,JSON.stringify({water,ratio,bloom,sound}));}catch(e){}};
 const saveTimer=()=>{try{localStorage.setItem(TIMER_KEY,JSON.stringify(timer));}catch(e){}};
-function renderSteps(){
- const active=stageAt(elapsed());
- $('stepList').replaceChildren(...steps.map((s,i)=>{
-  const qty=quantities(i),li=document.createElement('li');li.className='step'+(i===active?' current':i<active?' done-step':'');
-  if(i===active)li.setAttribute('aria-current','step');
-  li.innerHTML=`<span class="step-num">${i<active?'✓':String(i+1).padStart(2,'0')}</span><div class="step-content"><div class="step-top"><span class="step-at">${fmt(s.t)}</span><span class="step-kind">${s.kind}</span></div><div class="step-title">${s.title}</div><div class="step-description">${s.text}</div>${qty?`<div class="step-quantity">追加 ${qty.added} ｜ 累計 ${qty.total}</div>`:''}</div>`;
-  return li;
- }));
-}
+function toast(message){const el=$('toast');el.textContent=message;el.classList.add('show');clearTimeout(toastTimeout);toastTimeout=setTimeout(()=>el.classList.remove('show'),2500);}
+function setFocus(next){focus=next;document.body.classList.toggle('focus-mode',next);$('focusBtn').setAttribute('aria-pressed',String(next));$('focusLabel').textContent=next?'通常表示':'集中モード';}
+function renderSteps(){const active=stageAt(now());$('stepList').replaceChildren(...steps.map((s,i)=>{const q=qty(i),li=document.createElement('li');li.className='step'+(i===active?' current':i<active?' done-step':'');if(i===active)li.setAttribute('aria-current','step');const extra=q?`<div class="step-quantity">今回 +${q.add}g / 累計 ${q.total}g</div>`:'';li.innerHTML=`<span class="step-num">${i<active?'✓':String(i+1).padStart(2,'0')}</span><div class="step-content"><div class="step-top"><span class="step-at">${fmt(s.t)}</span><span class="step-kind">${s.kind}・${s.valve==='closed'?'閉':'開'}</span></div><div class="step-title">${s.title}</div><div class="step-description">${descAt(i)}</div>${extra}</div>`;return li;}));}
 function renderTimer(force=false){
- const sec=elapsed(),active=stageAt(sec),second=Math.floor(sec),mode=timer.mode;
+ const sec=now(),second=Math.floor(sec),active=stageAt(sec),mode=timer.mode;
  if(!force&&lastSecond===second)return;
  lastSecond=second;
+ const s=steps[active],q=qty(active),next=steps[active+1],nq=next?qty(active+1):null;
  $('clock').textContent=fmt(sec);
- $('progress').style.width=`${Math.max(0,Math.min(100,sec/DURATION*100))}%`;
+ $('progress').style.width=`${Math.min(100,sec/DURATION*100)}%`;
  $('statePill').textContent=mode==='running'?'抽出中':mode==='paused'?'一時停止中':mode==='done'?'完成':'準備OK';
  $('statePill').className='status'+(mode==='running'?' running':mode==='done'?' done':'');
  $('nowIndex').textContent=String(active+1).padStart(2,'0');
  $('nowTag').textContent=mode==='done'?'完成しました':'いまやること';
- $('nowTitle').textContent=steps[active].title;
- $('nowDesc').textContent=steps[active].text;
- const q=quantities(active),pour=$('pourLine');
- pour.classList.toggle('no-pour',!q);
- $('pourLabel').textContent=q?'いま注ぐお湯':active===5?'できあがり':'お湯を注がずに待つ';
- $('pourAdd').textContent=q?q.added:active===5?'ENJOY.':'WAIT';
- $('pourAdd').classList.toggle('range',!!q&&q.added.includes('〜'));
- $('pourTotal').textContent=q?`累計 ${q.total}`:active===5?'3分30秒で完成':'抽出を続ける';
- const next=steps[active+1],nq=next?quantities(active+1):null;
+ $('nowTitle').textContent=s.title;
+ $('nowDesc').textContent=descAt(active);
+ $('valveDiagram').dataset.position=s.valve;
+ $('switchText').className='switch-status'+(s.valve==='open'?' open':'');
+ $('switchText').innerHTML=s.valve==='open'?'OPEN <small>／ 開</small>':'CLOSE <small>／ 閉</small>';
+ $('switchHint').textContent=active===5?'抽出が完了しました':active===2?'開いた状態をキープ':s.valve==='closed'?'浸漬：お湯をためる':'透過：お湯を落とす';
+ $('pourLabel').textContent=active===5?'最終の累計注湯量':q?'スケールの目標（累計）':'注湯完了・最終累計';
+ $('pourTotalNumber').innerHTML=`${q?q.total:water}<small>g</small>`;
+ $('pourAdd').textContent=q?`+${q.add}g`:'追加なし';
+ $('pourDetail').textContent=q?'今回の追加量':'注湯せずに待つ';
+ $('tempAdvice').hidden=!(active===2);
  $('nextCountdown').textContent=next?`あと ${fmt(Math.ceil(next.t-sec))}`:'完了';
  $('nextTitle').textContent=next?next.title:'すべての工程が終了しました';
- $('nextDesc').textContent=next?next.text:'今日も良いコーヒーを。';
+ $('nextDesc').textContent=next?descAt(active+1):'今日も良いコーヒーを。';
  $('nextAt').textContent=next?fmt(next.t):'3:30';
  $('inlineNextAt').textContent=next?`NEXT ${fmt(next.t)}`:'FINISH';
  $('inlineNextTitle').textContent=next?next.title:'抽出完了';
  $('nextPourLine').hidden=!nq;
- if(nq){$('nextAdd').textContent=nq.added;$('nextTotal').textContent=`/ 累計 ${nq.total}`;}
+ if(nq){$('nextAdd').textContent=`+${nq.add}g`;$('nextTotal').textContent=`/ 累計${nq.total}g`;}
+ const countdown=next?Math.ceil(next.t-sec):999;
+ const imminent=!!next&&countdown<=10&&countdown>0&&mode==='running';
+ $('nextCard').classList.toggle('imminent',imminent);
+ $('nextLabel').textContent=imminent?'まもなく切り替え / UP NEXT':'UP NEXT / 次にやること';
+ $('preAlert').hidden=!imminent;
+ if(imminent){$('preAlertLabel').textContent=`まもなく：${next.title}`;$('preAlertSecs').textContent=`${countdown}秒`;} 
  const ctl=mode==='running'?'一時停止':mode==='paused'?'再開':mode==='done'?'もう一杯淹れる':'抽出をスタート';
  $('controlText').textContent=ctl;
  $('controlIcon').innerHTML=mode==='running'?'<rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/>':mode==='done'?'<path d="M12 5a7 7 0 1 1-6.8 8.8H2.8A9.5 9.5 0 1 0 12 2.5V0L6 5l6 5V7.5a7 7 0 0 1 0-2.5Z"/>':'<path d="m7 4 13 8-13 8V4Z"/>';
  $('startBtn').setAttribute('aria-label',ctl);
  $('resetBtn').hidden=mode==='idle';
- $('timerHint').textContent=mode==='running'?'次の工程になったら合図でお知らせします':mode==='paused'?'残り時間から再開できます':mode==='done'?'おつかれさまでした。もう一杯どうぞ。':'スタートすると工程ごとに音でお知らせします';
+ $('timerHint').textContent=mode==='running'?'10秒前から予告、3秒前から合図します':mode==='paused'?'再開すると残り時間から続けられます':mode==='done'?'おつかれさまでした。もう一杯どうぞ。':'開始すると自動で集中モードになります';
  const lock=mode!=='idle';
  ['minus','plus','water','ratio'].forEach(id=>$(id).disabled=lock);
- document.querySelectorAll('[data-water]').forEach(el=>el.disabled=lock);
- if(force||lastStage!==active){renderSteps();lastStage=active;}
+ document.querySelectorAll('[data-water],[data-bloom]').forEach(el=>el.disabled=lock);
+ if(force||active!==lastStage){renderSteps();lastStage=active;}
 }
 function renderRecipe(){
  $('water').value=water;$('beans').textContent=+(water/ratio).toFixed(1);$('ratio').value=ratio;$('soundOn').checked=sound;
  document.querySelectorAll('[data-water]').forEach(el=>el.classList.toggle('selected',+el.dataset.water===water));
+ document.querySelectorAll('[data-bloom]').forEach(el=>{const n=+el.dataset.bloom;el.classList.toggle('selected',n===bloom);el.setAttribute('aria-pressed',String(n===bloom));el.querySelector('.bloom-value').textContent=`${Math.round(water*n/300)}g`;});
+ $('bloomNote').textContent=`300ml時の基準は${bloom}g。総湯量に比例して初回注湯量を計算します。`;
  renderTimer(true);
 }
-function setWater(n){if(timer.mode!=='idle'||!Number.isFinite(n))return;water=Math.min(1000,Math.max(100,Math.round(n/10)*10));savePrefs();renderRecipe();}
+function setWater(v){if(timer.mode!=='idle'||!Number.isFinite(v))return;water=Math.min(1000,Math.max(100,Math.round(v/10)*10));savePrefs();renderRecipe();}
 $('minus').addEventListener('click',()=>setWater(water-10));
 $('plus').addEventListener('click',()=>setWater(water+10));
 $('water').addEventListener('change',e=>setWater(+e.target.value||water));
 document.querySelectorAll('[data-water]').forEach(el=>el.addEventListener('click',()=>setWater(+el.dataset.water)));
+document.querySelectorAll('[data-bloom]').forEach(el=>el.addEventListener('click',()=>{if(timer.mode!=='idle')return;bloom=+el.dataset.bloom;savePrefs();renderRecipe();}));
 $('ratio').addEventListener('change',e=>{if(timer.mode!=='idle')return;ratio=+e.target.value;savePrefs();renderRecipe();});
 $('soundOn').addEventListener('change',e=>{sound=e.target.checked;savePrefs();});
+$('focusBtn').addEventListener('click',()=>{setFocus(!focus);window.scrollTo(0,0);});
 function initAudio(){try{const C=window.AudioContext||window.webkitAudioContext;if(C){if(!audioContext)audioContext=new C();if(audioContext.state==='suspended')audioContext.resume().catch(()=>{});}}catch(e){}}
-function chime(finish=false){
- if(!sound)return;
- try{initAudio();if(audioContext){const t=audioContext.currentTime+.03;(finish?[0,.15,.30]:[0,.18]).forEach((delay,i)=>{const o=audioContext.createOscillator(),g=audioContext.createGain();o.type='sine';o.frequency.setValueAtTime((finish?660:740)+i*90,t+delay);g.gain.setValueAtTime(.0001,t+delay);g.gain.exponentialRampToValueAtTime(.13,t+delay+.025);g.gain.exponentialRampToValueAtTime(.001,t+delay+.19);o.connect(g);g.connect(audioContext.destination);o.start(t+delay);o.stop(t+delay+.20);});}}catch(e){}
- try{navigator.vibrate?.(finish?[120,75,120]:[85,55,85]);}catch(e){}
-}
-function toast(message){const el=$('toast');el.textContent=message;el.classList.add('show');clearTimeout(toastTimeout);toastTimeout=setTimeout(()=>el.classList.remove('show'),3200);}
+function tone(freq=660,vol=.08,duration=.11){if(!sound||!audioContext||audioContext.state!=='running')return;try{const t=audioContext.currentTime+.005,o=audioContext.createOscillator(),g=audioContext.createGain();o.type='sine';o.frequency.setValueAtTime(freq,t);g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(vol,t+.018);g.gain.exponentialRampToValueAtTime(.0001,t+duration);o.connect(g);g.connect(audioContext.destination);o.start(t);o.stop(t+duration+.012);}catch(e){}}
+function chime(finish=false){tone(finish?880:740,.12,.15);if(!audioContext||audioContext.state!=='running'||!sound)return;try{const t=audioContext.currentTime+.18,o=audioContext.createOscillator(),g=audioContext.createGain();o.type='sine';o.frequency.setValueAtTime(finish?1046:850,t);g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(.1,t+.018);g.gain.exponentialRampToValueAtTime(.0001,t+.18);o.connect(g);g.connect(audioContext.destination);o.start(t);o.stop(t+.20);}catch(e){}}
 async function holdScreen(){if(wakeLock||!navigator.wakeLock||document.visibilityState!=='visible')return;try{wakeLock=await navigator.wakeLock.request('screen');wakeLock.addEventListener('release',()=>wakeLock=null);}catch(e){}}
-async function releaseScreen(){if(wakeLock){try{await wakeLock.release();}catch(e){}wakeLock=null;}}
-function resetTimer(){timer={mode:'idle',elapsed:0,startTime:null};lastStage=null;lastSecond=-1;saveTimer();renderRecipe();releaseScreen();}
+async function releaseScreen(){if(!wakeLock)return;try{await wakeLock.release();}catch(e){}wakeLock=null;}
+function resetTimer(){timer={mode:'idle',elapsed:0,startTime:null};lastStage=-1;lastSecond=-1;lastTickSec=0;saveTimer();setFocus(false);renderRecipe();releaseScreen();window.scrollTo(0,0);}
 function toggleTimer(){
  if(timer.mode==='done'){resetTimer();return;}
- if(timer.mode==='running'){timer.elapsed=elapsed();timer.mode='paused';timer.startTime=null;releaseScreen();}
- else{initAudio();timer.startTime=Date.now()-timer.elapsed*1000;timer.mode='running';holdScreen();if(timer.elapsed===0)chime();}
- lastSecond=-1;saveTimer();renderTimer(true);
+ if(timer.mode==='running'){timer.elapsed=now();timer.mode='paused';timer.startTime=null;releaseScreen();}
+ else {initAudio();timer.startTime=Date.now()-timer.elapsed*1000;timer.mode='running';setFocus(true);holdScreen();if(timer.elapsed===0)chime();}
+ lastTickSec=now();lastSecond=-1;saveTimer();renderTimer(true);window.scrollTo(0,0);
 }
 $('startBtn').addEventListener('click',toggleTimer);
 $('resetBtn').addEventListener('click',resetTimer);
-$('soundTest').addEventListener('click',()=>{if(sound){initAudio();chime(true);toast('音を再生しました');}else toast('工程の合図音をオンにしてください');});
+$('soundTest').addEventListener('click',()=>{if(sound){initAudio();chime(true);toast('合図音を再生しました');}else toast('工程の合図音をオンにしてください');});
+function alerts(prev,sec){
+ if(document.visibilityState!=='visible'||sec-prev>1.7)return;
+ for(let i=1;i<steps.length;i++){
+  const s=steps[i];
+  if(prev<s.t-10&&sec>=s.t-10){toast(`あと10秒：${s.title}`);}
+  for(let k=3;k>=1;k--){if(prev<s.t-k&&sec>=s.t-k)tone(k===3?520:k===2?610:740,.085,.10);}
+  if(prev<s.t&&sec>=s.t){chime(i===5);toast(i===5?'抽出完了！':`${fmt(s.t)}　${s.title}`);}
+ }
+}
 function tick(){
  if(timer.mode!=='running')return;
- const sec=elapsed(),stage=stageAt(sec);
- if(lastStage!==null&&stage>lastStage&&document.visibilityState==='visible'){
-  chime(stage>=5);toast(stage>=5?'抽出完了！ おいしい一杯をどうぞ':`${fmt(steps[stage].t)} ${steps[stage].title}`);
- }
- if(sec>=DURATION){timer={mode:'done',elapsed:DURATION,startTime:null};releaseScreen();saveTimer();}
- else if(Math.floor(sec)!==lastStoredSecond){lastStoredSecond=Math.floor(sec);saveTimer();}
+ const sec=now();alerts(lastTickSec,sec);lastTickSec=sec;
+ if(sec>=DURATION){timer={mode:'done',elapsed:DURATION,startTime:null};saveTimer();releaseScreen();}
  renderTimer();
 }
-document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&timer.mode==='running'){holdScreen();tick();}});
-window.addEventListener('pagehide',saveTimer);
-renderRecipe();saveTimer();setInterval(tick,120);
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&timer.mode==='running'){lastTickSec=now();holdScreen();renderTimer(true);}});
+window.addEventListener('pagehide',()=>{if(timer.mode==='running')timer.elapsed=now();saveTimer();});
+renderRecipe();if(timer.mode!=='idle')setFocus(true);saveTimer();setInterval(tick,120);
 if(timer.mode==='running')holdScreen();
-if('serviceWorker'in navigator&&location.protocol==='https:')window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
+if('serviceWorker' in navigator&&location.protocol==='https:')window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
 })();
 </script>
 </body>
