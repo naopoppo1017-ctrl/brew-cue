@@ -1,7 +1,7 @@
 {
   "name": "Brew Cue — コーヒー抽出タイマー",
   "short_name": "Brew Cue",
-  "description": "粕谷さんのSwitchハイブリッド抽出レシピを、現在の操作と湯量でガイドするタイマー",
+  "description": "粕谷哲の4:6メソッドとSwitchハイブリッドの2つを切り替えて使えるコーヒータイマー",
   "lang": "ja",
   "start_url": "./",
   "scope": "./",

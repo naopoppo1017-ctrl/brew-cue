@@ -1,4 +1,4 @@
-const CACHE = 'brew-cue-phase1-v2';
+const CACHE = 'brew-cue-dual-method-v1';
 const PRELOAD = ['./', './index.html', './manifest.webmanifest', './icon-180.png', './icon-192.png', './icon-512.png'];
 self.addEventListener('install', event => {
   event.waitUntil(caches.open(CACHE).then(cache => cache.addAll(PRELOAD)).then(() => self.skipWaiting()));

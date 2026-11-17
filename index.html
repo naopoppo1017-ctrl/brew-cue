@@ -247,6 +247,38 @@ button,input,select{font:inherit}button{cursor:pointer}button:disabled,input:dis
  .focus-mode .next-title{font-size:14px;margin-top:5px}
  .focus-mode .next-bottom{font-size:10px}
 }
+
+/* Dual method — tailored recipes with one calm interface */
+.method-block{margin:0 0 15px}
+.method-caption{font-size:10px;letter-spacing:.17em;font-weight:900;color:#728173;margin:0 0 9px}
+.method-switch{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:5px;background:#e6e9df;border:1px solid #dce0d5;border-radius:14px}
+.method-btn{text-align:left;border:1px solid transparent;background:transparent;color:#6b7a6f;border-radius:10px;padding:11px 11px 10px;min-width:0;transition:background .15s,border-color .15s}
+.method-btn strong{display:block;font-size:14px;font-weight:900;letter-spacing:-.025em;line-height:1.3}
+.method-btn small{display:block;font-size:10px;color:inherit;opacity:.8;line-height:1.7;margin-top:2px;font-weight:650}
+.method-btn.selected{background:#fffef8;color:#243f30;border-color:#cfd8cd;box-shadow:0 3px 9px #263d2512}
+.method-btn:disabled{opacity:.55}
+.method-explainer{font-size:10px;color:#6f7d70;line-height:1.55;margin:10px 2px 0}
+.foursix-panel{border-top:1px solid #e3e3d7;margin-top:14px;padding-top:12px}
+.split-preview{display:flex;align-items:stretch;overflow:hidden;border-radius:9px;margin:7px 0 13px;height:35px;color:#fff9eb;font-weight:850;font-size:11px;line-height:1.3}
+.split-preview .flavor{width:40%;display:grid;place-items:center;background:#55725f}
+.split-preview .strength{width:60%;display:grid;place-items:center;background:#b68452}
+.preset-label{font-size:11px;color:#526a58;font-weight:850;margin:12px 0 7px}
+.foursix-choices{display:grid;gap:7px}
+.foursix-choices.flavors{grid-template-columns:repeat(3,minmax(0,1fr))}
+.foursix-choices.bodies{grid-template-columns:repeat(3,minmax(0,1fr))}
+.foursix-opt{min-width:0;background:#eeefe7;border:1px solid #dae0d6;border-radius:10px;padding:9px 3px 8px;color:#596e5b;font-weight:850;line-height:1.35;font-size:11px}
+.foursix-opt small{display:block;font-size:9px;font-weight:700;opacity:.76;margin-top:4px}
+.foursix-opt.selected{background:#264232;color:#f7eacf;border-color:#264232}
+.foursix-note{font-size:10px;color:#849085;line-height:1.6;margin:10px 0 0}
+.method-info{border:1px solid #718c77;background:rgba(236,242,218,.085);border-radius:13px;margin-bottom:12px;display:flex;align-items:center;gap:13px;padding:12px 14px}
+.method-info .phase-mark{width:42px;height:42px;border-radius:12px;background:#607b60;display:grid;place-items:center;flex:0 0 42px;font-family:var(--serif);font-size:22px;font-weight:800;color:#f4e9cb}
+.method-info[data-phase="strength"] .phase-mark{background:#90683e}
+.method-info small{font-size:9px;letter-spacing:.12em;color:#a9bea8;font-weight:800;display:block;margin-bottom:5px}
+.method-info strong{font-size:18px;font-weight:900;color:#f0dfbb;display:block;line-height:1.15}
+.method-info p{font-size:10px;line-height:1.5;color:#b8c8b7;margin:4px 0 0}
+.method-badge{font-size:10px;font-weight:900;color:#dbc293;letter-spacing:.08em}
+@media(max-width:375px){.method-btn{padding:9px 8px}.method-btn strong{font-size:12px}.method-btn small{font-size:9px}.method-info{padding:9px 11px;gap:10px}.method-info strong{font-size:16px}}
+@media(max-height:740px){.focus-mode .method-info{padding:7px 10px;margin-bottom:8px}.focus-mode .method-info .phase-mark{width:34px;height:34px;flex-basis:34px;font-size:18px}}
 </style>
 </head>
 <body>
@@ -261,6 +293,14 @@ button,input,select{font:inherit}button{cursor:pointer}button:disabled,input:dis
 <main class="layout">
   <div class="left-rail">
     <section class="recipe" aria-labelledby="recipeHeading">
+      <div class="method-block">
+        <div class="method-caption">BREWING METHOD / 抽出方法</div>
+        <div class="method-switch" role="group" aria-label="抽出モードを選択">
+          <button type="button" data-method="hybrid" class="method-btn selected" aria-pressed="true"><strong>ハイブリッド</strong><small>Switch / 浸漬 × 透過</small></button>
+          <button type="button" data-method="fourSix" class="method-btn" aria-pressed="false"><strong>4:6 メソッド</strong><small>V60 / 透過抽出</small></button>
+        </div>
+        <p class="method-explainer" id="methodExplainer">スイッチの開閉と湯温をガイドします。</p>
+      </div>
       <div class="recipe-row"><div><div class="kicker">01 — YOUR RECIPE</div><h1 class="recipe-heading" id="recipeHeading">お湯の量を決める</h1></div><span class="kicker" style="color:#a59b87">BREW SIZE</span></div>
       <div class="volume">
         <button id="minus" class="stepper" type="button" aria-label="お湯の量を10ml減らす">−</button>
@@ -269,7 +309,23 @@ button,input,select{font:inherit}button{cursor:pointer}button:disabled,input:dis
         <div class="bean-count"><strong><span id="beans">20</span><span style="font-size:12px"> g</span></strong><small>コーヒー豆</small></div>
       </div>
       <div class="presets" aria-label="総注湯量のクイック選択"><button class="chip" data-water="200">200 ml</button><button class="chip selected" data-water="300">300 ml</button><button class="chip" data-water="450">450 ml</button><button class="chip" data-water="600">600 ml</button></div>
-      <div class="bloom-panel"><div class="bloom-head"><span>初回注湯量</span><small>300ml基準・3段階</small></div><div class="bloom-choices" aria-label="初回注湯量を選ぶ"><button type="button" class="bloom-choice" data-bloom="40"><span class="bloom-value">40g</span><small>少なめ</small></button><button type="button" class="bloom-choice selected" data-bloom="45"><span class="bloom-value">45g</span><small>標準</small></button><button type="button" class="bloom-choice" data-bloom="50"><span class="bloom-value">50g</span><small>多め</small></button></div><p class="bloom-note" id="bloomNote">300ml時の基準は45g。総湯量に比例して計算します。</p></div><details class="recipe-more"><summary>豆とお湯の比率を調整</summary><label class="ratio-row" for="ratio"><span>抽出比率</span><select id="ratio"><option value="14">1 : 14（濃いめ）</option><option value="15" selected>1 : 15（標準）</option><option value="16">1 : 16（軽め）</option><option value="17">1 : 17（すっきり）</option></select></label><p class="recipe-note">指定するのは注ぐお湯の総量です。できあがり量は豆の吸水分だけ少なくなります。</p></details>
+      <div id="hybridOptions" class="bloom-panel"><div class="bloom-head"><span>初回注湯量</span><small>300ml基準・3段階</small></div><div class="bloom-choices" aria-label="初回注湯量を選ぶ"><button type="button" class="bloom-choice" data-bloom="40"><span class="bloom-value">40g</span><small>少なめ</small></button><button type="button" class="bloom-choice selected" data-bloom="45"><span class="bloom-value">45g</span><small>標準</small></button><button type="button" class="bloom-choice" data-bloom="50"><span class="bloom-value">50g</span><small>多め</small></button></div><p class="bloom-note" id="bloomNote">300ml時の基準は45g。総湯量に比例して計算します。</p></div><div class="foursix-panel" id="fourSixOptions" hidden>
+        <div class="bloom-head"><span>4:6の配分</span><small>前半40%で味・後半60%で濃度</small></div>
+        <div class="split-preview" aria-hidden="true"><span class="flavor">40% — 味</span><span class="strength">60% — 濃度</span></div>
+        <div class="preset-label">味のバランス <span style="font-weight:600;color:#829083">（最初の2投）</span></div>
+        <div class="foursix-choices flavors" role="group" aria-label="最初の40パーセントの配分">
+          <button type="button" data-taste="sweet" class="foursix-opt"><span>甘さ重視</span><small id="tasteSweet">50 + 70g</small></button>
+          <button type="button" data-taste="balanced" class="foursix-opt selected"><span>バランス</span><small id="tasteBalanced">60 + 60g</small></button>
+          <button type="button" data-taste="bright" class="foursix-opt"><span>明るさ重視</span><small id="tasteBright">70 + 50g</small></button>
+        </div>
+        <div class="preset-label">濃度 <span style="font-weight:600;color:#829083">（後半60%の回数）</span></div>
+        <div class="foursix-choices bodies" role="group" aria-label="後半60パーセントの注湯回数">
+          <button type="button" data-body="1" class="foursix-opt"><span>軽め</span><small>1投</small></button>
+          <button type="button" data-body="2" class="foursix-opt"><span>中間</span><small>2投</small></button>
+          <button type="button" data-body="3" class="foursix-opt selected"><span>しっかり</span><small>3投・基本</small></button>
+        </div>
+        <p class="foursix-note" id="fourSixNote">粗挽き・92℃前後が目安。注いだお湯がほぼ落ちてから次の注湯へ。</p>
+      </div><details class="recipe-more"><summary>豆とお湯の比率を調整</summary><label class="ratio-row" for="ratio"><span>抽出比率</span><select id="ratio"><option value="14">1 : 14（濃いめ）</option><option value="15" selected>1 : 15（標準）</option><option value="16">1 : 16（軽め）</option><option value="17">1 : 17（すっきり）</option></select></label><p class="recipe-note">指定するのは注ぐお湯の総量です。できあがり量は豆の吸水分だけ少なくなります。</p></details>
     </section>
 
     <section class="brew" aria-label="抽出タイマーと今の工程">
@@ -283,9 +339,13 @@ button,input,select{font:inherit}button{cursor:pointer}button:disabled,input:dis
           <div class="switch-graphic" aria-hidden="true"><svg viewBox="0 0 64 56"><path d="M7 5H56L45 33H18Z"/><path d="M15 12H49" stroke-opacity=".5"/><path d="M32 33V43"/><path d="M20 50H44" stroke-opacity=".4"/><g class="valve-closed"><path d="M24 41H40" stroke-width="4"/><path d="M43 42L49 37"/></g><g class="valve-open"><path d="M28 38L25 46M35 38L35 46M42 38L45 46" stroke-width="2.5"/><path d="M45 41L50 34"/></g></svg></div>
           <div class="switch-copy"><span class="switch-top">SWITCH POSITION / 現在の状態</span><strong id="switchText" class="switch-status">CLOSE <small>／ 閉</small></strong><span id="switchHint" class="switch-hint">浸漬：お湯をためる</span></div>
         </div>
+        <div id="fourSixVisual" class="method-info" data-phase="flavor" hidden>
+          <span class="phase-mark" id="phaseMark">40</span>
+          <div><small>4:6 METHOD / 今の抽出フェーズ</small><strong id="phaseTitle">前半40% — 味を整える</strong><p id="phaseDesc">最初の2投で、酸味と甘さのバランスを調整</p></div>
+        </div>
         <div id="pourLine" class="pour-box"><div class="pour-kicker" id="pourLabel">スケールの目標（累計）</div><div class="pour-main"><span id="pourTotalNumber" class="pour-amount">45<small>g</small></span><span class="pour-cumulative"><small id="pourDetail">今回の追加量</small><strong id="pourAdd">+45g</strong></span></div></div>
         <div class="temp-advice" id="tempAdvice" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 14V5a2 2 0 0 1 4 0v9a5 5 0 1 1-4 0Z"/><path d="M12 17v-9M17 6h3M17 10h2"/></svg><div><strong>今のうちに70〜80℃のお湯を準備</strong><span>2:10からの最後の注湯に使います</span></div></div>
-        <div class="timer-section"><div class="timer-top"><div class="timer-left"><div class="time-caption">BREW TIME <span class="timer-total">/ 3:30</span></div><div class="inline-next"><span id="inlineNextAt" class="inline-next-at">NEXT 0:40</span><span id="inlineNextTitle">フタを開けて注ぐ</span></div></div><div id="clock" class="clock" role="timer" aria-label="抽出経過時間">0:00</div></div><div class="timeline-bar" aria-hidden="true"><div class="timeline-fill" id="progress"></div></div></div>
+        <div class="timer-section"><div class="timer-top"><div class="timer-left"><div class="time-caption">BREW TIME <span class="timer-total" id="timerTotal">/ 3:30</span></div><div class="inline-next"><span id="inlineNextAt" class="inline-next-at">NEXT 0:40</span><span id="inlineNextTitle">フタを開けて注ぐ</span></div></div><div id="clock" class="clock" role="timer" aria-label="抽出経過時間">0:00</div></div><div class="timeline-bar" aria-hidden="true"><div class="timeline-fill" id="progress"></div></div></div>
         <div id="preAlert" class="countdown-warning" role="status" hidden><span id="preAlertLabel">まもなく次の工程</span><strong id="preAlertSecs">10秒</strong></div><div class="actions"><button id="startBtn" class="start-btn" type="button" aria-label="タイマーをスタート"><svg id="controlIcon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="m7 4 13 8-13 8V4Z"/></svg><span id="controlText">抽出をスタート</span></button><button id="resetBtn" class="reset-btn" type="button" hidden aria-label="タイマーをリセット" title="リセット">↺</button></div>
         <p id="timerHint" class="timer-hint">スタートすると工程ごとに音でお知らせします</p>
       </div>
@@ -296,7 +356,7 @@ button,input,select{font:inherit}button{cursor:pointer}button:disabled,input:dis
   </div>
   <div class="right-rail">
     <section class="guide" aria-labelledby="guideTitle">
-      <div class="guide-overline"><span class="kicker">03 — THE PROCESS</span><span class="kicker" style="color:#a99a7e">03:30 TOTAL</span></div>
+      <div class="guide-overline"><span class="kicker">03 — THE PROCESS</span><span class="kicker" style="color:#a99a7e"><span id="guideDuration">03:30 TOTAL</span></span></div>
       <h2 class="guide-title" id="guideTitle">抽出の流れ<span style="color:#c59760">.</span></h2>
       <ol id="stepList" class="guide-steps"></ol>
       <div class="preferences"><label class="sound-toggle"><input id="soundOn" type="checkbox" checked>工程の合図音</label><button class="sound-test" type="button" id="soundTest">音を試す ♪</button></div>
@@ -309,43 +369,67 @@ button,input,select{font:inherit}button{cursor:pointer}button:disabled,input:dis
 <script>
 (()=>{
 'use strict';
-const DURATION=210, RECIPE_KEY='brew-cue-recipe-phase1', TIMER_KEY='brew-cue-timer-phase1';
+const DURATION=210, RECIPE_KEY='brew-cue-recipe-multimethod-v1', TIMER_KEY='brew-cue-timer-multimethod-v1';
 const $=id=>document.getElementById(id);
-const steps=[
- {t:0,kind:'浸漬',valve:'closed',title:'スイッチを閉じて注ぐ',text:'約90℃のお湯で、豆全体が浸るまで注ぐ'},
- {t:40,kind:'透過',valve:'open',title:'スイッチを開いて注ぐ',text:'開けたらすぐ、累計120gまで注ぐ'},
- {t:90,kind:'透過',valve:'open',title:'さらに注ぐ',text:'スイッチは開いたまま、累計200gまで'},
- {t:130,kind:'浸漬',valve:'closed',title:'スイッチを閉じて注ぐ',text:'70〜80℃のお湯で、最後の注湯をする'},
- {t:165,kind:'透過',valve:'open',title:'スイッチを開く',text:'あとはそのまま抽出が終わるのを待つ'},
- {t:210,kind:'完成',valve:'open',title:'できあがり！',text:'おいしい一杯を楽しもう'}
+const HYBRID=[
+ {t:0,kind:'浸漬',valve:'closed',title:'スイッチを閉じて注ぐ',text:'約90℃のお湯で、豆全体が浸るまで注ぐ',pour:true},
+ {t:40,kind:'透過',valve:'open',title:'スイッチを開いて注ぐ',text:'開けたらすぐに注ぐ',pour:true},
+ {t:90,kind:'透過',valve:'open',title:'さらに注ぐ',text:'スイッチは開けたまま注ぐ',pour:true},
+ {t:130,kind:'浸漬',valve:'closed',title:'スイッチを閉じて注ぐ',text:'70〜80℃に下げたお湯を注ぐ',pour:true},
+ {t:165,kind:'透過',valve:'open',title:'スイッチを開く',text:'そのまま抽出完了まで待つ',pour:false},
+ {t:210,kind:'完成',valve:'open',title:'できあがり！',text:'おいしい一杯を楽しもう',pour:false}
 ];
-const oldPref=()=>{try{return JSON.parse(localStorage.getItem('brew-cue-recipe-v1'))||{};}catch(e){return {};}};
-const storedPref=()=>{try{return JSON.parse(localStorage.getItem(RECIPE_KEY))||oldPref();}catch(e){return oldPref();}};
-let pref={water:300,ratio:15,sound:true,bloom:45,...storedPref()};
+const SERIES_TIME=[90,130,160];
+function safeLoad(key){try{const v=JSON.parse(localStorage.getItem(key));return v&&typeof v==='object'&&!Array.isArray(v)?v:{};}catch(e){return {};}}
+const old=safeLoad('brew-cue-recipe-phase1');
+const older=safeLoad('brew-cue-recipe-v1');
+let pref={water:300,ratio:15,sound:true,bloom:45,method:'hybrid',taste:'balanced',body:3,...older,...old,...safeLoad(RECIPE_KEY)};
 let water=Number.isFinite(+pref.water)?Math.min(1000,Math.max(100,Math.round(+pref.water/10)*10)):300;
 let ratio=[14,15,16,17].includes(+pref.ratio)?+pref.ratio:15;
 let bloom=[40,45,50].includes(+pref.bloom)?+pref.bloom:45;
+let method=['hybrid','fourSix'].includes(pref.method)?pref.method:'hybrid';
+let taste=['sweet','balanced','bright'].includes(pref.taste)?pref.taste:'balanced';
+let body=[1,2,3].includes(+pref.body)?+pref.body:3;
 let sound=pref.sound!==false;
 let timer={mode:'idle',elapsed:0,startTime:null};
-try{const x=JSON.parse(localStorage.getItem(TIMER_KEY));if(x&&['running','paused','done'].includes(x.mode)&&Number.isFinite(x.elapsed)&&(x.mode!=='running'||Number.isFinite(x.startTime)))timer={mode:x.mode,elapsed:Math.min(DURATION,Math.max(0,x.elapsed)),startTime:x.startTime};}catch(e){}
+try{const x=safeLoad(TIMER_KEY);if(['running','paused','done'].includes(x.mode)&&Number.isFinite(x.elapsed)&&(x.mode!=='running'||Number.isFinite(x.startTime)))timer={mode:x.mode,elapsed:Math.min(DURATION,Math.max(0,x.elapsed)),startTime:x.startTime};}catch(e){}
 const now=()=>timer.mode==='running'?Math.min(DURATION,Math.max(0,(Date.now()-timer.startTime)/1000)):timer.mode==='done'?DURATION:timer.elapsed;
 if(now()>=DURATION&&timer.mode!=='idle')timer={mode:'done',elapsed:DURATION,startTime:null};
 let audioContext=null,wakeLock=null,lastStage=-1,lastSecond=-1,lastTickSec=now(),toastTimeout=null,focus=false;
 const fmt=n=>{const t=Math.max(0,Math.floor(n));return `${Math.floor(t/60)}:${String(t%60).padStart(2,'0')}`;};
-const stageAt=t=>{for(let i=steps.length-1;i>=0;i--)if(t>=steps[i].t)return i;return 0;};
-const targets=()=>[Math.round(water*bloom/300),Math.round(water*120/300),Math.round(water*200/300),water];
-function qty(i){const ts=targets();return i<4?{total:ts[i],add:ts[i]-(i?ts[i-1]:0)}:null;}
-const descAt=i=>i===1?`開けたらすぐ、累計${qty(1).total}gまで注ぐ`:i===2?`スイッチは開いたまま、累計${qty(2).total}gまで`:i===3?`70〜80℃のお湯で累計${water}gまで注ぐ`:steps[i].text;
-const savePrefs=()=>{try{localStorage.setItem(RECIPE_KEY,JSON.stringify({water,ratio,bloom,sound}));}catch(e){}};
+function buildRecipe(){
+ if(method==='hybrid'){
+   const total=[Math.round(water*bloom/300),Math.round(water*120/300),Math.round(water*200/300),water];
+   const steps=HYBRID.map((s,i)=>({...s, total:i<4?total[i]:water, add:i<4?total[i]-(i?total[i-1]:0):0}));
+   return {steps,duration:DURATION};
+ }
+ const toneRatio=taste==='sweet'?50/300:taste==='bright'?70/300:60/300;
+ const first=Math.round(water*toneRatio), forty=Math.round(water*.4);
+ const totals=[first,forty];
+ for(let j=1;j<=body;j++)totals.push(j===body?water:Math.round(water*(.4+.6*j/body)));
+ const time=[0,45,...SERIES_TIME.slice(0,body)];
+ const steps=totals.map((total,i)=>({
+   t:time[i],kind:i<2?'前半40%・味':'後半60%・濃度',title:`${i+1}投目を注ぐ`,
+   text:i===0?'粗挽き・92℃前後。粉全体に均一に注ぐ':i===1?'前の注湯がほぼ落ちきってから注ぐ':`ほぼ落ちきったら、累計${total}gまで注ぐ`,
+   pour:true,total,add:total-(i?totals[i-1]:0),phase:i<2?'flavor':'strength'
+ }));
+ steps.push({t:DURATION,kind:'完成',title:'ドリッパーを外す',text:'抽出完了。おいしい一杯を楽しもう',pour:false,total:water,add:0,phase:'done'});
+ return {steps,duration:DURATION};
+}
+let recipe=buildRecipe();
+const activeStage=t=>{for(let i=recipe.steps.length-1;i>=0;i--)if(t>=recipe.steps[i].t)return i;return 0;};
+const getQty=i=>{const s=recipe.steps[i];return s&&s.pour?{total:s.total,add:s.add}:null;};
+const getDesc=i=>{const s=recipe.steps[i];return s?method==='hybrid'&&s.pour&&i===1?`開けたらすぐ、累計${s.total}gまで注ぐ`:method==='hybrid'&&s.pour&&i===2?`スイッチは開いたまま、累計${s.total}gまで注ぐ`:method==='hybrid'&&s.pour&&i===3?`70〜80℃のお湯で、累計${s.total}gまで注ぐ`:s.text:'';};
+const savePrefs=()=>{try{localStorage.setItem(RECIPE_KEY,JSON.stringify({water,ratio,bloom,method,taste,body,sound}));}catch(e){}};
 const saveTimer=()=>{try{localStorage.setItem(TIMER_KEY,JSON.stringify(timer));}catch(e){}};
 function toast(message){const el=$('toast');el.textContent=message;el.classList.add('show');clearTimeout(toastTimeout);toastTimeout=setTimeout(()=>el.classList.remove('show'),2500);}
 function setFocus(next){focus=next;document.body.classList.toggle('focus-mode',next);$('focusBtn').setAttribute('aria-pressed',String(next));$('focusLabel').textContent=next?'通常表示':'集中モード';}
-function renderSteps(){const active=stageAt(now());$('stepList').replaceChildren(...steps.map((s,i)=>{const q=qty(i),li=document.createElement('li');li.className='step'+(i===active?' current':i<active?' done-step':'');if(i===active)li.setAttribute('aria-current','step');const extra=q?`<div class="step-quantity">今回 +${q.add}g / 累計 ${q.total}g</div>`:'';li.innerHTML=`<span class="step-num">${i<active?'✓':String(i+1).padStart(2,'0')}</span><div class="step-content"><div class="step-top"><span class="step-at">${fmt(s.t)}</span><span class="step-kind">${s.kind}・${s.valve==='closed'?'閉':'開'}</span></div><div class="step-title">${s.title}</div><div class="step-description">${descAt(i)}</div>${extra}</div>`;return li;}));}
+function renderSteps(){const active=activeStage(now()),steps=recipe.steps;$('stepList').replaceChildren(...steps.map((s,i)=>{const q=getQty(i),li=document.createElement('li');li.className='step'+(i===active?' current':i<active?' done-step':'');if(i===active)li.setAttribute('aria-current','step');const extra=q?`<div class="step-quantity">今回 +${q.add}g / 累計 ${q.total}g</div>`:'';const kind=method==='hybrid'?`${s.kind}・${s.valve==='closed'?'閉':'開'}`:s.kind;li.innerHTML=`<span class="step-num">${i<active?'✓':String(i+1).padStart(2,'0')}</span><div class="step-content"><div class="step-top"><span class="step-at">${fmt(s.t)}</span><span class="step-kind">${kind}</span></div><div class="step-title">${s.title}</div><div class="step-description">${getDesc(i)}</div>${extra}</div>`;return li;}));}
 function renderTimer(force=false){
- const sec=now(),second=Math.floor(sec),active=stageAt(sec),mode=timer.mode;
+ const sec=now(),second=Math.floor(sec),active=activeStage(sec),mode=timer.mode;
  if(!force&&lastSecond===second)return;
  lastSecond=second;
- const s=steps[active],q=qty(active),next=steps[active+1],nq=next?qty(active+1):null;
+ const steps=recipe.steps,s=steps[active],q=getQty(active),next=steps[active+1],nq=next?getQty(active+1):null;
  $('clock').textContent=fmt(sec);
  $('progress').style.width=`${Math.min(100,sec/DURATION*100)}%`;
  $('statePill').textContent=mode==='running'?'抽出中':mode==='paused'?'一時停止中':mode==='done'?'完成':'準備OK';
@@ -353,20 +437,30 @@ function renderTimer(force=false){
  $('nowIndex').textContent=String(active+1).padStart(2,'0');
  $('nowTag').textContent=mode==='done'?'完成しました':'いまやること';
  $('nowTitle').textContent=s.title;
- $('nowDesc').textContent=descAt(active);
- $('valveDiagram').dataset.position=s.valve;
- $('switchText').className='switch-status'+(s.valve==='open'?' open':'');
- $('switchText').innerHTML=s.valve==='open'?'OPEN <small>／ 開</small>':'CLOSE <small>／ 閉</small>';
- $('switchHint').textContent=active===5?'抽出が完了しました':active===2?'開いた状態をキープ':s.valve==='closed'?'浸漬：お湯をためる':'透過：お湯を落とす';
- $('pourLabel').textContent=active===5?'最終の累計注湯量':q?'スケールの目標（累計）':'注湯完了・最終累計';
+ $('nowDesc').textContent=getDesc(active);
+ $('valveDiagram').hidden=method!=='hybrid';
+ $('fourSixVisual').hidden=method!=='fourSix';
+ if(method==='hybrid'){
+  $('valveDiagram').dataset.position=s.valve;
+  $('switchText').className='switch-status'+(s.valve==='open'?' open':'');
+  $('switchText').innerHTML=s.valve==='open'?'OPEN <small>／ 開</small>':'CLOSE <small>／ 閉</small>';
+  $('switchHint').textContent=active===steps.length-1?'抽出が完了しました':active===2?'開いた状態をキープ':s.valve==='closed'?'浸漬：お湯をためる':'透過：お湯を落とす';
+ }else{
+  const phase=s.phase==='done'?'done':s.phase;
+  $('fourSixVisual').dataset.phase=phase;
+  $('phaseMark').textContent=phase==='flavor'?'40':phase==='strength'?'60':'✓';
+  $('phaseTitle').textContent=phase==='flavor'?'前半40% — 味を整える':phase==='strength'?'後半60% — 濃度を整える':'抽出完了';
+  $('phaseDesc').textContent=phase==='flavor'?'最初の2投で酸味と甘さのバランスを決める':phase==='strength'?`残りの60%を${body}回に分けて注ぐ`:'ドリッパーを外して完成';
+ }
+ $('pourLabel').textContent=mode==='done'?'最終の累計注湯量':q?'スケールの目標（累計）':'注湯完了・最終累計';
  $('pourTotalNumber').innerHTML=`${q?q.total:water}<small>g</small>`;
  $('pourAdd').textContent=q?`+${q.add}g`:'追加なし';
  $('pourDetail').textContent=q?'今回の追加量':'注湯せずに待つ';
- $('tempAdvice').hidden=!(active===2);
+ $('tempAdvice').hidden=!(method==='hybrid'&&active===2);
  $('nextCountdown').textContent=next?`あと ${fmt(Math.ceil(next.t-sec))}`:'完了';
  $('nextTitle').textContent=next?next.title:'すべての工程が終了しました';
- $('nextDesc').textContent=next?descAt(active+1):'今日も良いコーヒーを。';
- $('nextAt').textContent=next?fmt(next.t):'3:30';
+ $('nextDesc').textContent=next?getDesc(active+1):'今日も良いコーヒーを。';
+ $('nextAt').textContent=next?fmt(next.t):fmt(DURATION);
  $('inlineNextAt').textContent=next?`NEXT ${fmt(next.t)}`:'FINISH';
  $('inlineNextTitle').textContent=next?next.title:'抽出完了';
  $('nextPourLine').hidden=!nq;
@@ -376,7 +470,7 @@ function renderTimer(force=false){
  $('nextCard').classList.toggle('imminent',imminent);
  $('nextLabel').textContent=imminent?'まもなく切り替え / UP NEXT':'UP NEXT / 次にやること';
  $('preAlert').hidden=!imminent;
- if(imminent){$('preAlertLabel').textContent=`まもなく：${next.title}`;$('preAlertSecs').textContent=`${countdown}秒`;} 
+ if(imminent){$('preAlertLabel').textContent=`まもなく：${next.title}`;$('preAlertSecs').textContent=`${countdown}秒`;}
  const ctl=mode==='running'?'一時停止':mode==='paused'?'再開':mode==='done'?'もう一杯淹れる':'抽出をスタート';
  $('controlText').textContent=ctl;
  $('controlIcon').innerHTML=mode==='running'?'<rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/>':mode==='done'?'<path d="M12 5a7 7 0 1 1-6.8 8.8H2.8A9.5 9.5 0 1 0 12 2.5V0L6 5l6 5V7.5a7 7 0 0 1 0-2.5Z"/>':'<path d="m7 4 13 8-13 8V4Z"/>';
@@ -385,23 +479,42 @@ function renderTimer(force=false){
  $('timerHint').textContent=mode==='running'?'10秒前から予告、3秒前から合図します':mode==='paused'?'再開すると残り時間から続けられます':mode==='done'?'おつかれさまでした。もう一杯どうぞ。':'開始すると自動で集中モードになります';
  const lock=mode!=='idle';
  ['minus','plus','water','ratio'].forEach(id=>$(id).disabled=lock);
- document.querySelectorAll('[data-water],[data-bloom]').forEach(el=>el.disabled=lock);
+ document.querySelectorAll('[data-water],[data-bloom],[data-method],[data-taste],[data-body]').forEach(el=>el.disabled=lock);
  if(force||active!==lastStage){renderSteps();lastStage=active;}
 }
 function renderRecipe(){
+ recipe=buildRecipe();
  $('water').value=water;$('beans').textContent=+(water/ratio).toFixed(1);$('ratio').value=ratio;$('soundOn').checked=sound;
+ $('hybridOptions').hidden=method!=='hybrid';
+ $('fourSixOptions').hidden=method!=='fourSix';
+ $('methodExplainer').textContent=(method==='hybrid'?'Switchの開閉・注湯量・湯温をガイドします。':'V60などの透過式。最初の40%で味、残り60%で濃度を調整します。')+(water!==300?' ※工程時刻は300ml基準の目安です。':'');
+ $('timerHint').textContent='開始すると自動で集中モードになります';
+ document.querySelectorAll('[data-method]').forEach(el=>{const selected=el.dataset.method===method;el.classList.toggle('selected',selected);el.setAttribute('aria-pressed',String(selected));});
  document.querySelectorAll('[data-water]').forEach(el=>el.classList.toggle('selected',+el.dataset.water===water));
  document.querySelectorAll('[data-bloom]').forEach(el=>{const n=+el.dataset.bloom;el.classList.toggle('selected',n===bloom);el.setAttribute('aria-pressed',String(n===bloom));el.querySelector('.bloom-value').textContent=`${Math.round(water*n/300)}g`;});
  $('bloomNote').textContent=`300ml時の基準は${bloom}g。総湯量に比例して初回注湯量を計算します。`;
+ const firsts={sweet:50/300,balanced:60/300,bright:70/300};
+ Object.entries({sweet:'tasteSweet',balanced:'tasteBalanced',bright:'tasteBright'}).forEach(([key,id])=>{const first=Math.round(water*firsts[key]);$(id).textContent=`${first} + ${Math.round(water*.4)-first}g`;});
+ document.querySelectorAll('[data-taste]').forEach(el=>{const selected=el.dataset.taste===taste;el.classList.toggle('selected',selected);el.setAttribute('aria-pressed',String(selected));});
+ document.querySelectorAll('[data-body]').forEach(el=>{const selected=+el.dataset.body===body;el.classList.toggle('selected',selected);el.setAttribute('aria-pressed',String(selected));});
+ $('fourSixNote').textContent=`後半${Math.round(water*.6)}gを${body}回に分けて注ぎます。粗挽き・92℃前後が目安。落ちきりを見ながら淹れてください。`;
+ $('guideTitle').innerHTML=method==='hybrid'?'抽出の流れ<span style="color:#c59760">.</span>':'4:6の抽出手順<span style="color:#c59760">.</span>';
+ $('guideDuration').textContent='03:30 TOTAL';
+ $('timerTotal').textContent='/ 3:30';
+ $('nowIndex').textContent='01';
  renderTimer(true);
 }
-function setWater(v){if(timer.mode!=='idle'||!Number.isFinite(v))return;water=Math.min(1000,Math.max(100,Math.round(v/10)*10));savePrefs();renderRecipe();}
+function recipeChange(fn){if(timer.mode!=='idle')return;fn();lastStage=-1;lastSecond=-1;savePrefs();renderRecipe();}
+function setWater(v){if(!Number.isFinite(v))return;recipeChange(()=>water=Math.min(1000,Math.max(100,Math.round(v/10)*10)));}
 $('minus').addEventListener('click',()=>setWater(water-10));
 $('plus').addEventListener('click',()=>setWater(water+10));
 $('water').addEventListener('change',e=>setWater(+e.target.value||water));
 document.querySelectorAll('[data-water]').forEach(el=>el.addEventListener('click',()=>setWater(+el.dataset.water)));
-document.querySelectorAll('[data-bloom]').forEach(el=>el.addEventListener('click',()=>{if(timer.mode!=='idle')return;bloom=+el.dataset.bloom;savePrefs();renderRecipe();}));
-$('ratio').addEventListener('change',e=>{if(timer.mode!=='idle')return;ratio=+e.target.value;savePrefs();renderRecipe();});
+document.querySelectorAll('[data-bloom]').forEach(el=>el.addEventListener('click',()=>recipeChange(()=>bloom=+el.dataset.bloom)));
+document.querySelectorAll('[data-method]').forEach(el=>el.addEventListener('click',()=>recipeChange(()=>method=el.dataset.method)));
+document.querySelectorAll('[data-taste]').forEach(el=>el.addEventListener('click',()=>recipeChange(()=>taste=el.dataset.taste)));
+document.querySelectorAll('[data-body]').forEach(el=>el.addEventListener('click',()=>recipeChange(()=>body=+el.dataset.body)));
+$('ratio').addEventListener('change',e=>recipeChange(()=>ratio=+e.target.value));
 $('soundOn').addEventListener('change',e=>{sound=e.target.checked;savePrefs();});
 $('focusBtn').addEventListener('click',()=>{setFocus(!focus);window.scrollTo(0,0);});
 function initAudio(){try{const C=window.AudioContext||window.webkitAudioContext;if(C){if(!audioContext)audioContext=new C();if(audioContext.state==='suspended')audioContext.resume().catch(()=>{});}}catch(e){}}
@@ -421,11 +534,12 @@ $('resetBtn').addEventListener('click',resetTimer);
 $('soundTest').addEventListener('click',()=>{if(sound){initAudio();chime(true);toast('合図音を再生しました');}else toast('工程の合図音をオンにしてください');});
 function alerts(prev,sec){
  if(document.visibilityState!=='visible'||sec-prev>1.7)return;
+ const steps=recipe.steps;
  for(let i=1;i<steps.length;i++){
   const s=steps[i];
-  if(prev<s.t-10&&sec>=s.t-10){toast(`あと10秒：${s.title}`);}
+  if(prev<s.t-10&&sec>=s.t-10)toast(`あと10秒：${s.title}`);
   for(let k=3;k>=1;k--){if(prev<s.t-k&&sec>=s.t-k)tone(k===3?520:k===2?610:740,.085,.10);}
-  if(prev<s.t&&sec>=s.t){chime(i===5);toast(i===5?'抽出完了！':`${fmt(s.t)}　${s.title}`);}
+  if(prev<s.t&&sec>=s.t){chime(i===steps.length-1);toast(i===steps.length-1?'抽出完了！':`${fmt(s.t)}　${s.title}`);}
  }
 }
 function tick(){
