@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#f2f1ed">
+<meta name="color-scheme" content="light dark">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -21,12 +22,22 @@
   /* setup: porcelain + espresso ink */
   --paper:#f2f1ed;--paper2:#e7e5df;--card:#faf9f6;--ink:#1b1410;--ink2:#5f564d;--line:#d6d2c9;
   --crema:#c98a44;--cremaText:#8a5220;--open:#3fa487;--openText:#1d6a54;
+  --tick1:#b7b2a7;--tick2:#8f897e;--line2:#e6e3db;--grab:#c9c4b9;--press:#0000000d;--stripe:#cfcabf;
+  --amberOnInk:#f2b65e;--goFg:#1b1410;--onInkTint:#ffffff1f;--onInkMute:#d8d0c4;
+  --chev:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none' stroke='%231b1410' stroke-width='2' stroke-linecap='round'%3E%3Cpath d='M1 1.5 6 6.5l5-5'/%3E%3C/svg%3E");
   /* brew: roasting-dark */
   --roast:#16100c;--roast2:#2a1a11;--cream:#f7efe5;--creamMute:#d6c6b4;--amber:#f2b65e;--mint:#8ed6bd;
   --sans:"Zen Kaku Gothic New","Hiragino Kaku Gothic ProN","Yu Gothic","Noto Sans CJK JP",system-ui,sans-serif;
   --num:"Bricolage Grotesque","Helvetica Neue","Zen Kaku Gothic New",system-ui,sans-serif;
   --ease:cubic-bezier(.2,.8,.2,1);
 }
+@media(prefers-color-scheme:dark){:root{
+  --paper:#17110d;--paper2:#261a13;--card:#1e1510;--ink:#f3eadf;--ink2:#b8a794;--line:#3b2d23;
+  --crema:#d99b57;--cremaText:#e3a561;--open:#5cc2a2;--openText:#8ed6bd;
+  --tick1:#5a4a3d;--tick2:#85705e;--line2:#2c2019;--grab:#4a3a2e;--press:#ffffff14;--stripe:#4a3a2e;
+  --amberOnInk:#8a5220;--goFg:#fff;--onInkTint:#0000001a;--onInkMute:#5a4636;
+  --chev:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none' stroke='%23f3eadf' stroke-width='2' stroke-linecap='round'%3E%3Cpath d='M1 1.5 6 6.5l5-5'/%3E%3C/svg%3E");
+}}
 *{box-sizing:border-box}
 [hidden]{display:none!important}
 html{font-family:var(--sans);-webkit-text-size-adjust:100%;-webkit-tap-highlight-color:transparent;font-feature-settings:"palt"}
@@ -51,10 +62,10 @@ button:disabled,input:disabled,select:disabled{opacity:.4;cursor:not-allowed}
 .setup{padding:calc(14px + env(safe-area-inset-top,0px)) 24px 0;background:var(--paper)}
 .setup-top{display:flex;align-items:center;justify-content:space-between;min-height:48px}
 .brand{display:flex;align-items:center;gap:10px;font-family:var(--num);font-weight:600;font-size:21px;letter-spacing:-.02em}
-.brand-mark{width:26px;height:26px;border-radius:8px;background:var(--ink);display:grid;place-items:center;color:var(--amber)}
+.brand-mark{width:26px;height:26px;border-radius:8px;background:var(--ink);display:grid;place-items:center;color:var(--amberOnInk)}
 .brand-mark svg{width:16px;height:16px;stroke-width:2.2}
 .icon-button{width:44px;height:44px;background:transparent;border:0;display:grid;place-items:center;border-radius:50%;color:inherit}
-.icon-button:active{background:#0000000d}
+.icon-button:active{background:var(--press)}
 .setup-top .icon-button{margin-right:-10px}
 .sec{margin-top:26px}
 .sec-head{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin:0 0 12px}
@@ -66,7 +77,7 @@ button:disabled,input:disabled,select:disabled{opacity:.4;cursor:not-allowed}
 .method-card:active{transform:scale(.98)}
 .method-card .icon-svg{width:44px;height:44px;stroke-width:1.6;color:var(--ink2);transition:color .25s}
 .method-card.selected{background:var(--ink);border-color:var(--ink);color:var(--paper)}
-.method-card.selected .icon-svg{color:var(--amber)}
+.method-card.selected .icon-svg{color:var(--amberOnInk)}
 .method-name{display:block;font-weight:900;font-size:15px;line-height:1.25;white-space:nowrap}
 .method-sub{display:block;font-family:var(--num);font-size:12px;opacity:.7;margin-top:2px;letter-spacing:.01em}
 
@@ -84,8 +95,8 @@ button:disabled,input:disabled,select:disabled{opacity:.4;cursor:not-allowed}
 .ruler-track{position:absolute;left:0;top:0;display:flex;transition:transform .22s var(--ease)}
 .ruler.dragging .ruler-track{transition:none}
 .tick{position:relative;flex:0 0 12px;height:64px;font-style:normal}
-.tick:before{content:"";position:absolute;left:5px;top:0;width:2px;height:9px;border-radius:2px;background:#b7b2a7}
-.tick.mid:before{height:15px;background:#8f897e}
+.tick:before{content:"";position:absolute;left:5px;top:0;width:2px;height:9px;border-radius:2px;background:var(--tick1)}
+.tick.mid:before{height:15px;background:var(--tick2)}
 .tick.major:before{height:24px;background:var(--ink)}
 .tick b{position:absolute;top:31px;left:50%;transform:translateX(-50%);font-family:var(--num);font-size:12px;font-weight:500;color:var(--ink2)}
 .ruler-needle{position:absolute;left:50%;top:0;width:3px;height:34px;margin-left:-1.5px;background:var(--crema);border-radius:3px;pointer-events:none}
@@ -107,30 +118,30 @@ button:disabled,input:disabled,select:disabled{opacity:.4;cursor:not-allowed}
 .gap{height:22px}
 
 /* recipe chart */
-.plan{padding:16px 16px 14px;border-radius:22px;background:var(--card);border:1px solid #e6e3db}
+.plan{padding:16px 16px 14px;border-radius:22px;background:var(--card);border:1px solid var(--line2)}
 .plan-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
 .plan-total{font-family:var(--num);font-size:13px;color:var(--ink2);font-weight:500}
 .chart{display:flex;gap:4px;align-items:flex-end}
 .col{min-width:0;display:flex;flex-direction:column;align-items:stretch}
 .col-add{font-family:var(--num);font-weight:600;font-size:13px;height:20px;display:flex;align-items:flex-end;justify-content:center;letter-spacing:-.01em}
 .col-bar{border-radius:8px 8px 3px 3px;background:var(--ink);transform-origin:bottom;min-height:6px}
-.col-bar.none{background:repeating-linear-gradient(135deg,#cfcabf 0 3px,transparent 3px 6px);height:6px!important}
+.col-bar.none{background:repeating-linear-gradient(135deg,var(--stripe) 0 3px,transparent 3px 6px);height:6px!important}
 .col-valve{height:6px;border-radius:3px;margin-top:5px;background:var(--line)}
 .col-valve.open{background:var(--open)}.col-valve.closed{background:var(--crema)}
 .col-time{font-family:var(--num);font-size:12px;color:var(--ink2);margin-top:6px;font-weight:500}
-.chart.intro .col-bar{animation:grow .7s var(--ease) both;animation-delay:calc(var(--i)*70ms + 150ms)}
+.chart.intro .col-bar{animation:grow .7s var(--ease) both;animation-delay:calc(var(--base,0s) + var(--i)*70ms + 150ms)}
 @keyframes grow{from{transform:scaleY(0)}}
 .legend{display:flex;gap:14px;margin:10px 0 0;font-size:11.5px;color:var(--ink2);font-weight:500;align-items:center}
 .legend i{display:inline-block;width:14px;height:6px;border-radius:3px;margin-right:6px;vertical-align:1px}
 .plan-foot{font-size:11.5px;color:var(--ink2);margin:10px 0 0;line-height:1.55}
 
-.dock{position:sticky;bottom:0;margin:22px -24px 0;padding:34px 24px calc(16px + env(safe-area-inset-bottom,0px));background:linear-gradient(180deg,#f2f1ed00,var(--paper) 38%);display:grid;grid-template-columns:auto 1fr;gap:10px}
+.dock{position:sticky;bottom:0;margin:22px -24px 0;padding:34px 24px calc(16px + env(safe-area-inset-bottom,0px));background:linear-gradient(180deg,transparent,var(--paper) 38%);display:grid;grid-template-columns:auto 1fr;gap:10px}
 .ghost{height:60px;padding:0 20px;border-radius:30px;border:1px solid var(--ink);background:transparent;font-weight:900;font-size:14px;display:flex;align-items:center;gap:8px}
 .ghost svg{width:20px;height:20px}
-.ghost:active{background:#0000000d}
+.ghost:active{background:var(--press)}
 .go{height:60px;border-radius:30px;border:0;background:var(--ink);color:var(--paper);display:flex;align-items:center;justify-content:space-between;padding:0 8px 0 26px;font-weight:900;font-size:17px;letter-spacing:.02em;transition:transform .12s}
 .go:active{transform:scale(.98)}
-.go-icon{width:44px;height:44px;border-radius:50%;background:var(--amber);color:var(--ink);display:grid;place-items:center}
+.go-icon{width:44px;height:44px;border-radius:50%;background:var(--amberOnInk);color:var(--goFg);display:grid;place-items:center}
 .go-icon svg{width:18px;height:18px;margin-left:2px}
 
 /* ============ BREW ============ */
@@ -218,7 +229,7 @@ button:disabled,input:disabled,select:disabled{opacity:.4;cursor:not-allowed}
 @keyframes fade{from{opacity:0}}
 .sheet{width:100%;height:min(90dvh,100%);background:var(--paper);border-radius:30px 30px 0 0;display:flex;flex-direction:column;overflow:hidden;animation:rise .42s var(--ease);padding:0 22px}
 @keyframes rise{from{transform:translateY(100%)}}
-.sheet-grab{width:38px;height:5px;border-radius:5px;background:#c9c4b9;margin:10px auto 0;flex:none}
+.sheet-grab{width:38px;height:5px;border-radius:5px;background:var(--grab);margin:10px auto 0;flex:none}
 .sheet-drag{flex:none;touch-action:none;cursor:grab;margin:0 -22px;padding:0 22px}
 .sheet{will-change:transform}
 .sheet.dragging{transition:none}
@@ -244,20 +255,56 @@ button:disabled,input:disabled,select:disabled{opacity:.4;cursor:not-allowed}
 .step-item.complete{opacity:.62}
 .step-item.active{background:var(--ink);color:var(--paper)}
 .step-item.active .step-time,.step-item.active .step-title{color:var(--paper)}
-.step-item.active .step-sub{color:#d8d0c4}
-.step-item.active .step-grams{color:var(--amber)}
-.step-item.active .valve-pill{background:#ffffff1f;color:var(--paper)}
+.step-item.active .step-sub{color:var(--onInkMute)}
+.step-item.active .step-grams{color:var(--amberOnInk)}
+.step-item.active .valve-pill{background:var(--onInkTint);color:var(--paper)}
 .setting-row{padding:16px 2px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:12px;font-size:15px;font-weight:700}
-.setting-row select{padding:10px 36px 10px 14px;border:1px solid var(--line);background:var(--card) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none' stroke='%231b1410' stroke-width='2' stroke-linecap='round'%3E%3Cpath d='M1 1.5 6 6.5l5-5'/%3E%3C/svg%3E") no-repeat right 14px center;appearance:none;-webkit-appearance:none;border-radius:14px;font-weight:500;font-size:14px}
-.switch{appearance:none;-webkit-appearance:none;width:52px;height:32px;border-radius:16px;background:#c9c4b9;position:relative;transition:background .25s;flex:none;cursor:pointer;margin:0}
+.setting-row select{padding:10px 36px 10px 14px;border:1px solid var(--line);background:var(--card) var(--chev) no-repeat right 14px center;appearance:none;-webkit-appearance:none;border-radius:14px;font-weight:500;font-size:14px}
+.switch{appearance:none;-webkit-appearance:none;width:52px;height:32px;border-radius:16px;background:var(--grab);position:relative;transition:background .25s;flex:none;cursor:pointer;margin:0}
 .switch:after{content:"";position:absolute;left:3px;top:3px;width:26px;height:26px;border-radius:50%;background:#fff;box-shadow:0 1px 3px #0003;transition:transform .3s var(--ease)}
 .switch:checked{background:var(--ink)}
-.switch:checked:after{transform:translateX(20px);background:var(--amber)}
+.switch:checked:after{transform:translateX(20px);background:var(--amberOnInk)}
 .test-button{background:var(--paper2);border:0;border-radius:99px;padding:10px 16px;font-size:13px;font-weight:700}
 .setting-help{font-size:12.5px;line-height:1.75;color:var(--ink2);margin:16px 2px 0;font-weight:500}
 .toast{pointer-events:none;position:absolute;z-index:60;bottom:calc(24px + env(safe-area-inset-bottom,0px));left:50%;transform:translate(-50%,16px);width:calc(100% - 40px);max-width:400px;background:var(--cream);color:var(--roast);border-radius:99px;padding:13px 20px;text-align:center;font-weight:900;font-size:14px;box-shadow:0 12px 30px #0006;opacity:0;transition:opacity .2s,transform .3s var(--ease)}
 .toast.show{opacity:1;transform:translate(-50%,0)}
 
+/* clock mode toggle */
+.chip-row{display:flex;align-items:center;gap:10px}
+.clock-mode{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:700;color:var(--creamMute)}
+.clock-sub{margin-left:auto;font-family:var(--num);font-size:15px;font-weight:500;color:var(--creamMute);white-space:nowrap}
+.clock-mode svg{width:14px;height:14px;stroke-width:2}
+.clock-btn{display:block;width:100%;background:none;border:0;padding:0;color:inherit;text-align:left;border-radius:16px}
+.clock-btn:active .clock{opacity:.7}
+/* pacing target: dashed line at the cumulative target, liquid rises toward it */
+.target{position:absolute;left:0;right:0;bottom:calc(var(--target,0) * 78%);height:0;border-top:1.5px dashed #f2b65eb8;pointer-events:none;transition:bottom .6s var(--ease),opacity .4s}
+.target span{position:absolute;left:3px;top:-17px;font-family:var(--num);font-size:11px;font-weight:700;color:var(--amber)}
+.target.off{opacity:0}
+.target.reached{border-top-color:var(--mint)}.target.reached span{color:var(--mint)}
+.liquid{transition:height .5s linear}
+/* finished: the pot fills up and the surface goes still */
+.brew[data-run="done"] .liquid{transition:height 2.6s cubic-bezier(.25,.7,.2,1)}
+.brew[data-run="done"] .wave{opacity:0;transition:opacity 1.6s}
+.brew[data-run="done"] .crest{opacity:1;background:linear-gradient(90deg,transparent,#f2b65e 30%,#f2b65e 70%,transparent)}
+.brew[data-run="done"] .clock{color:var(--amber);transition:color 1.2s}
+/* confirm dialog */
+.dialog-layer{position:absolute;inset:0;z-index:50;background:#0c0705b8;display:flex;align-items:flex-end;padding:0 12px calc(12px + env(safe-area-inset-bottom,0px));animation:fade .2s ease-out}
+.dialog{width:100%;background:var(--paper);color:var(--ink);border-radius:30px;padding:26px 20px 20px;display:flex;flex-direction:column;gap:10px;animation:rise .4s var(--ease)}
+.dialog h2{margin:0;font-size:20px;font-weight:900}
+.dialog p{margin:0 0 10px;font-size:14px;line-height:1.7;color:var(--ink2);font-weight:500}
+.dlg-btn{height:60px;border-radius:30px;font-weight:900;font-size:16px;letter-spacing:.02em}
+.dlg-primary{background:var(--ink);color:var(--paper);border:0}
+.dlg-secondary{background:transparent;border:1px solid var(--line);color:var(--ink)}
+.dlg-btn:active{transform:scale(.98)}
+/* launch */
+.splash{position:absolute;inset:0;z-index:80;background:var(--roast);display:grid;place-items:center;overflow:hidden;transition:opacity .5s ease,visibility .5s}
+.splash.out{opacity:0;visibility:hidden}
+.splash .liquid{--level:.82;transition:none;animation:fillup 1.5s cubic-bezier(.3,.6,.2,1) both}
+@keyframes fillup{from{height:0}}
+.splash-mark{position:relative;display:flex;align-items:center;gap:12px;font-family:var(--num);font-weight:600;font-size:30px;letter-spacing:-.02em;color:var(--cream);animation:markin .9s .3s var(--ease) both}
+.splash-mark span{width:36px;height:36px;border-radius:11px;background:var(--cream);color:var(--roast);display:grid;place-items:center}
+.splash-mark svg{width:22px;height:22px}
+@keyframes markin{from{opacity:0;transform:translateY(10px)}}
 @media(max-height:740px){
   .sec{margin-top:20px}
   .clock{font-size:clamp(60px,12.5dvh,100px)}.now-title{font-size:22px}
@@ -290,6 +337,7 @@ button:disabled,input:disabled,select:disabled{opacity:.4;cursor:not-allowed}
  <symbol id="icon-pause" viewBox="0 0 24 24"><path d="M8.5 5v14M15.5 5v14" stroke-width="3.6"/></symbol>
  <symbol id="icon-reset" viewBox="0 0 24 24"><path d="M4 10V4m0 6h6M4.9 10A8 8 0 1 1 4 14"/></symbol>
  <symbol id="icon-thermo" viewBox="0 0 24 24"><path d="M9 14V5a3 3 0 0 1 6 0v9a6 6 0 1 1-6 0Z"/><path d="M12 10v8"/></symbol>
+ <symbol id="icon-swap" viewBox="0 0 24 24"><path d="M7 4v14M3.500 14.500 7 18l3.500-3.500M17 20V6M13.500 9.500 17 6l3.500 3.500"/></symbol>
  <symbol id="icon-drop" viewBox="0 0 24 24"><path d="M12 3C8.5 8.2 6 11 6 14.5a6 6 0 0 0 12 0C18 11 15.500 8.200 12 3Z" fill="currentColor" stroke="none"/></symbol>
 </svg>
 <div class="app" id="app">
@@ -358,6 +406,7 @@ button:disabled,input:disabled,select:disabled{opacity:.4;cursor:not-allowed}
  </main>
 
  <main class="screen brew" id="brewView" aria-label="抽出タイマー" data-valve="closed" data-run="idle" hidden>
+  <div class="target off" id="target" aria-hidden="true"><span id="targetLabel"></span></div>
   <div class="liquid" id="liquid" aria-hidden="true"><div class="crest"></div>
    <div class="wave b"><svg viewBox="0 0 800 14" preserveAspectRatio="none"><path fill="currentColor" d="M0 14V7C50 0 100 0 200 7S350 14 400 7 500 0 600 7s150 7 200 0V14Z"/></svg></div>
    <div class="wave"><svg viewBox="0 0 800 14" preserveAspectRatio="none"><path fill="currentColor" d="M0 14V6C100 14 150 14 200 6S300 -2 400 6 500 14 600 6s150-8 200 0V14Z"/></svg></div>
@@ -369,8 +418,8 @@ button:disabled,input:disabled,select:disabled{opacity:.4;cursor:not-allowed}
     <button type="button" class="icon-button" id="brewSettings" aria-label="設定を開く"><svg class="icon-svg"><use href="#icon-gear"/></svg></button>
    </header>
    <div class="segments" id="segments" aria-hidden="true"></div>
-   <div class="clock-block"><span class="phase-chip" id="phaseChip">浸漬</span>
-    <div class="clock-line" role="timer" aria-label="抽出の経過時間"><span class="clock" id="clock" aria-live="off">0:00</span><span class="clock-total" id="clockTotal">/ 3:30</span></div></div>
+   <div class="clock-block"><div class="chip-row"><span class="phase-chip" id="phaseChip">浸漬</span><span class="clock-mode"><svg class="icon-svg"><use href="#icon-swap"/></svg><span id="clockMode">経過時間</span></span><span class="clock-sub" id="clockSub" hidden></span></div>
+    <button type="button" class="clock-btn" id="clockBtn" title="タップで表示を切り替え"><div class="clock-line"><span class="clock" id="clock">0:00</span><span class="clock-total" id="clockTotal">/ 3:30</span></div></button></div>
    <section class="now" aria-label="現在の工程">
     <div class="now-head"><b id="stepCount">工程 1 / 5</b><span id="stageLabel">1投目</span></div>
     <h2 class="now-title" id="stageAction">スイッチを閉じる</h2>
@@ -414,10 +463,13 @@ button:disabled,input:disabled,select:disabled{opacity:.4;cursor:not-allowed}
   <div id="settingsContent" class="sheet-body" hidden>
    <div class="setting-row"><label for="ratioSelect">豆とお湯の比率</label><select id="ratioSelect"><option value="14">1：14（濃いめ）</option><option value="15">1：15（標準）</option><option value="16">1：16（軽め）</option><option value="17">1：17（すっきり）</option></select></div>
    <div class="setting-row"><label for="soundToggle">工程の合図音</label><input type="checkbox" class="switch" id="soundToggle" checked></div>
+   <div class="setting-row" id="hapticRow" hidden><label for="hapticToggle">工程の振動</label><input type="checkbox" class="switch" id="hapticToggle" checked></div>
    <div class="setting-row"><span>合図音の確認</span><button type="button" class="test-button" id="soundTest">音を試す</button></div>
    <p class="setting-help">次の工程の10秒前から画面で予告し、3・2・1秒前に合図音が鳴ります。抽出中に比率や抽出方法は変更できません。<br><br>抽出中は画面を開いたまま使用してください。工程時刻は基本レシピ（300ml）を基準とした目安です。</p>
   </div>
  </section></div>
+ <div class="dialog-layer" id="dialogLayer" hidden><section class="dialog" role="alertdialog" aria-modal="true" aria-labelledby="dlgTitle" aria-describedby="dlgBody"><h2 id="dlgTitle"></h2><p id="dlgBody"></p><button type="button" class="dlg-btn dlg-primary" id="dlgCancel">続ける</button><button type="button" class="dlg-btn dlg-secondary" id="dlgOk">OK</button></section></div>
+ <div class="splash" id="splash" aria-hidden="true"><div class="liquid"><div class="crest"></div><div class="wave b"><svg viewBox="0 0 800 14" preserveAspectRatio="none"><path fill="currentColor" d="M0 14V7C50 0 100 0 200 7S350 14 400 7 500 0 600 7s150 7 200 0V14Z"/></svg></div><div class="wave"><svg viewBox="0 0 800 14" preserveAspectRatio="none"><path fill="currentColor" d="M0 14V6C100 14 150 14 200 6S300 -2 400 6 500 14 600 6s150-8 200 0V14Z"/></svg></div></div><div class="splash-mark"><span><svg class="icon-svg"><use href="#icon-drop"/></svg></span>Brew Cue</div></div>
  <div class="toast" id="toast" role="status" aria-live="polite"></div>
 </div>
 <script>
@@ -431,7 +483,7 @@ button:disabled,input:disabled,select:disabled{opacity:.4;cursor:not-allowed}
  const FOUR_TIMES=[90,130,160];
  const RULER_GAP=12,RULER_MIN=100,RULER_MAX=1000;
  const safeRead=key=>{try{const x=JSON.parse(localStorage.getItem(key));return x&&typeof x==='object'&&!Array.isArray(x)?x:null;}catch{return null;}};
- const defaults={method:'hybrid',water:300,bloom:45,taste:'balanced',body:3,ratio:15,sound:true};
+ const defaults={method:'hybrid',water:300,bloom:45,taste:'balanced',body:3,ratio:15,sound:true,haptic:true,clockMode:'elapsed'};
  let stored=safeRead(PREF_KEY);if(!stored){for(const k of oldKeys){const x=safeRead(k);if(x){stored=x;break;}}}
  let prefs={...defaults,...stored};
  const inSet=(x,items,def)=>items.includes(x)?x:def;
@@ -441,14 +493,14 @@ button:disabled,input:disabled,select:disabled{opacity:.4;cursor:not-allowed}
  prefs.taste=inSet(prefs.taste,['sweet','balanced','bright'],'balanced');
  prefs.body=inSet(+prefs.body,[1,2,3],3);
  prefs.ratio=inSet(+prefs.ratio,[14,15,16,17],15);
- prefs.sound=prefs.sound!==false;
+ prefs.sound=prefs.sound!==false;prefs.haptic=prefs.haptic!==false;prefs.clockMode=inSet(prefs.clockMode,['elapsed','remaining'],'elapsed');
  let timer={mode:'idle',elapsed:0,startedAt:null};
  const storedTimer=safeRead(TIMER_KEY);
  if(storedTimer&&['running','paused','done'].includes(storedTimer.mode)&&Number.isFinite(storedTimer.elapsed)){
   timer={mode:storedTimer.mode,elapsed:Math.max(0,Math.min(DURATION,storedTimer.elapsed)),startedAt:Number.isFinite(storedTimer.startedAt)?storedTimer.startedAt:null};
   if(timer.mode==='running'&&!timer.startedAt)timer.mode='paused';
  }
- let recipe=[],sheetMode=null,sheetPreviousFocus=null,context=null,wakeLock=null,previousTick=null,lastActive=-1,toastTimeout=null,chartIntro=true,segKey='';
+ let currentView='setup',dialogOpen=false,recipe=[],sheetMode=null,sheetPreviousFocus=null,context=null,wakeLock=null,previousTick=null,lastActive=-1,toastTimeout=null,chartIntro=true,segKey='';
  const safeWrite=(k,val)=>{try{localStorage.setItem(k,JSON.stringify(val));}catch{}};
  const savePrefs=()=>safeWrite(PREF_KEY,prefs);
  const saveTimer=()=>safeWrite(TIMER_KEY,timer);
@@ -479,9 +531,21 @@ button:disabled,input:disabled,select:disabled{opacity:.4;cursor:not-allowed}
   })).concat([{at:210,name:'完成',action:'ドリッパーを外す',phase:'完成',pour:false,total:water,add:0,instruction:'お湯が落ちきったら、ドリッパーを外して完成です。',description:'抽出完了',valve:'open'}]);
  }
  function toast(message){const el=$('toast');el.textContent=message;el.classList.add('show');clearTimeout(toastTimeout);toastTimeout=setTimeout(()=>el.classList.remove('show'),2600);}
+const applyThemeColor=()=>{const dark=matchMedia('(prefers-color-scheme: dark)').matches;document.querySelector('meta[name="theme-color"]').content=currentView==='brew'?'#16100c':dark?'#17110d':'#f2f1ed';};
+ matchMedia('(prefers-color-scheme: dark)').addEventListener('change',applyThemeColor);
+ const buzz=p=>{if(prefs.haptic&&navigator.vibrate&&document.visibilityState==='visible'){try{navigator.vibrate(p);}catch{}}};
+ function ask({title,body,ok,cancel='続ける'}){return new Promise(resolve=>{
+  const L=$('dialogLayer'),prev=document.activeElement,a=$('dlgCancel'),b=$('dlgOk');
+  $('dlgTitle').textContent=title;$('dlgBody').textContent=body;b.textContent=ok;a.textContent=cancel;
+  L.hidden=false;dialogOpen=true;a.focus();
+  const finish=v=>{L.hidden=true;dialogOpen=false;document.removeEventListener('keydown',onKey,true);L.removeEventListener('click',onScrim);a.removeEventListener('click',onNo);b.removeEventListener('click',onYes);if(prev&&prev.isConnected)prev.focus();resolve(v);};
+  const onYes=()=>finish(true),onNo=()=>finish(false),onScrim=e=>{if(e.target===L)finish(false);};
+  const onKey=e=>{if(e.key==='Escape'){e.preventDefault();e.stopPropagation();finish(false);}else if(e.key==='Tab'){if(e.shiftKey&&document.activeElement===a){e.preventDefault();b.focus();}else if(!e.shiftKey&&document.activeElement===b){e.preventDefault();a.focus();}}};
+  document.addEventListener('keydown',onKey,true);L.addEventListener('click',onScrim);a.addEventListener('click',onNo);b.addEventListener('click',onYes);
+ });}
  function setView(view){
   $('setupView').hidden=view!=='setup';$('brewView').hidden=view!=='brew';
-  document.querySelector('meta[name="theme-color"]').content=view==='brew'?'#16100c':'#f2f1ed';
+  currentView=view;applyThemeColor();
   if(view==='setup'){$('setupView').scrollTop=0;positionRuler();}
  }
  /* ruler */
@@ -527,7 +591,7 @@ button:disabled,input:disabled,select:disabled{opacity:.4;cursor:not-allowed}
   }
   document.querySelectorAll('[data-taste]').forEach(b=>{const ok=b.dataset.taste===prefs.taste;b.classList.toggle('selected',ok);b.setAttribute('aria-pressed',String(ok));});
   document.querySelectorAll('[data-body]').forEach(b=>{const ok=+b.dataset.body===prefs.body;b.classList.toggle('selected',ok);b.setAttribute('aria-pressed',String(ok));});
-  $('ratioSelect').value=prefs.ratio;$('soundToggle').checked=prefs.sound;
+  $('ratioSelect').value=prefs.ratio;$('soundToggle').checked=prefs.sound;$('hapticToggle').checked=prefs.haptic;
   renderChart();
  }
  function updateRecipe(){recipe=buildRecipe();savePrefs();renderSetup();if(sheetMode==='steps')renderSteps();}
@@ -550,10 +614,19 @@ button:disabled,input:disabled,select:disabled{opacity:.4;cursor:not-allowed}
   $('valveMarkText').textContent=step.valve==='closed'?'CLOSE':'OPEN';
   $('valveMarkHint').textContent=step.valve==='closed'?'レバーを上げる':'レバーを水平に';
   $('leverFig').setAttribute('aria-label',step.valve==='closed'?'レバーが右上に上がったCLOSE状態':'レバーが床と平行のOPEN状態');
-  $('phaseChip').textContent=step.phase;setClock(clockTime(sec));
+  $('phaseChip').textContent=step.phase;
+  const remMode=prefs.clockMode==='remaining'&&!!next;
+  setClock(clockTime(remMode?Math.max(0,Math.ceil(next.at-sec)):sec));
+  $('clockMode').textContent=remMode?'次の工程まで':'経過時間';
+  $('clockTotal').hidden=remMode;$('clockSub').hidden=!remMode;$('clockSub').textContent=`経過 ${clockTime(sec)}`;
   buildSegments();
   document.querySelectorAll('#segments .seg').forEach((seg,i)=>{const a=recipe[i].at,b=recipe[i+1].at;const p=Math.max(0,Math.min(1,(sec-a)/(b-a)));seg.style.setProperty('--p',p.toFixed(3));seg.classList.toggle('past',p>=1);});
-  $('liquid').style.setProperty('--level',(step.total/prefs.water).toFixed(3));
+  const prevTotal=active>0?recipe[active-1].total:0,stageDur=next?next.at-step.at:0;
+  const pourWin=Math.max(1,Math.min(20,stageDur*.5)),prog=step.pour?Math.max(0,Math.min(1,(sec-step.at)/pourWin)):1;
+  const level=timer.mode==='done'?1/.78:(prevTotal+(step.total-prevTotal)*prog)/prefs.water;
+  $('liquid').style.setProperty('--level',level.toFixed(4));
+  const tg=$('target');tg.style.setProperty('--target',(step.total/prefs.water).toFixed(4));
+  tg.classList.toggle('off',!(step.pour&&timer.mode!=='done'));tg.classList.toggle('reached',prog>=1);$('targetLabel').textContent=step.total;
   $('stepCount').textContent=step.at===DURATION?'完了':`工程 ${active+1} / ${recipe.length-1}`;
   $('stageAction').textContent=step.action;
   $('stageLabel').textContent=step.pour?step.name:step.at===DURATION?'抽出完了':'注湯完了';
@@ -606,7 +679,7 @@ button:disabled,input:disabled,select:disabled{opacity:.4;cursor:not-allowed}
  function openSheet(mode){
   sheetMode=mode;sheetPreviousFocus=document.activeElement;
   $('stepsContent').hidden=mode!=='steps';$('settingsContent').hidden=mode!=='settings';
-  if(mode==='steps')renderSteps();else{$('sheetTitle').textContent='設定';$('ratioSelect').disabled=timer.mode!=='idle';$('ratioSelect').value=prefs.ratio;$('soundToggle').checked=prefs.sound;}
+  if(mode==='steps')renderSteps();else{$('sheetTitle').textContent='設定';$('ratioSelect').disabled=timer.mode!=='idle';$('ratioSelect').value=prefs.ratio;$('soundToggle').checked=prefs.sound;$('hapticToggle').checked=prefs.haptic;$('hapticRow').hidden=!navigator.vibrate;}
   $('sheetLayer').hidden=false;$('closeSheet').focus();
  }
  function closeSheet(){if(!sheetMode)return;sheetMode=null;$('sheetLayer').hidden=true;if(sheetPreviousFocus&&sheetPreviousFocus.isConnected)sheetPreviousFocus.focus();}
@@ -616,15 +689,15 @@ button:disabled,input:disabled,select:disabled{opacity:.4;cursor:not-allowed}
  async function wake(){try{if(!wakeLock&&navigator.wakeLock&&document.visibilityState==='visible'){wakeLock=await navigator.wakeLock.request('screen');wakeLock.addEventListener('release',()=>wakeLock=null);}}catch{}}
  async function unwake(){if(!wakeLock)return;try{await wakeLock.release();}catch{}wakeLock=null;}
  function reset(){timer={mode:'idle',elapsed:0,startedAt:null};lastActive=-1;previousTick=null;saveTimer();unwake();}
- function start(){reset();initAudio();timer.mode='running';timer.startedAt=Date.now();previousTick=0;saveTimer();$('liquid').style.setProperty('--level',0);setView('brew');renderTimer();chime();wake();}
+ function start(){reset();initAudio();buzz(25);timer.mode='running';timer.startedAt=Date.now();previousTick=0;saveTimer();$('liquid').style.setProperty('--level',0);setView('brew');renderTimer();chime();wake();}
  function pause(){if(timer.mode==='running'){timer.elapsed=timeNow();timer.startedAt=null;timer.mode='paused';unwake();}else if(timer.mode==='paused'){initAudio();timer.startedAt=Date.now()-timer.elapsed*1000;timer.mode='running';previousTick=timer.elapsed;wake();}else if(timer.mode==='done'){reset();setView('setup');}saveTimer();renderTimer();}
- function back(){if(timer.mode==='running'||timer.mode==='paused'){if(!confirm('抽出を終了して設定画面に戻りますか？'))return;}reset();setView('setup');}
+ async function back(){if(timer.mode==='running'||timer.mode==='paused'){if(!await ask({title:'抽出を終了しますか？',body:'タイマーを止めて、設定画面に戻ります。',ok:'終了して戻る'}))return;}reset();setView('setup');}
  function alerts(prev,current){
   if(document.visibilityState!=='visible'||current-prev>2)return;
   recipe.slice(1).forEach(s=>{
    if(prev<s.at-10&&current>=s.at-10)toast(`まもなく：${s.action}`);
-   for(let n=3;n>=1;n--)if(prev<s.at-n&&current>=s.at-n)ping(600+(3-n)*120,0,.08,.11);
-   if(prev<s.at&&current>=s.at){chime(s.at===DURATION);toast(s.at===DURATION?'抽出完了！':`${clockTime(s.at)}：${s.action}`);}
+   for(let n=3;n>=1;n--)if(prev<s.at-n&&current>=s.at-n){ping(600+(3-n)*120,0,.08,.11);buzz(14);}
+   if(prev<s.at&&current>=s.at){chime(s.at===DURATION);buzz(s.at===DURATION?[120,70,120,70,260]:[70,50,70]);toast(s.at===DURATION?'抽出完了！':`${clockTime(s.at)}：${s.action}`);}
   });
  }
  function tick(){if(timer.mode!=='running')return;const sec=timeNow();if(previousTick!==null)alerts(previousTick,sec);previousTick=sec;if(sec>=DURATION){timer={mode:'done',elapsed:DURATION,startedAt:null};unwake();saveTimer();}renderTimer();}
@@ -654,7 +727,7 @@ button:disabled,input:disabled,select:disabled{opacity:.4;cursor:not-allowed}
  document.querySelectorAll('[data-taste]').forEach(b=>b.addEventListener('click',()=>{prefs.taste=b.dataset.taste;updateRecipe();}));
  document.querySelectorAll('[data-body]').forEach(b=>b.addEventListener('click',()=>{prefs.body=+b.dataset.body;updateRecipe();}));
  $('startBrew').addEventListener('click',start);$('pauseBrew').addEventListener('click',pause);
- $('resetBrew').addEventListener('click',()=>{if(timer.mode==='running'||timer.mode==='paused'){if(!confirm('タイマーをリセットして最初から始めますか？'))return;}reset();setView('setup');});
+ $('resetBrew').addEventListener('click',async()=>{if(timer.mode==='running'||timer.mode==='paused'){if(!await ask({title:'リセットしますか？',body:'いまの抽出は破棄され、設定画面に戻ります。',ok:'リセットする',cancel:'やめる'}))return;}reset();setView('setup');});
  $('backBtn').addEventListener('click',back);
  document.querySelectorAll('[data-open-steps]').forEach(b=>b.addEventListener('click',()=>openSheet('steps')));
  $('openSettings').addEventListener('click',()=>openSheet('settings'));$('brewSettings').addEventListener('click',()=>openSheet('settings'));
@@ -699,10 +772,14 @@ button:disabled,input:disabled,select:disabled{opacity:.4;cursor:not-allowed}
  });
  $('ratioSelect').addEventListener('change',e=>{if(timer.mode!=='idle')return;prefs.ratio=+e.target.value;updateRecipe();});
  $('soundToggle').addEventListener('change',e=>{prefs.sound=e.target.checked;savePrefs();});
+ $('hapticToggle').addEventListener('change',e=>{prefs.haptic=e.target.checked;savePrefs();if(prefs.haptic)buzz(40);});
+ $('clockBtn').addEventListener('click',()=>{prefs.clockMode=prefs.clockMode==='remaining'?'elapsed':'remaining';savePrefs();renderTimer();});
  $('soundTest').addEventListener('click',()=>{if(!prefs.sound){toast('合図音がオフになっています');return;}initAudio();chime(true);toast('合図音を再生しました');});
  document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&timer.mode==='running'){previousTick=timeNow();wake();renderTimer();}});
  window.addEventListener('pagehide',saveTimer);
  buildRuler();
+ {const sp=$('splash'),calm=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(timer.mode==='idle'&&!calm){$('chart').style.setProperty('--base','1.3s');const out=()=>sp.classList.add('out');setTimeout(out,1600);sp.addEventListener('pointerdown',out);sp.addEventListener('transitionend',e=>{if(e.target===sp&&sp.classList.contains('out'))sp.remove();});}else sp.remove();}
  updateRecipe();if(timer.mode==='running'&&timeNow()>=DURATION){timer={mode:'done',elapsed:DURATION,startedAt:null};saveTimer();}
  if(timer.mode!=='idle'){setView('brew');renderTimer();if(timer.mode==='running')wake();}else setView('setup');
  if(document.fonts&&document.fonts.ready)document.fonts.ready.then(positionRuler);
