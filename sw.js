@@ -1,4 +1,4 @@
-const CACHE='brew-cue-ui-2026-11-19-v14-edge28';
+const CACHE='brew-cue-ui-2026-11-19-v15-edge-setup';
 const FONTS='cue-fonts-v1';
 const ASSETS=['./','./index.html','./manifest.webmanifest','./icon-180.png','./icon-192.png','./icon-512.png'];
 self.addEventListener('install',event=>{
