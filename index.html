@@ -40,8 +40,8 @@
   --amberOnInk:#8a5220;--goFg:#fff;--onInkTint:#0000001a;--onInkMute:#5a4636;
   --chev:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none' stroke='%23f3eadf' stroke-width='2' stroke-linecap='round'%3E%3Cpath d='M1 1.5 6 6.5l5-5'/%3E%3C/svg%3E");
 }}
-html.edge{--edge:28px;--edgeS:6px}
-@media (display-mode:standalone) and (min-height:780px){html{--edge:28px;--edgeS:6px}}
+html.edge{--edge:16px;--edgeS:6px}
+@media (display-mode:standalone) and (min-height:780px){html{--edge:16px;--edgeS:6px}}
 html{background:#16100c}
 *{box-sizing:border-box}
 [hidden]{display:none!important}
@@ -486,7 +486,7 @@ button:disabled,input:disabled,select:disabled{opacity:.4;cursor:not-allowed}
 (()=>{
  'use strict';
  const $=id=>document.getElementById(id);
- const DURATION=210,VERSION='v15';
+ const DURATION=210,VERSION='v16';
  const PREF_KEY='brew-cue-redesign-preferences-v1',TIMER_KEY='brew-cue-redesign-timer-v1';
  const oldKeys=['brew-cue-recipe-multimethod-v1','brew-cue-recipe-phase1','brew-cue-recipe-v1'];
  const TASTE={sweet:50,balanced:60,bright:70};
