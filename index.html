@@ -21,10 +21,10 @@
 :root{
   /* day: steam-white, ink, ultramarine for water, orange for held water */
   --bg:#eef1f2;--surface:#fff;--ink:#15110f;--ink2:#596066;--line:#d3d9dc;--line2:#e3e8ea;
-  --water:#2b4bff;--waterInk:#fff;--waterSoft:#dfe4ff;--heat:#e8480f;--heatSoft:#ffe4d8;
+  --water:#46c7dc;--waterInk:#052a31;--waterText:#0b8799;--waterSoft:#d6f3f7;--heat:#e8480f;--heatSoft:#ffe4d8;
   --glass:#ffffffa6;--liq1:#c9772f;--liq2:#5a2c13;--press:#0000000d;--grab:#c7cdd0;
   /* night (brew screen) */
-  --night:#0f0d0c;--fog:#f4f1ec;--fogMute:#bdb6ac;--nWater:#7f96ff;--nHeat:#ff8a4d;--nLine:#ffffff24;
+  --night:#0f0d0c;--fog:#f4f1ec;--fogMute:#bdb6ac;--nWater:#86e3ee;--nHeat:#ff8a4d;--nLine:#ffffff24;
   --sans:"Zen Kaku Gothic New","Hiragino Kaku Gothic ProN","Yu Gothic","Noto Sans CJK JP",system-ui,sans-serif;
   --num:"Archivo","Helvetica Neue","Arial Narrow","Zen Kaku Gothic New",system-ui,sans-serif;
   --ease:cubic-bezier(.2,.8,.2,1);
@@ -32,7 +32,7 @@
 }
 @media(prefers-color-scheme:dark){:root{
   --bg:#0e0d0f;--surface:#1a191c;--ink:#f3f0ea;--ink2:#a9a49d;--line:#2d2b30;--line2:#232126;
-  --water:#7f96ff;--waterInk:#0a0e2e;--waterSoft:#1c2350;--heat:#ff8a4d;--heatSoft:#3a2015;
+  --water:#7fdfeb;--waterInk:#052a31;--waterText:#7fdfeb;--waterSoft:#143a42;--heat:#ff8a4d;--heatSoft:#3a2015;
   --glass:#ffffff10;--press:#ffffff14;--grab:#47434a;
 }}
 html.edge{--edge:16px;--edgeS:6px}
@@ -85,36 +85,31 @@ button:disabled,input:disabled,select:disabled{opacity:.4;cursor:not-allowed}
 .method-name{display:block;font-weight:900;font-size:15px;line-height:1.25;white-space:nowrap}
 .method-sub{display:block;font-family:var(--num);font-stretch:85%;font-size:12px;opacity:.75;margin-top:2px}
 
-/* water: a real measuring beaker you can drag */
-.gauge{display:grid;grid-template-columns:132px 1fr;gap:18px;align-items:stretch}
-.beaker{position:relative;height:clamp(250px,35dvh,330px);touch-action:none;cursor:ns-resize;-webkit-user-select:none;user-select:none;outline-offset:6px;border-radius:12px}
-.glass{position:absolute;left:0;top:0;bottom:0;width:84px;border:2.5px solid var(--ink);border-top-color:transparent;border-radius:4px 4px 28px 28px;background:var(--glass);overflow:hidden}
-.glass:before{content:"";position:absolute;left:0;right:0;top:0;height:2.5px;background:linear-gradient(90deg,var(--ink) 0 14%,transparent 14% 86%,var(--ink) 86%)}
-.fill{position:absolute;left:0;right:0;bottom:0;height:calc(var(--w,300) / 10 * 1%);background:linear-gradient(180deg,var(--liq1),var(--liq2) 70%);transition:height .3s var(--ease)}
-.beaker.dragging .fill{transition:none}
-.fill:before{content:"";position:absolute;left:0;right:0;top:0;height:3px;background:#ffd9a8;opacity:.85}
-.notch{position:absolute;left:0;right:0;height:0;border-top:1px dashed #ffffff8c;pointer-events:none}
-.notch span{position:absolute;left:7px;bottom:2px;font-family:var(--num);font-stretch:75%;font-weight:700;font-size:11px;color:#fff}
-.scale{position:absolute;left:90px;top:0;bottom:0;width:42px;pointer-events:none}
-.scale i{position:absolute;inset:0;background-repeat:repeat-y;background-position:left bottom;
-  background-image:linear-gradient(to top,var(--ink2) 1px,transparent 1px),linear-gradient(to top,var(--ink) 1px,transparent 1px),linear-gradient(to top,var(--ink) 1.5px,transparent 1.5px);
-  background-size:6px 1%,12px 5%,18px 10%;opacity:.8}
-.scale b{position:absolute;left:23px;font-family:var(--num);font-stretch:75%;font-weight:600;font-size:11px;color:var(--ink2);transform:translateY(50%)}
-.gauge-side{display:flex;flex-direction:column;min-width:0}
-.readout{display:flex;align-items:baseline;gap:6px;margin-top:-4px}
-.readout input{font-family:var(--num);font-stretch:62%;font-weight:700;font-size:clamp(84px,25vw,112px);line-height:.95;letter-spacing:-.03em;width:2.7ch;text-align:left;background:transparent;border:0;border-radius:8px;padding:0;appearance:textfield;-moz-appearance:textfield;font-variant-numeric:tabular-nums}
-.readout input::-webkit-inner-spin-button,.readout input::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
-.readout span{font-family:var(--num);font-stretch:80%;font-size:24px;font-weight:600;color:var(--ink2)}
-.steppers{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}
-.step-btn{height:54px;border-radius:27px;border:1px solid var(--line);background:var(--surface);display:grid;place-items:center;transition:transform .12s,background .2s}
-.step-btn:active{transform:scale(.94);background:var(--line2)}
+/* water: big readout + horizontal ruler */
+.readout{display:grid;grid-template-columns:52px 1fr 52px;align-items:center;gap:6px}
+.step-btn{width:52px;height:52px;border-radius:50%;border:1px solid var(--line);background:var(--surface);display:grid;place-items:center;transition:transform .12s,background .2s}
+.step-btn:active{transform:scale(.92);background:var(--line2)}
 .step-btn svg{width:20px;height:20px;stroke-width:2.2}
-.beans{margin-top:auto;padding-top:16px;display:flex;flex-direction:column;gap:2px}
-.beans-label{font-size:12px;font-weight:700;color:var(--ink2)}
-.beans-value{font-family:var(--num);font-stretch:70%;font-size:40px;font-weight:700;line-height:1;letter-spacing:-.01em}
-.beans-value small{font-family:var(--sans);font-size:15px;font-weight:700;margin-left:3px;letter-spacing:0}
+.readout-num{display:flex;justify-content:center;align-items:baseline;gap:6px}
+.readout-num input{font-family:var(--num);font-stretch:62%;font-weight:700;font-size:clamp(88px,26vw,112px);line-height:1;letter-spacing:-.03em;width:3ch;text-align:center;background:transparent;border:0;border-radius:8px;padding:0;appearance:textfield;-moz-appearance:textfield;font-variant-numeric:tabular-nums}
+.readout-num input::-webkit-inner-spin-button,.readout-num input::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
+.readout-num span{font-family:var(--num);font-stretch:80%;font-size:24px;font-weight:600;color:var(--ink2)}
+.ruler{position:relative;height:64px;margin:8px -22px 0;overflow:hidden;cursor:ew-resize;touch-action:pan-y;user-select:none;-webkit-user-select:none;-webkit-mask-image:linear-gradient(90deg,transparent,#000 22%,#000 78%,transparent);mask-image:linear-gradient(90deg,transparent,#000 22%,#000 78%,transparent);border-radius:8px}
+.ruler-track{position:absolute;left:0;top:0;display:flex;transition:transform .22s var(--ease)}
+.ruler.dragging .ruler-track{transition:none}
+.tick{position:relative;flex:0 0 12px;height:64px;font-style:normal}
+.tick:before{content:"";position:absolute;left:5px;top:0;width:2px;height:9px;border-radius:2px;background:var(--grab)}
+.tick.mid:before{height:15px;background:var(--ink2)}
+.tick.major:before{height:24px;background:var(--ink)}
+.tick b{position:absolute;top:31px;left:50%;transform:translateX(-50%);font-family:var(--num);font-stretch:80%;font-size:12px;font-weight:600;color:var(--ink2)}
+.ruler-needle{position:absolute;left:50%;top:0;width:4px;height:36px;margin-left:-2px;background:var(--water);border-radius:3px;pointer-events:none}
+.ruler:focus-visible{outline-offset:-3px}
+.beans{display:flex;align-items:baseline;justify-content:space-between;margin-top:12px;padding:14px 18px;border-radius:20px;background:var(--surface);border:1px solid var(--line2)}
+.beans-label{font-size:13px;font-weight:700;color:var(--ink2)}
+.beans-value{font-family:var(--num);font-stretch:70%;font-size:34px;font-weight:700;line-height:1}
+.beans-value small{font-family:var(--sans);font-size:14px;font-weight:700;margin-left:3px}
 .beans-ratio{font-family:var(--num);font-stretch:85%;font-size:13px;color:var(--ink2);font-weight:500}
-.reset-link{border:0;background:none;font-size:12px;font-weight:700;color:var(--water);padding:8px 0 8px 12px;text-decoration:underline;text-underline-offset:4px}
+.reset-link{border:0;background:none;font-size:12px;font-weight:700;color:var(--waterText);padding:8px 0 8px 12px;text-decoration:underline;text-underline-offset:4px}
 
 .opts{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
 .opt{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;min-height:76px;padding:8px 4px;border-radius:20px;border:1px solid var(--line);background:var(--surface);transition:background .25s,color .25s,border-color .25s,transform .12s}
@@ -148,7 +143,7 @@ button:disabled,input:disabled,select:disabled{opacity:.4;cursor:not-allowed}
 .ghost:active{background:var(--press)}
 .go{height:62px;border-radius:31px;border:0;background:var(--water);color:var(--waterInk);display:flex;align-items:center;justify-content:space-between;padding:0 8px 0 26px;font-weight:900;font-size:17px;letter-spacing:.02em;transition:transform .12s}
 .go:active{transform:scale(.98)}
-.go-icon{width:46px;height:46px;border-radius:50%;background:var(--waterInk);color:var(--water);display:grid;place-items:center}
+.go-icon{width:46px;height:46px;border-radius:50%;background:var(--waterInk);color:#86e3ee;display:grid;place-items:center}
 .go-icon svg{width:18px;height:18px;margin-left:2px}
 
 /* ================= BREW: the cue lane ================= */
@@ -237,7 +232,7 @@ button:disabled,input:disabled,select:disabled{opacity:.4;cursor:not-allowed}
 .q-added .no-pour{color:#ffffff59;font-size:.45em;font-weight:500}
 .qty-total{display:flex;align-items:baseline;gap:8px}
 .now-note{margin:6px 0 0;font-size:14px;line-height:1.6;font-weight:500;max-width:34em}
-.temp-tip{margin-top:6px;padding:7px 12px;background:#7f96ff26;border-radius:12px;color:var(--nWater);font-size:12.5px;font-weight:700;line-height:1.45;display:flex;gap:8px;align-items:center}
+.temp-tip{margin-top:6px;padding:7px 12px;background:#86e3ee24;border-radius:12px;color:var(--nWater);font-size:12.5px;font-weight:700;line-height:1.45;display:flex;gap:8px;align-items:center}
 .temp-tip svg{width:18px;height:18px;flex:none}
 .actions{flex:none;padding-top:clamp(8px,1.4dvh,14px);display:grid;grid-template-columns:1fr auto 1fr;align-items:center;justify-items:center}
 .act{display:flex;flex-direction:column;align-items:center;gap:6px;background:none;border:0;color:var(--fog);font-size:12px;font-weight:700;padding:0}
@@ -273,7 +268,7 @@ button:disabled,input:disabled,select:disabled{opacity:.4;cursor:not-allowed}
 .step-title{font-weight:900;font-size:15px;line-height:1.4}
 .step-sub{font-size:12.5px;line-height:1.6;color:var(--ink2);margin-top:2px;font-weight:500}
 .step-side{display:flex;flex-direction:column;align-items:flex-end;gap:6px}
-.step-grams{font-family:var(--num);font-stretch:65%;font-size:26px;font-weight:700;line-height:1.1;color:var(--water);white-space:nowrap}
+.step-grams{font-family:var(--num);font-stretch:65%;font-size:26px;font-weight:700;line-height:1.1;color:var(--waterText);white-space:nowrap}
 .valve-pill{display:inline-flex;align-items:center;gap:5px;font-family:var(--num);font-stretch:85%;font-size:11px;font-weight:700;letter-spacing:.06em;padding:3px 9px 3px 7px;border-radius:99px;background:var(--surface);border:1px solid var(--line2)}
 .valve-pill i{width:7px;height:7px;border-radius:50%}
 .valve-pill.open i{background:var(--water)}.valve-pill.closed i{background:var(--heat)}
@@ -304,9 +299,9 @@ button:disabled,input:disabled,select:disabled{opacity:.4;cursor:not-allowed}
 /* ================= LAUNCH ================= */
 .splash{position:absolute;inset:0;z-index:80;background:#0f0d0c;overflow:hidden;transition:opacity .5s ease,visibility .5s}
 .splash.out{opacity:0;visibility:hidden}
-.sp-rail{position:absolute;left:50%;top:0;width:2px;height:46%;margin-left:-1px;background:linear-gradient(180deg,transparent,#7f96ff);transform-origin:top;animation:railin .9s var(--ease) both}
-.sp-drop{position:absolute;left:50%;top:46%;width:18px;height:26px;margin:-26px 0 0 -9px;background:#7f96ff;border-radius:50% 50% 50% 50%/62% 62% 38% 38%;animation:dropin .9s cubic-bezier(.5,0,.8,.4) both}
-.sp-ring,.sp-ring2{position:absolute;left:50%;top:46%;width:18px;height:18px;margin:-9px 0 0 -9px;border-radius:50%;border:2px solid #7f96ff;opacity:0;animation:ring 1.2s .85s var(--ease) both}
+.sp-rail{position:absolute;left:50%;top:0;width:2px;height:46%;margin-left:-1px;background:linear-gradient(180deg,transparent,#86e3ee);transform-origin:top;animation:railin .9s var(--ease) both}
+.sp-drop{position:absolute;left:50%;top:46%;width:18px;height:26px;margin:-26px 0 0 -9px;background:#86e3ee;border-radius:50% 50% 50% 50%/62% 62% 38% 38%;animation:dropin .9s cubic-bezier(.5,0,.8,.4) both}
+.sp-ring,.sp-ring2{position:absolute;left:50%;top:46%;width:18px;height:18px;margin:-9px 0 0 -9px;border-radius:50%;border:2px solid #86e3ee;opacity:0;animation:ring 1.2s .85s var(--ease) both}
 .sp-ring2{animation-delay:1s}
 .sp-mark{position:absolute;left:0;right:0;top:calc(46% + 44px);text-align:center;font-family:var(--num);font-stretch:80%;font-weight:800;font-size:34px;letter-spacing:-.01em;color:#f4f1ec;animation:markin .8s 1s var(--ease) both}
 @keyframes railin{from{transform:scaleY(0)}}
@@ -335,6 +330,7 @@ button:disabled,input:disabled,select:disabled{opacity:.4;cursor:not-allowed}
  <symbol id="icon-v60" viewBox="0 0 48 48"><path d="M6 8H40L31 32H15Z"/><path d="M13 12L19 31M23 11V31M33 12L27 31" stroke-opacity=".55"/><path d="M38 12C46 12 46 24 36 24"/><path d="M17 36H29"/><path d="M23 39.5c-1.6 2.3-1.6 3.2 0 4.2 1.6-1 1.6-1.9 0-4.2Z" fill="currentColor" stroke="none"/></symbol>
  <symbol id="g-closed" viewBox="0 0 40 40"><path d="M5 6H25L21 19H9Z"/><rect x="9" y="19" width="12" height="7" rx="2"/><path d="M21 23L33 11" stroke-width="3"/></symbol>
  <symbol id="g-open" viewBox="0 0 40 40"><path d="M5 6H25L21 19H9Z"/><rect x="9" y="19" width="12" height="7" rx="2"/><path d="M21 23H36" stroke-width="3"/><path d="M12 31v4M17 31v4" stroke-opacity=".6"/></symbol>
+ <symbol id="g-temp" viewBox="0 0 40 40"><path d="M16 22V9a4 4 0 0 1 8 0v13a8 8 0 1 1-8 0Z"/><path d="M20 16v12"/></symbol>
  <symbol id="g-pour" viewBox="0 0 40 40"><path d="M20 5C14 14 10 18 10 24a10 10 0 0 0 20 0c0-6-4-10-10-19Z"/></symbol>
  <symbol id="icon-list" viewBox="0 0 24 24"><path d="M9 6h11M9 12h11M9 18h11"/><circle cx="4.5" cy="6" r="1" fill="currentColor"/><circle cx="4.5" cy="12" r="1" fill="currentColor"/><circle cx="4.5" cy="18" r="1" fill="currentColor"/></symbol>
  <symbol id="icon-gear" viewBox="0 0 24 24"><path d="M4 7h9M17 7h3M4 17h3M11 17h9"/><circle cx="15" cy="7" r="2.2"/><circle cx="9" cy="17" r="2.2"/></symbol>
@@ -363,22 +359,15 @@ button:disabled,input:disabled,select:disabled{opacity:.4;cursor:not-allowed}
   </section>
 
   <section class="sec" aria-labelledby="waterTitle">
-   <div class="sec-head"><h2 class="sec-title" id="waterTitle">湯量 <span class="sec-note">ビーカーを上下になぞる</span></h2><button type="button" class="reset-link" id="resetVolume">300mlに戻す</button></div>
-   <div class="gauge">
-    <div class="beaker" id="beaker" role="slider" tabindex="0" aria-label="湯量" aria-valuemin="100" aria-valuemax="1000" aria-valuenow="300" aria-valuetext="300ml">
-     <div class="glass"><div class="fill" id="fill"></div><div id="notches"></div></div>
-     <div class="scale" id="scale"><i></i></div>
-    </div>
-    <div class="gauge-side">
-     <label class="readout"><input type="number" id="waterInput" inputmode="numeric" min="100" max="1000" step="10" value="300" aria-label="お湯の量（100〜1000ml、10ml刻み）"><span>ml</span></label>
-     <div class="steppers" role="group" aria-label="お湯の量を10ml刻みで調整">
-      <button type="button" class="step-btn" id="waterMinus" aria-label="お湯を10ml減らす"><svg class="icon-svg"><use href="#icon-minus"/></svg></button>
-      <button type="button" class="step-btn" id="waterPlus" aria-label="お湯を10ml増やす"><svg class="icon-svg"><use href="#icon-plus"/></svg></button>
-     </div>
-     <div class="beans"><span class="beans-label">必要なコーヒー豆</span><strong id="beansInfo" class="beans-value">20<small>g</small></strong><span class="beans-ratio" id="ratioInfo">1：15</span></div>
-    </div>
+   <div class="sec-head"><h2 class="sec-title" id="waterTitle">湯量 <span class="sec-note">目盛りを左右になぞる</span></h2><button type="button" class="reset-link" id="resetVolume">300mlに戻す</button></div>
+   <div class="readout">
+    <button type="button" class="step-btn" id="waterMinus" aria-label="お湯を10ml減らす"><svg class="icon-svg"><use href="#icon-minus"/></svg></button>
+    <label class="readout-num"><input type="number" id="waterInput" inputmode="numeric" min="100" max="1000" step="10" value="300" aria-label="お湯の量（100〜1000ml、10ml刻み）"><span>ml</span></label>
+    <button type="button" class="step-btn" id="waterPlus" aria-label="お湯を10ml増やす"><svg class="icon-svg"><use href="#icon-plus"/></svg></button>
    </div>
-  </section>
+   <div class="ruler" id="ruler" role="slider" tabindex="0" aria-label="湯量の目盛り" aria-valuemin="100" aria-valuemax="1000" aria-valuenow="300" aria-valuetext="300ml"><div class="ruler-track" id="rulerTrack"></div><div class="ruler-needle"></div></div>
+   <div class="beans"><span class="beans-label">必要なコーヒー豆 <span class="beans-ratio" id="ratioInfo">1：15</span></span><strong id="beansInfo" class="beans-value">20<small>g</small></strong></div>
+   </section>
 
   <section class="sec" id="hybridSettings">
    <div class="sec-head"><h2 class="sec-title">1投目の湯量 <span class="sec-note">味わいの目安</span></h2></div>
@@ -490,7 +479,7 @@ button:disabled,input:disabled,select:disabled{opacity:.4;cursor:not-allowed}
 (()=>{
  'use strict';
  const $=id=>document.getElementById(id);
- const DURATION=210,VERSION='v17 キューレーン';
+ const DURATION=210,VERSION='v18 キューレーン';
  const PREF_KEY='brew-cue-redesign-preferences-v1',TIMER_KEY='brew-cue-redesign-timer-v1';
  const oldKeys=['brew-cue-recipe-multimethod-v1','brew-cue-recipe-phase1','brew-cue-recipe-v1'];
  const TASTE={sweet:50,balanced:60,bright:70};
@@ -564,25 +553,23 @@ button:disabled,input:disabled,select:disabled{opacity:.4;cursor:not-allowed}
  function setView(view){
   $('setupView').hidden=view!=='setup';$('brewView').hidden=view!=='brew';
   currentView=view;applyThemeColor();$('safeTop').dataset.view=view;
-  if(view==='setup'){$('setupView').scrollTop=0;}
+  if(view==='setup'){$('setupView').scrollTop=0;positionRuler();}
   if(view==='brew')kick();
  }
 
  /* ---------- setup: beaker ---------- */
- function buildScale(){
-  let h='<i></i>';for(let v=100;v<=1000;v+=100)h+=`<b style="bottom:${v/10}%">${v}</b>`;$('scale').innerHTML=h;
+ const RULER_GAP=12,RULER_MIN=100,RULER_MAX=1000;
+ function buildRuler(){
+  const n=(RULER_MAX-RULER_MIN)/10+1;let h='';
+  for(let i=0;i<n;i++){const v=RULER_MIN+i*10;h+=`<i class="tick${v%100===0?' major':v%50===0?' mid':''}">${v%100===0?`<b>${v}</b>`:''}</i>`;}
+  $('rulerTrack').innerHTML=h;
  }
- function renderBeaker(){
-  const w=prefs.water;$('fill').style.setProperty('--w',w);
-  const H=$('beaker').clientHeight||300;let lastY=-99,h='';
-  const totals=[...new Set(recipe.filter(s=>s.pour).map(s=>s.total))].sort((a,b)=>b-a);
-  totals.forEach(t=>{
-   const y=H*(t/1000);const show=Math.abs(y-lastY)>=14&&t<w;if(t<w||true){h+=`<div class="notch" style="bottom:${t/10}%">${show?`<span>${t}</span>`:''}</div>`;}
-   if(show)lastY=y;
-  });
-  $('notches').innerHTML=h;
-  const b=$('beaker');b.setAttribute('aria-valuenow',w);b.setAttribute('aria-valuetext',`${w}ml`);
+ function positionRuler(){
+  const w=$('ruler').clientWidth;if(!w)return;
+  const idx=(prefs.water-RULER_MIN)/10;
+  $('rulerTrack').style.transform=`translateX(${w/2-(idx+.5)*RULER_GAP}px)`;
  }
+ function renderBeaker(){const r=$('ruler');r.setAttribute('aria-valuenow',prefs.water);r.setAttribute('aria-valuetext',`${prefs.water}ml`);positionRuler();}
  /* ---------- setup: plan chart ---------- */
  function renderChart(){
   const stages=recipe.slice(0,-1),pours=stages.filter(s=>s.pour),maxAdd=Math.max(1,...pours.map(s=>s.add));
@@ -604,7 +591,7 @@ button:disabled,input:disabled,select:disabled{opacity:.4;cursor:not-allowed}
   if(document.activeElement!==$('waterInput'))$('waterInput').value=prefs.water;
   $('waterMinus').disabled=prefs.water<=100;$('waterPlus').disabled=prefs.water>=1000;$('resetVolume').disabled=prefs.water===300;
   $('beansInfo').innerHTML=`${computedBeans()}<small>g</small>`;
-  $('ratioInfo').textContent=`比率 1：${prefs.ratio}`;
+  $('ratioInfo').textContent=`1：${prefs.ratio}`;
   document.querySelectorAll('[data-bloom]').forEach(b=>{const value=+b.dataset.bloom;b.classList.toggle('selected',value===prefs.bloom);b.setAttribute('aria-pressed',String(value===prefs.bloom));b.querySelector('[data-bloom-value]').textContent=`${Math.round(prefs.water*value/300)}g`;});
   for(const [taste,base] of Object.entries(TASTE)){
    const first=Math.round(prefs.water*base/300),second=Math.round(prefs.water*.4)-first;
@@ -628,15 +615,17 @@ button:disabled,input:disabled,select:disabled{opacity:.4;cursor:not-allowed}
   $('segments').innerHTML=recipe.slice(0,-1).map((s,i)=>`<div class="seg" style="flex:${recipe[i+1].at-s.at} 1 0"><i></i></div>`).join('');
  }
  function buildCues(){
-  const key=recipe.map(s=>s.at+s.action+s.add).join('|')+prefs.method;if(key===cueKey)return;cueKey=key;
+  const key=recipe.map(s=>s.at+s.action+s.add).join('|')+prefs.method+'t';if(key===cueKey)return;cueKey=key;
   const host=$('cues');host.innerHTML='';cues=[];
-  recipe.forEach((s,i)=>{
-   if(i===0)return;
+  const items=recipe.slice(1).map(s=>({...s,glyph:null}));
+  if(prefs.method==='hybrid')items.push({at:100,valve:'closed',action:'湯温を下げる',pour:false,temp:true,total:0,add:0});
+  items.sort((a,b)=>a.at-b.at);
+  items.forEach(s=>{
    const el=document.createElement('div');el.className='cue';
    const hybrid=prefs.method==='hybrid';
-   el.dataset.valve=hybrid?s.valve:'open';
-   const glyph=hybrid&&s.at!==DURATION?(s.valve==='closed'?'g-closed':'g-open'):'g-pour';
-   const sub=s.pour?`+${s.add}g → 累計${s.total}g`:(s.at===DURATION?'おつかれさまでした':'注湯は完了');
+   el.dataset.valve=s.temp?'closed':hybrid?s.valve:'open';
+   const glyph=s.temp?'g-temp':hybrid&&s.at!==DURATION?(s.valve==='closed'?'g-closed':'g-open'):'g-pour';
+   const sub=s.temp?'70〜80℃のお湯を準備':s.pour?`+${s.add}g → 累計${s.total}g`:(s.at===DURATION?'おつかれさまでした':'注湯は完了');
    el.innerHTML=`<span class="cue-time">${clockTime(s.at)}</span><span class="cue-body"><span class="cue-act">${s.action}</span><span class="cue-sub">${sub}</span></span><svg class="cue-glyph icon-svg" aria-hidden="true"><use href="#${glyph}"/></svg>`;
    host.appendChild(el);cues.push({at:s.at,el});
   });
@@ -693,7 +682,7 @@ button:disabled,input:disabled,select:disabled{opacity:.4;cursor:not-allowed}
   $('stageAmount').innerHTML=`${step.total}<small>g</small>`;
   $('stageAdded').innerHTML=step.pour?`+${step.add}<small>g</small>`:'<span class="no-pour">—</span>';
   $('stageNote').textContent=step.instruction;
-  $('tempTip').hidden=!(prefs.method==='hybrid'&&active===2);
+  $('tempTip').hidden=true;
   buildCues();layoutLane(sec);
   $('nextSr').textContent=next?`次の工程、${clockTime(next.at)}。${next.action}。あと${Math.max(0,Math.ceil(next.at-sec))}秒。`:'すべての工程が終了しました。';
   if(timer.mode==='running'){$('pauseIconUse').setAttribute('href','#icon-pause');$('pauseLabel').textContent='一時停止';}
@@ -774,15 +763,13 @@ button:disabled,input:disabled,select:disabled{opacity:.4;cursor:not-allowed}
  });
  $('waterInput').addEventListener('keydown',e=>{if(e.key==='Enter'){e.target.blur();}});
  $('waterInput').addEventListener('focus',e=>e.target.select());
- {/* drag the water level inside the beaker */
-  const bk=$('beaker');let drag=null,lastBuzz=0;
-  bk.addEventListener('pointerdown',e=>{drag={y:e.clientY,w:prefs.water};try{bk.setPointerCapture(e.pointerId);}catch{}bk.classList.add('dragging');});
-  bk.addEventListener('pointermove',e=>{if(!drag)return;const H=bk.clientHeight||300;const w=Math.min(1000,Math.max(100,drag.w+Math.round(((drag.y-e.clientY)/H*1000)/10)*10));if(w!==prefs.water){setWater(w);const n=Date.now();if(n-lastBuzz>40){lastBuzz=n;if(navigator.vibrate)navigator.vibrate(3);}}});
-  const end=()=>{drag=null;bk.classList.remove('dragging');};
-  bk.addEventListener('pointerup',end);bk.addEventListener('pointercancel',end);
-  bk.addEventListener('keydown',e=>{const d={ArrowLeft:-10,ArrowDown:-10,ArrowRight:10,ArrowUp:10,PageDown:-100,PageUp:100}[e.key];if(d){e.preventDefault();setWater(prefs.water+d);}});
-  window.addEventListener('resize',renderBeaker);
- }
+ {const ruler=$('ruler');let drag=null;
+  ruler.addEventListener('pointerdown',e=>{drag={x:e.clientX,w:prefs.water};try{ruler.setPointerCapture(e.pointerId);}catch{}ruler.classList.add('dragging');});
+  ruler.addEventListener('pointermove',e=>{if(!drag)return;const w=Math.min(RULER_MAX,Math.max(RULER_MIN,drag.w+Math.round((drag.x-e.clientX)/RULER_GAP)*10));if(w!==prefs.water){setWater(w);if(navigator.vibrate)navigator.vibrate(3);}});
+  const end=()=>{drag=null;ruler.classList.remove('dragging');};
+  ruler.addEventListener('pointerup',end);ruler.addEventListener('pointercancel',end);
+  ruler.addEventListener('keydown',e=>{const d={ArrowLeft:-10,ArrowDown:-10,ArrowRight:10,ArrowUp:10,PageDown:-100,PageUp:100}[e.key];if(d){e.preventDefault();setWater(prefs.water+d);}});
+  window.addEventListener('resize',positionRuler);}
  document.querySelectorAll('[data-bloom]').forEach(b=>b.addEventListener('click',()=>{prefs.bloom=+b.dataset.bloom;updateRecipe();}));
  document.querySelectorAll('[data-taste]').forEach(b=>b.addEventListener('click',()=>{prefs.taste=b.dataset.taste;updateRecipe();}));
  document.querySelectorAll('[data-body]').forEach(b=>b.addEventListener('click',()=>{prefs.body=+b.dataset.body;updateRecipe();}));
@@ -825,13 +812,13 @@ button:disabled,input:disabled,select:disabled{opacity:.4;cursor:not-allowed}
  {const probe=document.createElement('div');probe.style.cssText='position:absolute;visibility:hidden;padding-top:env(safe-area-inset-top,0px)';document.body.appendChild(probe);
   const measure=()=>{const inset=parseFloat(getComputedStyle(probe).paddingTop)||0;const tall=innerHeight>=780;document.documentElement.classList.toggle('edge',inset>30||(navigator.standalone===true&&tall));};
   measure();[100,400,1000,2500].forEach(t=>setTimeout(measure,t));addEventListener('load',measure);addEventListener('resize',measure);addEventListener('orientationchange',measure);addEventListener('pageshow',measure);}
- buildScale();
+ buildRuler();
  {const sp=$('splash');
   if(timer.mode==='idle'&&!calm){$('chart').style.setProperty('--base','1.5s');splashActive=true;const out=()=>{if(!splashActive)return;splashActive=false;sp.classList.add('out');applyThemeColor();};setTimeout(out,2000);sp.addEventListener('pointerdown',out);sp.addEventListener('transitionend',e=>{if(e.target===sp&&sp.classList.contains('out'))sp.remove();});}
   else sp.remove();}
  updateRecipe();if(timer.mode==='running'&&timeNow()>=DURATION){timer={mode:'done',elapsed:DURATION,startedAt:null};saveTimer();}
  if(timer.mode!=='idle'){setView('brew');renderTimer();if(timer.mode==='running')wake();}else setView('setup');
- requestAnimationFrame(renderBeaker);
+ requestAnimationFrame(positionRuler);if(document.fonts&&document.fonts.ready)document.fonts.ready.then(positionRuler);
  setInterval(tick,150);
  if('serviceWorker' in navigator&&location.protocol==='https:'){const had=!!navigator.serviceWorker.controller;let reloaded=false;navigator.serviceWorker.addEventListener('controllerchange',()=>{if(!had||reloaded)return;reloaded=true;if(timer.mode==='idle')location.reload();else toast('新しい版があります。抽出後に開き直してください');});window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js',{updateViaCache:'none'}).then(r=>r.update()).catch(()=>{}));}
 })();
