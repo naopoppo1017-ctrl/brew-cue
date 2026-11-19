@@ -474,6 +474,7 @@ button:disabled,input:disabled,select:disabled{opacity:.4;cursor:not-allowed}
    <div class="setting-row" id="hapticRow" hidden><label for="hapticToggle">工程の振動</label><input type="checkbox" class="switch" id="hapticToggle" checked></div>
    <div class="setting-row"><span>合図音の確認</span><button type="button" class="test-button" id="soundTest">音を試す</button></div>
    <p class="setting-help">次の工程の10秒前から画面で予告し、3・2・1秒前に合図音が鳴ります。抽出中に比率や抽出方法は変更できません。<br><br>抽出中は画面を開いたまま使用してください。工程時刻は基本レシピ（300ml）を基準とした目安です。</p>
+   <p class="setting-help" id="verText" style="opacity:.8"></p>
   </div>
  </section></div>
  <div class="safe-top" id="safeTop" data-view="setup" aria-hidden="true"></div>
@@ -485,7 +486,7 @@ button:disabled,input:disabled,select:disabled{opacity:.4;cursor:not-allowed}
 (()=>{
  'use strict';
  const $=id=>document.getElementById(id);
- const DURATION=210;
+ const DURATION=210,VERSION='v14';
  const PREF_KEY='brew-cue-redesign-preferences-v1',TIMER_KEY='brew-cue-redesign-timer-v1';
  const oldKeys=['brew-cue-recipe-multimethod-v1','brew-cue-recipe-phase1','brew-cue-recipe-v1'];
  const TASTE={sweet:50,balanced:60,bright:70};
@@ -690,7 +691,7 @@ const applyThemeColor=()=>{const dark=matchMedia('(prefers-color-scheme: dark)')
  function openSheet(mode){
   sheetMode=mode;sheetPreviousFocus=document.activeElement;
   $('stepsContent').hidden=mode!=='steps';$('settingsContent').hidden=mode!=='settings';
-  if(mode==='steps')renderSteps();else{$('sheetTitle').textContent='設定';$('ratioSelect').disabled=timer.mode!=='idle';$('ratioSelect').value=prefs.ratio;$('soundToggle').checked=prefs.sound;$('hapticToggle').checked=prefs.haptic;$('hapticRow').hidden=!navigator.vibrate;}
+  if(mode==='steps')renderSteps();else{$('sheetTitle').textContent='設定';$('ratioSelect').disabled=timer.mode!=='idle';$('ratioSelect').value=prefs.ratio;$('soundToggle').checked=prefs.sound;$('hapticToggle').checked=prefs.haptic;$('hapticRow').hidden=!navigator.vibrate;showVersion();}
   $('sheetLayer').hidden=false;$('closeSheet').focus();
  }
  function closeSheet(){if(!sheetMode)return;sheetMode=null;$('sheetLayer').hidden=true;if(sheetPreviousFocus&&sheetPreviousFocus.isConnected)sheetPreviousFocus.focus();}
@@ -743,6 +744,8 @@ const applyThemeColor=()=>{const dark=matchMedia('(prefers-color-scheme: dark)')
  document.querySelectorAll('[data-open-steps]').forEach(b=>b.addEventListener('click',()=>openSheet('steps')));
  $('openSettings').addEventListener('click',()=>openSheet('settings'));$('brewSettings').addEventListener('click',()=>openSheet('settings'));
  $('closeSheet').addEventListener('click',closeSheet);
+ const showVersion=()=>{const cs=getComputedStyle(document.documentElement);const pr=document.createElement('div');pr.style.cssText='position:absolute;visibility:hidden;padding-top:env(safe-area-inset-top,0px)';document.body.appendChild(pr);const inset=Math.round(parseFloat(getComputedStyle(pr).paddingTop)||0);pr.remove();
+  $('verText').textContent=`バージョン ${VERSION}（上余白 ${cs.getPropertyValue('--edge').trim()||'0px'} ／ 安全領域 ${inset}px）`;};
  /* swipe down to dismiss: from the handle/title, or from the body when scrolled to the top */
  {
   const sheet=document.querySelector('.sheet'),layer=$('sheetLayer');
@@ -799,7 +802,7 @@ const applyThemeColor=()=>{const dark=matchMedia('(prefers-color-scheme: dark)')
  if(timer.mode!=='idle'){setView('brew');renderTimer();if(timer.mode==='running')wake();}else setView('setup');
  if(document.fonts&&document.fonts.ready)document.fonts.ready.then(positionRuler);
  setInterval(tick,150);
- if('serviceWorker' in navigator&&location.protocol==='https:')window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js',{updateViaCache:'none'}).catch(()=>{}));
+ if('serviceWorker' in navigator&&location.protocol==='https:'){const had=!!navigator.serviceWorker.controller;let reloaded=false;navigator.serviceWorker.addEventListener('controllerchange',()=>{if(!had||reloaded)return;reloaded=true;if(timer.mode==='idle')location.reload();else toast('新しい版があります。抽出後に開き直してください');});window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js',{updateViaCache:'none'}).then(r=>r.update()).catch(()=>{}));}
 })();
 </script>
 </body>
