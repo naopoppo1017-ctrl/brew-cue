@@ -269,6 +269,10 @@ button:disabled,input:disabled,select:disabled{opacity:.4;cursor:not-allowed}
 .toast{pointer-events:none;position:absolute;z-index:60;bottom:calc(24px + env(safe-area-inset-bottom,0px));left:50%;transform:translate(-50%,16px);width:calc(100% - 40px);max-width:400px;background:var(--cream);color:var(--roast);border-radius:99px;padding:13px 20px;text-align:center;font-weight:900;font-size:14px;box-shadow:0 12px 30px #0006;opacity:0;transition:opacity .2s,transform .3s var(--ease)}
 .toast.show{opacity:1;transform:translate(-50%,0)}
 
+/* solid strip under the status bar: nothing scrolls beneath the translucent iOS bar, so there is nothing to blur */
+.safe-top{position:absolute;top:0;left:0;right:0;height:env(safe-area-inset-top,0px);z-index:20;background:var(--paper);pointer-events:none;transition:background 1.2s}
+.safe-top[data-view="brew"]{background:var(--roast)}
+.safe-top[data-view="done"]{background:#6b3719}
 /* clock mode toggle */
 .chip-row{display:flex;align-items:center;gap:10px}
 .clock-mode{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:700;color:var(--creamMute)}
@@ -468,6 +472,7 @@ button:disabled,input:disabled,select:disabled{opacity:.4;cursor:not-allowed}
    <p class="setting-help">次の工程の10秒前から画面で予告し、3・2・1秒前に合図音が鳴ります。抽出中に比率や抽出方法は変更できません。<br><br>抽出中は画面を開いたまま使用してください。工程時刻は基本レシピ（300ml）を基準とした目安です。</p>
   </div>
  </section></div>
+ <div class="safe-top" id="safeTop" data-view="setup" aria-hidden="true"></div>
  <div class="dialog-layer" id="dialogLayer" hidden><section class="dialog" role="alertdialog" aria-modal="true" aria-labelledby="dlgTitle" aria-describedby="dlgBody"><h2 id="dlgTitle"></h2><p id="dlgBody"></p><button type="button" class="dlg-btn dlg-primary" id="dlgCancel">続ける</button><button type="button" class="dlg-btn dlg-secondary" id="dlgOk">OK</button></section></div>
  <div class="splash" id="splash" aria-hidden="true"><div class="liquid"><div class="crest"></div><div class="wave b"><svg viewBox="0 0 800 14" preserveAspectRatio="none"><path fill="currentColor" d="M0 14V7C50 0 100 0 200 7S350 14 400 7 500 0 600 7s150 7 200 0V14Z"/></svg></div><div class="wave"><svg viewBox="0 0 800 14" preserveAspectRatio="none"><path fill="currentColor" d="M0 14V6C100 14 150 14 200 6S300 -2 400 6 500 14 600 6s150-8 200 0V14Z"/></svg></div></div><div class="splash-mark"><span><svg class="icon-svg"><use href="#icon-drop"/></svg></span>Brew Cue</div></div>
  <div class="toast" id="toast" role="status" aria-live="polite"></div>
@@ -483,7 +488,7 @@ button:disabled,input:disabled,select:disabled{opacity:.4;cursor:not-allowed}
  const FOUR_TIMES=[90,130,160];
  const RULER_GAP=12,RULER_MIN=100,RULER_MAX=1000;
  const safeRead=key=>{try{const x=JSON.parse(localStorage.getItem(key));return x&&typeof x==='object'&&!Array.isArray(x)?x:null;}catch{return null;}};
- const defaults={method:'hybrid',water:300,bloom:45,taste:'balanced',body:3,ratio:15,sound:true,haptic:true,clockMode:'elapsed'};
+ const defaults={method:'hybrid',water:300,bloom:45,taste:'balanced',body:3,ratio:15,sound:true,haptic:true,clockMode:'remaining'};
  let stored=safeRead(PREF_KEY);if(!stored){for(const k of oldKeys){const x=safeRead(k);if(x){stored=x;break;}}}
  let prefs={...defaults,...stored};
  const inSet=(x,items,def)=>items.includes(x)?x:def;
@@ -493,7 +498,9 @@ button:disabled,input:disabled,select:disabled{opacity:.4;cursor:not-allowed}
  prefs.taste=inSet(prefs.taste,['sweet','balanced','bright'],'balanced');
  prefs.body=inSet(+prefs.body,[1,2,3],3);
  prefs.ratio=inSet(+prefs.ratio,[14,15,16,17],15);
- prefs.sound=prefs.sound!==false;prefs.haptic=prefs.haptic!==false;prefs.clockMode=inSet(prefs.clockMode,['elapsed','remaining'],'elapsed');
+ prefs.sound=prefs.sound!==false;prefs.haptic=prefs.haptic!==false;prefs.clockMode=inSet(prefs.clockMode,['elapsed','remaining'],'remaining');
+ if(!stored||stored.clockDefault!==2)prefs.clockMode='remaining';
+ prefs.clockDefault=2;
  let timer={mode:'idle',elapsed:0,startedAt:null};
  const storedTimer=safeRead(TIMER_KEY);
  if(storedTimer&&['running','paused','done'].includes(storedTimer.mode)&&Number.isFinite(storedTimer.elapsed)){
@@ -545,7 +552,7 @@ const applyThemeColor=()=>{const dark=matchMedia('(prefers-color-scheme: dark)')
  });}
  function setView(view){
   $('setupView').hidden=view!=='setup';$('brewView').hidden=view!=='brew';
-  currentView=view;applyThemeColor();
+  currentView=view;applyThemeColor();$('safeTop').dataset.view=view;
   if(view==='setup'){$('setupView').scrollTop=0;positionRuler();}
  }
  /* ruler */
@@ -608,7 +615,7 @@ const applyThemeColor=()=>{const dark=matchMedia('(prefers-color-scheme: dark)')
  function renderTimer(){
   const sec=timeNow(), active=recipeStage(sec),step=recipe[active],next=recipe[active+1];
   const show4=prefs.method==='fourSix',v=$('brewView');
-  v.dataset.valve=step.valve;v.dataset.run=timer.mode;
+  v.dataset.valve=step.valve;v.dataset.run=timer.mode;$('safeTop').dataset.view=timer.mode==='done'?'done':'brew';
   $('methodHeading').textContent=show4?'4:6メソッド':'ハイブリッド';$('deviceHeading').textContent=show4?'V60':'HARIO Switch';
   $('leverFig').toggleAttribute('hidden',show4);$('v60Fig').toggleAttribute('hidden',!show4);$('valveMarker').hidden=show4;
   $('valveMarkText').textContent=step.valve==='closed'?'CLOSE':'OPEN';
