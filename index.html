@@ -41,7 +41,8 @@
   --chev:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none' stroke='%23f3eadf' stroke-width='2' stroke-linecap='round'%3E%3Cpath d='M1 1.5 6 6.5l5-5'/%3E%3C/svg%3E");
 }}
 html.edge{--edge:42px}
-html{background:var(--paper)}
+@media (display-mode:standalone) and (min-height:780px){html{--edge:42px}}
+html{background:#16100c}
 *{box-sizing:border-box}
 [hidden]{display:none!important}
 html{font-family:var(--sans);-webkit-text-size-adjust:100%;-webkit-tap-highlight-color:transparent;font-feature-settings:"palt"}
@@ -510,7 +511,7 @@ button:disabled,input:disabled,select:disabled{opacity:.4;cursor:not-allowed}
   timer={mode:storedTimer.mode,elapsed:Math.max(0,Math.min(DURATION,storedTimer.elapsed)),startedAt:Number.isFinite(storedTimer.startedAt)?storedTimer.startedAt:null};
   if(timer.mode==='running'&&!timer.startedAt)timer.mode='paused';
  }
- let currentView='setup',dialogOpen=false,recipe=[],sheetMode=null,sheetPreviousFocus=null,context=null,wakeLock=null,previousTick=null,lastActive=-1,toastTimeout=null,chartIntro=true,segKey='';
+ let splashActive=false,currentView='setup',dialogOpen=false,recipe=[],sheetMode=null,sheetPreviousFocus=null,context=null,wakeLock=null,previousTick=null,lastActive=-1,toastTimeout=null,chartIntro=true,segKey='';
  const safeWrite=(k,val)=>{try{localStorage.setItem(k,JSON.stringify(val));}catch{}};
  const savePrefs=()=>safeWrite(PREF_KEY,prefs);
  const saveTimer=()=>safeWrite(TIMER_KEY,timer);
@@ -541,7 +542,7 @@ button:disabled,input:disabled,select:disabled{opacity:.4;cursor:not-allowed}
   })).concat([{at:210,name:'完成',action:'ドリッパーを外す',phase:'完成',pour:false,total:water,add:0,instruction:'お湯が落ちきったら、ドリッパーを外して完成です。',description:'抽出完了',valve:'open'}]);
  }
  function toast(message){const el=$('toast');el.textContent=message;el.classList.add('show');clearTimeout(toastTimeout);toastTimeout=setTimeout(()=>el.classList.remove('show'),2600);}
-const applyThemeColor=()=>{const dark=matchMedia('(prefers-color-scheme: dark)').matches;const col=currentView==='brew'?'#16100c':dark?'#17110d':'#f2f1ed';document.querySelector('meta[name="theme-color"]').content=col;document.documentElement.style.backgroundColor=col;};
+const applyThemeColor=()=>{const dark=matchMedia('(prefers-color-scheme: dark)').matches;const col=splashActive||currentView==='brew'?'#16100c':dark?'#17110d':'#f2f1ed';document.querySelector('meta[name="theme-color"]').content=col;document.documentElement.style.backgroundColor=col;};
  matchMedia('(prefers-color-scheme: dark)').addEventListener('change',applyThemeColor);
  const buzz=p=>{if(prefs.haptic&&navigator.vibrate&&document.visibilityState==='visible'){try{navigator.vibrate(p);}catch{}}};
  function ask({title,body,ok,cancel='続ける'}){return new Promise(resolve=>{
@@ -788,10 +789,12 @@ const applyThemeColor=()=>{const dark=matchMedia('(prefers-color-scheme: dark)')
  document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&timer.mode==='running'){previousTick=timeNow();wake();renderTimer();}});
  window.addEventListener('pagehide',saveTimer);
  {const probe=document.createElement('div');probe.style.cssText='position:absolute;visibility:hidden;padding-top:env(safe-area-inset-top,0px)';document.body.appendChild(probe);
-  const inset=parseFloat(getComputedStyle(probe).paddingTop)||0;probe.remove();if(inset>30)document.documentElement.classList.add('edge');}
+  const measure=()=>{const inset=parseFloat(getComputedStyle(probe).paddingTop)||0;const tall=innerHeight>=780;
+   document.documentElement.classList.toggle('edge',inset>30||(navigator.standalone===true&&tall));};
+  measure();[100,400,1000,2500].forEach(t=>setTimeout(measure,t));addEventListener('load',measure);addEventListener('resize',measure);addEventListener('orientationchange',measure);addEventListener('pageshow',measure);}
  buildRuler();
  {const sp=$('splash'),calm=matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if(timer.mode==='idle'&&!calm){$('chart').style.setProperty('--base','1.3s');const out=()=>sp.classList.add('out');setTimeout(out,1600);sp.addEventListener('pointerdown',out);sp.addEventListener('transitionend',e=>{if(e.target===sp&&sp.classList.contains('out'))sp.remove();});}else sp.remove();}
+  if(timer.mode==='idle'&&!calm){$('chart').style.setProperty('--base','1.3s');splashActive=true;const out=()=>{if(!splashActive)return;splashActive=false;sp.classList.add('out');applyThemeColor();};setTimeout(out,1600);sp.addEventListener('pointerdown',out);sp.addEventListener('transitionend',e=>{if(e.target===sp&&sp.classList.contains('out'))sp.remove();});}else sp.remove();}
  updateRecipe();if(timer.mode==='running'&&timeNow()>=DURATION){timer={mode:'done',elapsed:DURATION,startedAt:null};saveTimer();}
  if(timer.mode!=='idle'){setView('brew');renderTimer();if(timer.mode==='running')wake();}else setView('setup');
  if(document.fonts&&document.fonts.ready)document.fonts.ready.then(positionRuler);
