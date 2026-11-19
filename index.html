@@ -31,7 +31,7 @@
   --num:"Bricolage Grotesque","Helvetica Neue","Zen Kaku Gothic New",system-ui,sans-serif;
   --ease:cubic-bezier(.2,.8,.2,1);
   /* iOS blurs content a little below the status bar; keep text out of that band */
-  --edge:clamp(0px,calc(env(safe-area-inset-top,0px) * 999),34px);
+  --edge:0px;
 }
 @media(prefers-color-scheme:dark){:root{
   --paper:#17110d;--paper2:#261a13;--card:#1e1510;--ink:#f3eadf;--ink2:#b8a794;--line:#3b2d23;
@@ -40,10 +40,12 @@
   --amberOnInk:#8a5220;--goFg:#fff;--onInkTint:#0000001a;--onInkMute:#5a4636;
   --chev:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none' stroke='%23f3eadf' stroke-width='2' stroke-linecap='round'%3E%3Cpath d='M1 1.5 6 6.5l5-5'/%3E%3C/svg%3E");
 }}
+html.edge{--edge:42px}
+html{background:var(--paper)}
 *{box-sizing:border-box}
 [hidden]{display:none!important}
 html{font-family:var(--sans);-webkit-text-size-adjust:100%;-webkit-tap-highlight-color:transparent;font-feature-settings:"palt"}
-body{margin:0;min-width:320px;background:#0d0907;color:var(--ink);overflow:hidden}
+body{margin:0;min-width:320px;background:transparent;color:var(--ink);overflow:hidden}
 button,input,select{font:inherit;color:inherit}
 button{cursor:pointer;-webkit-touch-callout:none;touch-action:manipulation}
 button:disabled,input:disabled,select:disabled{opacity:.4;cursor:not-allowed}
@@ -56,6 +58,7 @@ button:disabled,input:disabled,select:disabled{opacity:.4;cursor:not-allowed}
 .screen{position:absolute;inset:0;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:none}
 .screen::-webkit-scrollbar{display:none}
 @media(min-width:620px){
+  html{background:#0d0907}
   body{display:grid;place-items:center;min-height:100vh;background:radial-gradient(circle at 50% 30%,#2a1a11,#0d0907 70%)}
   .app{height:min(900px,96dvh);width:430px;border-radius:44px;box-shadow:0 0 0 10px #000,0 40px 100px #000a}
 }
@@ -148,7 +151,7 @@ button:disabled,input:disabled,select:disabled{opacity:.4;cursor:not-allowed}
 
 /* ============ BREW ============ */
 .brew{background:var(--roast);color:var(--cream);overflow:hidden}
-.liquid{position:absolute;left:0;right:0;bottom:0;height:calc(var(--level,0) * 78%);min-height:0;transition:height 3.2s cubic-bezier(.25,.7,.2,1);pointer-events:none}
+.liquid{position:absolute;left:0;right:0;bottom:0;height:calc(var(--level,0) * 60%);min-height:0;transition:height 3.2s cubic-bezier(.25,.7,.2,1);pointer-events:none}
 .liquid:before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,#6b3719,#2d170b 60%,#22110a)}
 .wave{position:absolute;left:0;top:-13px;width:200%;height:14px;color:#74401e;animation:wave 9s linear infinite}
 .wave.b{top:-18px;opacity:.5;animation-duration:14s;animation-direction:reverse}
@@ -171,7 +174,7 @@ button:disabled,input:disabled,select:disabled{opacity:.4;cursor:not-allowed}
 .clock-block{margin-top:clamp(6px,1.2dvh,12px);flex:none}
 .phase-chip{display:inline-block;padding:3px 12px;border-radius:99px;border:1px solid #ffffff40;font-weight:700;font-size:12.5px;color:var(--cream)}
 .clock-line{display:flex;align-items:baseline;gap:10px;margin-top:2px}
-.clock{display:inline-flex;font-family:var(--num);font-weight:300;font-size:clamp(62px,11.6dvh,108px);line-height:1.02;letter-spacing:-.02em;margin-left:-.04em}
+.clock{display:inline-flex;font-family:var(--num);font-weight:300;font-size:clamp(62px,11dvh,108px);line-height:1.02;letter-spacing:-.02em;margin-left:-.04em}
 .clock .d{display:inline-block;width:.58em;text-align:center}
 .clock .c{display:inline-block;width:.3em;text-align:center;transform:translateY(-.06em)}
 .clock-total{font-family:var(--num);font-size:20px;color:var(--creamMute);font-weight:400}
@@ -271,9 +274,9 @@ button:disabled,input:disabled,select:disabled{opacity:.4;cursor:not-allowed}
 .toast.show{opacity:1;transform:translate(-50%,0)}
 
 /* solid strip under the status bar: nothing scrolls beneath the translucent iOS bar, so there is nothing to blur */
-.safe-top{position:absolute;top:0;left:0;right:0;height:env(safe-area-inset-top,0px);z-index:20;background:var(--paper);pointer-events:none;transition:background 1.2s}
+.safe-top{position:absolute;top:0;left:0;right:0;height:env(safe-area-inset-top,0px);z-index:20;background:var(--paper);pointer-events:none;transition:background .3s}
 .safe-top[data-view="brew"]{background:var(--roast)}
-.safe-top[data-view="done"]{background:#6b3719}
+.safe-top[data-view="done"]{background:#6b3719;transition-duration:2.6s}
 /* clock mode toggle */
 .chip-row{display:flex;align-items:center;gap:10px}
 .clock-mode{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:700;color:var(--creamMute)}
@@ -282,7 +285,7 @@ button:disabled,input:disabled,select:disabled{opacity:.4;cursor:not-allowed}
 .clock-btn{display:block;width:100%;background:none;border:0;padding:0;color:inherit;text-align:left;border-radius:16px}
 .clock-btn:active .clock{opacity:.7}
 /* pacing target: dashed line at the cumulative target, liquid rises toward it */
-.target{position:absolute;left:0;right:0;bottom:calc(var(--target,0) * 78%);height:0;border-top:1.5px dashed #f2b65eb8;pointer-events:none;transition:bottom .6s var(--ease),opacity .4s}
+.target{position:absolute;left:0;right:0;bottom:calc(var(--target,0) * 60%);height:0;border-top:1.5px dashed #f2b65eb8;pointer-events:none;transition:bottom .6s var(--ease),opacity .4s}
 .target span{position:absolute;left:3px;top:-17px;font-family:var(--num);font-size:11px;font-weight:700;color:var(--amber)}
 .target.off{opacity:0}
 .target.reached{border-top-color:var(--mint)}.target.reached span{color:var(--mint)}
@@ -304,7 +307,7 @@ button:disabled,input:disabled,select:disabled{opacity:.4;cursor:not-allowed}
 /* launch */
 .splash{position:absolute;inset:0;z-index:80;background:var(--roast);display:grid;place-items:center;overflow:hidden;transition:opacity .5s ease,visibility .5s}
 .splash.out{opacity:0;visibility:hidden}
-.splash .liquid{--level:.82;transition:none;animation:fillup 1.5s cubic-bezier(.3,.6,.2,1) both}
+.splash .liquid{--level:1.05;transition:none;animation:fillup 1.5s cubic-bezier(.3,.6,.2,1) both}
 @keyframes fillup{from{height:0}}
 .splash-mark{position:relative;display:flex;align-items:center;gap:12px;font-family:var(--num);font-weight:600;font-size:30px;letter-spacing:-.02em;color:var(--cream);animation:markin .9s .3s var(--ease) both}
 .splash-mark span{width:36px;height:36px;border-radius:11px;background:var(--cream);color:var(--roast);display:grid;place-items:center}
@@ -538,7 +541,7 @@ button:disabled,input:disabled,select:disabled{opacity:.4;cursor:not-allowed}
   })).concat([{at:210,name:'完成',action:'ドリッパーを外す',phase:'完成',pour:false,total:water,add:0,instruction:'お湯が落ちきったら、ドリッパーを外して完成です。',description:'抽出完了',valve:'open'}]);
  }
  function toast(message){const el=$('toast');el.textContent=message;el.classList.add('show');clearTimeout(toastTimeout);toastTimeout=setTimeout(()=>el.classList.remove('show'),2600);}
-const applyThemeColor=()=>{const dark=matchMedia('(prefers-color-scheme: dark)').matches;document.querySelector('meta[name="theme-color"]').content=currentView==='brew'?'#16100c':dark?'#17110d':'#f2f1ed';};
+const applyThemeColor=()=>{const dark=matchMedia('(prefers-color-scheme: dark)').matches;const col=currentView==='brew'?'#16100c':dark?'#17110d':'#f2f1ed';document.querySelector('meta[name="theme-color"]').content=col;document.documentElement.style.backgroundColor=col;};
  matchMedia('(prefers-color-scheme: dark)').addEventListener('change',applyThemeColor);
  const buzz=p=>{if(prefs.haptic&&navigator.vibrate&&document.visibilityState==='visible'){try{navigator.vibrate(p);}catch{}}};
  function ask({title,body,ok,cancel='続ける'}){return new Promise(resolve=>{
@@ -630,7 +633,7 @@ const applyThemeColor=()=>{const dark=matchMedia('(prefers-color-scheme: dark)')
   document.querySelectorAll('#segments .seg').forEach((seg,i)=>{const a=recipe[i].at,b=recipe[i+1].at;const p=Math.max(0,Math.min(1,(sec-a)/(b-a)));seg.style.setProperty('--p',p.toFixed(3));seg.classList.toggle('past',p>=1);});
   const prevTotal=active>0?recipe[active-1].total:0,stageDur=next?next.at-step.at:0;
   const pourWin=Math.max(1,Math.min(20,stageDur*.5)),prog=step.pour?Math.max(0,Math.min(1,(sec-step.at)/pourWin)):1;
-  const level=timer.mode==='done'?1/.78:(prevTotal+(step.total-prevTotal)*prog)/prefs.water;
+  const level=timer.mode==='done'?1/.6:(prevTotal+(step.total-prevTotal)*prog)/prefs.water;
   $('liquid').style.setProperty('--level',level.toFixed(4));
   const tg=$('target');tg.style.setProperty('--target',(step.total/prefs.water).toFixed(4));
   tg.classList.toggle('off',!(step.pour&&timer.mode!=='done'));tg.classList.toggle('reached',prog>=1);$('targetLabel').textContent=step.total;
@@ -784,6 +787,8 @@ const applyThemeColor=()=>{const dark=matchMedia('(prefers-color-scheme: dark)')
  $('soundTest').addEventListener('click',()=>{if(!prefs.sound){toast('合図音がオフになっています');return;}initAudio();chime(true);toast('合図音を再生しました');});
  document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&timer.mode==='running'){previousTick=timeNow();wake();renderTimer();}});
  window.addEventListener('pagehide',saveTimer);
+ {const probe=document.createElement('div');probe.style.cssText='position:absolute;visibility:hidden;padding-top:env(safe-area-inset-top,0px)';document.body.appendChild(probe);
+  const inset=parseFloat(getComputedStyle(probe).paddingTop)||0;probe.remove();if(inset>30)document.documentElement.classList.add('edge');}
  buildRuler();
  {const sp=$('splash'),calm=matchMedia('(prefers-reduced-motion: reduce)').matches;
   if(timer.mode==='idle'&&!calm){$('chart').style.setProperty('--base','1.3s');const out=()=>sp.classList.add('out');setTimeout(out,1600);sp.addEventListener('pointerdown',out);sp.addEventListener('transitionend',e=>{if(e.target===sp&&sp.classList.contains('out'))sp.remove();});}else sp.remove();}
